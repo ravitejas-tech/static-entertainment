@@ -1,5 +1,5 @@
 {
-  "name": "echoverse-admin",
+  "name": "admin",
   "private": true,
   "type": "module",
   "scripts": {
