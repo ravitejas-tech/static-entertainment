@@ -55,7 +55,7 @@ yarn supabase secrets set \
 
 ## 5. Website (static)
 
-- Use any static host, such as Cloudflare Pages, Netlify or Vercel. Build command: `yarn build`. Output directory: `build/client`.
+- Use any static host, such as Cloudflare Pages, Netlify or Vercel. Build command: `yarn build:echoverse`. Output directory: `apps/echoverse/build/client`.
 - Environment variables:
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_PUBLISHABLE_KEY`
@@ -65,7 +65,7 @@ yarn supabase secrets set \
 
 ## 6. Admin panel (static)
 
-- Build from `admin/` with `yarn build`. Output directory: `admin/build/client`.
+- Build command: `yarn build:admin`. Output directory: `apps/admin/build/client`.
 - Environment variables:
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_PUBLISHABLE_KEY`
@@ -76,13 +76,13 @@ yarn supabase secrets set \
 **The venue map needs no keys or accounts.** The admin's map shows [OpenStreetMap](https://www.openstreetmap.org/copyright) tiles, and its search box uses [Photon](https://photon.komoot.io/), a free OpenStreetMap search. Both are free for light use like an admin team's.
 - The team drops a pin on each venue. The website's Directions button and the ticket email then open Google Maps navigation to those exact coordinates.
 - If the search ever misses a venue, they search the area and tap the exact spot.
-- If the admin is ever used heavily, both services can be swapped for a paid tile and search provider by changing `VENUE_MAP.tiles` and `PLACE_SEARCH` in `admin/app/data/events/venue.ts`.
+- If the admin is ever used heavily, both services can be swapped for a paid tile and search provider by changing `VENUE_MAP.tiles` and `PLACE_SEARCH` in `apps/admin/app/data/events/venue.ts`.
 
 ## 7. Before real ticket sales
 
 - Replace the placeholder events, prices and photos. Remove any local-only test events.
 - Get the Terms, Privacy and Refund policy reviewed by a lawyer.
-- Replace the placeholder contact email and Instagram handle in `app/data/contact.ts`.
+- Replace the placeholder contact email and Instagram handle in `apps/echoverse/app/data/contact.ts`.
 - Add the analytics IDs.
 - Switch to real payments (step 8) and clear the demo bookings.
 - Do one real ₹1 test booking end to end: pay, receive the email, scan at the gate, then refund it.
