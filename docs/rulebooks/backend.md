@@ -10,7 +10,7 @@ Every scaffold comes from the CLI. Write only the SQL or TypeScript inside it.
 |---|---|
 | A schema change | `yarn supabase migration new <snake_name> < /dev/null` |
 | A new edge function | `yarn supabase functions new <kebab-name>` |
-| Types for the apps | `yarn db:types` (writes `app/types/database.ts` and `admin/app/types/database.ts`) |
+| Types for the apps | `yarn db:types` (writes `app/types/database.ts` in each app that talks to Supabase) |
 
 `migration new` reads SQL from stdin when stdin isn't a terminal. Without `< /dev/null`, a piped or backgrounded run waits forever and leaves an empty file.
 
@@ -27,7 +27,7 @@ Every scaffold comes from the CLI. Write only the SQL or TypeScript inside it.
 - **Money and tickets change only through SQL functions.** `orders`, `order_items`, `tickets`, `customers` and `check_ins` have no direct write grant. Staff may update `orders.notes` and nothing else.
 - Functions are `security definer` with `set search_path = ''` and schema-qualified names.
 - **An internal function has its `execute` revoked from `public, anon, authenticated`.** Grant it to `service_role` only when an edge function calls it. Supabase grants `execute` to `anon` and `authenticated` by default, so `revoke … from public` alone is not enough.
-- Staff checks go through `has_staff_role(...)`. The role list for each action is mirrored in `PERMISSIONS` (`admin/app/data/staff/roles.ts`), so the admin hides what the database would refuse.
+- Staff checks go through `has_staff_role(...)`. The role list for each action is mirrored in `PERMISSIONS` (`apps/admin/app/data/staff/roles.ts`), so the admin hides what the database would refuse.
 
 ## Booking invariants
 
