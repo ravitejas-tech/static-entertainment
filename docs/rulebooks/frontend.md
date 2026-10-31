@@ -1,6 +1,6 @@
 # Frontend Rules
 
-React 19 + React Router 8 (SPA mode; the public pages, every published event page and the SEO files are prerendered) + TypeScript + Tailwind 4 + Supabase. Applies to `app/`. The admin panel follows these rules too, with the additions in [admin.md](admin.md).
+React 19 + React Router 8 (SPA mode; the public pages, every published event page and the SEO files are prerendered) + TypeScript + Tailwind 4 + Supabase. Applies to every website in `apps/` (`apps/echoverse/`, `apps/founders-frame/`). Paths such as `app/data/` are relative to the app's own folder. The admin panel follows these rules too, with the additions in [admin.md](admin.md).
 
 ## Reusability
 
