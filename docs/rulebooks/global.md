@@ -66,7 +66,7 @@ Do not silence an error with `@ts-ignore`, `any` or a non-null `!`, and do not l
 
 A file named for a handler, component, or service contains *that thing only*. Constants, generic helpers and types declared at the top of it are a second responsibility that has moved in — they belong in a shared location from the moment they are written, not once a second caller appears.
 
-| What it is | Location |
+| What it is | Location (inside the app's folder in `apps/`) |
 |---|---|
 | Generic helper, no domain knowledge | `app/lib/` |
 | Domain constant — limits, option sets, copy tables | `app/data/<feature>/` |
