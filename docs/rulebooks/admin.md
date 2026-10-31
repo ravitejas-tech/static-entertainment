@@ -1,6 +1,6 @@
 # Admin Rules
 
-The admin panel in `admin/` is a separate React Router 8 SPA (`ssr: false`, nothing prerendered) on the same Supabase backend. It follows [global.md](global.md) and [frontend.md](frontend.md):
+The admin panel in `apps/admin/` is a separate React Router 8 SPA (`ssr: false`, nothing prerendered) on the same Supabase backend. It follows [global.md](global.md) and [frontend.md](frontend.md):
 - `Text` for all text
 - copy in `data/`
 - `services/`, `hooks/`, `schemas/` and `types/` placement
