@@ -8,8 +8,10 @@
     ],
     "scripts": {
         "dev:echoverse": "yarn workspace echoverse dev",
+        "dev:founders-frame": "yarn workspace founders-frame dev",
         "dev:admin": "yarn workspace admin dev",
         "build:echoverse": "yarn workspace echoverse build",
+        "build:founders-frame": "yarn workspace founders-frame build",
         "build:admin": "yarn workspace admin build",
         "ts:check": "yarn workspaces foreach --all --exclude static-entertainment --parallel run ts:check",
         "lint": "yarn workspaces foreach --all --exclude static-entertainment --parallel run lint",
