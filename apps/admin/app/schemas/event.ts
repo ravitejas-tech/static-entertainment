@@ -3,7 +3,7 @@ import { EVENT_FORM_ERRORS as errors } from '~/data/events/form'
 import { SUMMARY_MAX_LENGTH, TITLE_LENGTH } from '~/data/events/limits'
 import { Constants } from '~/types/database'
 
-const { event_category, pop_tone } = Constants.public.Enums
+const { pop_tone } = Constants.public.Enums
 
 const text = z.string().trim()
 
@@ -30,7 +30,7 @@ export const eventFormSchema = z
     .object({
         title: eventTitleSchema,
         slug: text.regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, errors.slug),
-        category: z.enum(event_category),
+        category: text.min(1, errors.category),
         tag: text.max(30, errors.tag),
         tone: z.enum(pop_tone),
         summary: eventSummarySchema,
@@ -49,7 +49,7 @@ export const eventFormSchema = z
         description: text,
         highlights: z.array(textItem),
         schedule: z.array(z.object({ time: text, title: text })),
-        hosts: z.array(z.object({ name: text, role: text })),
+        hosts: z.array(z.object({ name: text, role: text, part: text })),
         age_limit: text,
         language: text,
         dress_code: text,
@@ -57,6 +57,9 @@ export const eventFormSchema = z
         not_included: z.array(textItem),
         things_to_know: z.array(textItem),
         faqs: z.array(z.object({ question: text, answer: text })),
+        audience: z.array(z.string()),
+        industries: z.array(z.string()),
+        founder_stages: z.array(z.string()),
         terms: text,
         refund_policy: text,
     })
