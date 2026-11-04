@@ -15,6 +15,7 @@ export interface TicketTypeDialogProps {
     eventId: string
     draft: TicketDraft
     nextSortOrder: number
+    approvals: boolean
     onClose: () => void
 }
 
@@ -22,6 +23,7 @@ export function TicketTypeDialog({
     eventId,
     draft: { ticket, preset },
     nextSortOrder,
+    approvals,
     onClose,
 }: TicketTypeDialogProps) {
     const { mutate, isPending } = useSaveTicketType()
@@ -63,7 +65,7 @@ export function TicketTypeDialog({
                             { onSuccess: onClose },
                         ),
                     )}>
-                    <TicketTypeFields />
+                    <TicketTypeFields approvals={approvals} />
                 </form>
             </FormProvider>
         </Dialog>
