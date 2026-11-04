@@ -1,5 +1,6 @@
 import { FunctionsFetchError, FunctionsHttpError } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { COMMUNITY_SLUG } from '~/data/brand'
 import { bookingSchema } from '~/schemas/booking'
 import {
     createOrderResultSchema,
@@ -11,7 +12,7 @@ import { supabase } from '~/services/supabase'
 import type { CreateOrderInput, PromoQuoteInput, VerifyPaymentInput } from '~/types/checkout'
 
 const MY_BOOKING_COLUMNS =
-    'id, booking_code, access_token, status, total, created_at, events(slug, title, starts_at, ends_at, city, venue_name, cover_url, cover_alt, tone), tickets(count)'
+    'id, booking_code, access_token, status, total, created_at, events!inner(slug, title, starts_at, ends_at, city, venue_name, cover_url, cover_alt, tone), tickets(count)'
 
 async function functionErrorCode(error: unknown) {
     if (error instanceof FunctionsFetchError) return 'network'
@@ -52,6 +53,7 @@ export async function listMyBookings(email: string) {
         .from('orders')
         .select(MY_BOOKING_COLUMNS)
         .eq('email', email.toLowerCase())
+        .eq('events.community', COMMUNITY_SLUG)
         .order('created_at', { ascending: false })
     if (error) throw new Error(error.message)
     return data
