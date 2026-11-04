@@ -20,7 +20,7 @@ import type { TicketDraft, TicketTypeStock } from '~/types/ticket-types'
 
 export function TicketTypesPanel({ eventId, community }: { eventId: string; community: string }) {
     const canEdit = useCan('editEvents')
-    const { applications } = communityFeatures(community)
+    const { freeTickets } = communityFeatures(community)
     const { data: tickets = [], isPending } = useTicketTypes({ variables: eventId })
     const [draft, setDraft] = useState<TicketDraft | null>(null)
     const [deleting, setDeleting] = useState<TicketTypeStock | null>(null)
@@ -79,7 +79,7 @@ export function TicketTypesPanel({ eventId, community }: { eventId: string; comm
                     eventId={eventId}
                     draft={draft}
                     nextSortOrder={nextSortOrder}
-                    approvals={applications}
+                    freeTickets={freeTickets}
                     onClose={() => setDraft(null)}
                 />
             )}
