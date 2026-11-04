@@ -1,51 +1,30 @@
-import type { ApplicationRequest, MemberProfileInput, RegistrationFormValues, RsvpRequest } from '~/types/registration'
+import type { CartLine, MemberProfileInput, OrderRequest, RegistrationFormValues } from '~/types/registration'
 
-function toProfile({
-    memberType,
-    jobTitle,
-    linkedinUrl,
-    lookingFor,
-    companyName,
-    companyWebsite,
-    industry,
-    stage,
-}: RegistrationFormValues): MemberProfileInput {
-    const company = Object.fromEntries(
-        Object.entries({ name: companyName, website: companyWebsite, industry, stage }).filter(([, value]) => value),
-    )
+function toProfile({ memberType, jobTitle, companyName }: RegistrationFormValues): MemberProfileInput {
     return {
         memberType,
         ...(jobTitle && { jobTitle }),
-        ...(linkedinUrl && { linkedinUrl }),
-        lookingFor,
-        ...(companyName && { company }),
+        ...(companyName && { company: { name: companyName } }),
     }
 }
 
 const filledAnswers = (answers: Record<string, string>) =>
     Object.fromEntries(Object.entries(answers).filter(([, value]) => value))
 
-export function toRsvpRequest(eventId: string, values: RegistrationFormValues): RsvpRequest {
-    const { ticketTypeId, name, email, phone, answers, marketingConsent } = values
+export function toOrderRequest(
+    eventId: string,
+    lines: CartLine[],
+    values: RegistrationFormValues,
+    promoCode: string | undefined,
+): OrderRequest {
+    const { name, email, phone, answers, marketingConsent } = values
     return {
         eventId,
-        items: [{ ticketTypeId, quantity: 1 }],
+        items: lines.map(({ option, quantity }) => ({ ticketTypeId: option.id, quantity })),
         buyer: { name, email, phone },
         answers: filledAnswers(answers),
         profile: toProfile(values),
-        marketingConsent,
-        termsAccepted: true,
-    }
-}
-
-export function toApplicationRequest(eventId: string, values: RegistrationFormValues): ApplicationRequest {
-    const { ticketTypeId, name, email, phone, answers, marketingConsent } = values
-    return {
-        eventId,
-        ticketTypeId,
-        applicant: { name, email, phone },
-        answers: filledAnswers(answers),
-        profile: toProfile(values),
+        ...(promoCode && { promoCode }),
         marketingConsent,
         termsAccepted: true,
     }
