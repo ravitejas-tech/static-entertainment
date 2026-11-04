@@ -1,4 +1,5 @@
 import type { CSSProperties, FocusEvent, MouseEvent, PointerEvent, ReactNode } from 'react'
+import { observeEntrance } from '~/lib/entrance'
 import { cn } from '~/lib/utils'
 
 export interface PanelFrameProps {
@@ -25,6 +26,7 @@ export function PanelFrame({ order, open, onOpen, backdrop, tab, children }: Pan
 
     return (
         <div
+            ref={observeEntrance}
             onPointerEnter={openOnHover}
             onFocus={openOnKeyboardFocus}
             onClickCapture={openBeforeFollowing}
