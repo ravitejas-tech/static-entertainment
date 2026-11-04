@@ -8,6 +8,7 @@ import { Select } from '~/components/ui/select'
 import { Spinner } from '~/components/ui/spinner'
 import { GALLERY_COPY, GALLERY_EVENT_PARAM } from '~/data/gallery/copy'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useEvents } from '~/hooks/events/queries'
 import { useGalleryPhotos } from '~/hooks/gallery/queries'
 import { eventOptions } from '~/lib/event-list'
@@ -22,7 +23,8 @@ export async function clientLoader() {
 
 export default function Gallery({ loaderData: { now } }: Route.ComponentProps) {
     const [params, setParams] = useSearchParams()
-    const { data: events } = useEvents()
+    const { slug: community } = useCommunity()
+    const { data: events } = useEvents({ variables: community })
     const ordered = pastEventsFirst(events ?? [], now)
     const event = ordered.find(({ id }) => id === params.get(GALLERY_EVENT_PARAM)) ?? ordered[0]
     const { data: photos } = useGalleryPhotos({ variables: event?.id ?? '', enabled: Boolean(event) })
