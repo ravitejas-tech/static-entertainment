@@ -13,7 +13,7 @@ export const ACTIVITY_COPY = {
     empty: {
         emoji: '🕰️',
         title: 'Nothing here yet',
-        body: 'Changes to events, tickets, promo codes, applications and the team show up here.',
+        body: 'Changes to events, tickets, promo codes and the team show up here.',
     },
     things: {
         events: named('the event'),
@@ -22,7 +22,6 @@ export const ACTIVITY_COPY = {
         staff: (name: string) => name,
         orders: named('the order'),
         tickets: named('the ticket'),
-        applications: named('the application from'),
     } satisfies Record<ActivityEntity, (name: string) => string>,
     created: (thing: string) => `created ${thing}`,
     added: (name: string) => `added ${name} to the team`,
@@ -50,7 +49,6 @@ export const ACTIVITY_COPY = {
     complimentary: (count: number, type: string, email: string) =>
         `gave ${count} free ${type} ${count === 1 ? 'ticket' : 'tickets'} to ${email}`,
     override: (code: string) => `let ${code} in again`,
-    reviewed: (name: string, status: string) => `marked ${name}'s application as ${status.toLowerCase()}`,
     fallbackName: 'something',
     fieldSeparator: ', ',
 } as const
