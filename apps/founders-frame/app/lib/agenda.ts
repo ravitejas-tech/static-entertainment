@@ -1,7 +1,5 @@
-import { EVENT_FORMATS } from '~/data/events/formats'
 import { formatCalendarMonth } from '~/lib/format'
-import type { EventFormat, EventMonth, EventSummary, FormatCount } from '~/types/events'
-import type { Option } from '~/types/options'
+import type { EventMonth, EventSummary, TypeCount } from '~/types/events'
 
 export function groupByMonth(events: EventSummary[]): EventMonth[] {
     const months = new Map<string, EventMonth>()
@@ -14,12 +12,9 @@ export function groupByMonth(events: EventSummary[]): EventMonth[] {
     return [...months.values()]
 }
 
-export function countFormats(events: EventSummary[]): FormatCount[] {
-    return (Object.keys(EVENT_FORMATS) as EventFormat[])
-        .map((format) => ({ format, count: events.filter((event) => event.format === format).length }))
-        .filter(({ count }) => count > 0)
-}
-
-export function typeOptions(events: EventSummary[]): Option[] {
-    return [...new Set(events.map(({ categoryLabel }) => categoryLabel))].map((label) => ({ value: label, label }))
+export function countTypes(events: EventSummary[]): TypeCount[] {
+    return [...new Set(events.map(({ categoryLabel }) => categoryLabel))].map((label) => ({
+        label,
+        count: events.filter(({ categoryLabel }) => categoryLabel === label).length,
+    }))
 }
