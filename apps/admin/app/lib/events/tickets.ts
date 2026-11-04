@@ -45,7 +45,6 @@ export function ticketToForm(source?: TicketType | TicketPreset): TicketTypeValu
         sales_end: toIstInput(source.sales_end),
         visible: source.visible,
         sold_out: source.sold_out,
-        requires_approval: source.requires_approval,
     }
 }
 
