@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const scheduleItemSchema = z.object({ time: z.string(), title: z.string() })
 
-export const hostSchema = z.object({ name: z.string(), role: z.string() })
+export const hostSchema = z.object({ name: z.string(), role: z.string(), part: z.string().default('') })
 
 export const faqSchema = z.object({ question: z.string(), answer: z.string() })
 
