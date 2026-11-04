@@ -1,7 +1,6 @@
 import { AudienceSection } from '~/components/landing/audience-section'
 import { ClosingCta } from '~/components/landing/closing-cta'
 import { EventsSection } from '~/components/landing/events-section'
-import { FaqSection } from '~/components/landing/faq-section'
 import { FormatsSection } from '~/components/landing/formats-section'
 import { HeroSection } from '~/components/landing/hero-section'
 import { HOME_EVENTS_LIMIT } from '~/data/landing/events'
@@ -32,7 +31,6 @@ export default function Home({ loaderData: { events } }: Route.ComponentProps) {
             <EventsSection events={events.slice(0, HOME_EVENTS_LIMIT)} />
             <AudienceSection />
             <FormatsSection />
-            <FaqSection />
             <ClosingCta />
         </>
     )
