@@ -10,6 +10,8 @@ const fromItems = (items: readonly { value: string }[]) => items.map(({ value })
 const filled = <Item extends Record<string, string>>(items: readonly Item[]) =>
     items.filter((item) => Object.values(item).some(Boolean))
 
+const withoutEmptyPart = ({ part, ...host }: EventFormValues['hosts'][number]) => (part ? { ...host, part } : host)
+
 export function eventToForm(event: EventRow): EventFormValues {
     return {
         title: event.title,
@@ -44,6 +46,9 @@ export function eventToForm(event: EventRow): EventFormValues {
         faqs: faqListSchema.parse(event.faqs),
         terms: event.terms,
         refund_policy: event.refund_policy,
+        audience: event.audience,
+        industries: event.industries,
+        founder_stages: event.founder_stages,
     }
 }
 
@@ -57,7 +62,7 @@ export function formToEventUpdate(values: EventFormValues): EventUpdate {
         cover_source: values.cover_source || null,
         highlights: fromItems(values.highlights),
         schedule: filled(values.schedule),
-        hosts: filled(values.hosts),
+        hosts: filled(values.hosts).map(withoutEmptyPart),
         included: fromItems(values.included),
         not_included: fromItems(values.not_included),
         things_to_know: fromItems(values.things_to_know),
