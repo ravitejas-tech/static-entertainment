@@ -1,19 +1,10 @@
 import { ACTIVITY_COPY as copy } from '~/data/activity/copy'
 import { describeUpdate } from '~/lib/activity-updates'
-import { applicationStatusLabel } from '~/lib/applications'
 import { formatRupees } from '~/lib/format'
 import { activityDetailsSchema, fieldChangesSchema } from '~/schemas/activity'
 import type { ActivityEntity, ActivityEntry, ActivityItem } from '~/types/activity'
 
-const ENTITIES: readonly ActivityEntity[] = [
-    'events',
-    'ticket_types',
-    'promo_codes',
-    'staff',
-    'orders',
-    'tickets',
-    'applications',
-]
+const ENTITIES: readonly ActivityEntity[] = ['events', 'ticket_types', 'promo_codes', 'staff', 'orders', 'tickets']
 
 export const nameKey = (entity: string, id: string | null) => `${entity}:${id ?? ''}`
 
@@ -37,7 +28,6 @@ export function describeActivity(entry: ActivityEntry, names: ReadonlyMap<string
         refund: () => copy.refunded(formatRupees(details.amount ?? 0), details.booking_code ?? name),
         complimentary: () => copy.complimentary(details.quantity ?? 1, details.ticket_type ?? '', details.email ?? ''),
         check_in_override: () => copy.override(details.ticket ?? name),
-        review: () => copy.reviewed(name, applicationStatusLabel(details.status)),
     }
     return sentences[entry.action]?.() ?? `${entry.action} ${name}`
 }
