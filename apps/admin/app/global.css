@@ -77,8 +77,6 @@
     --pop-orange: #ff8a3d;
 
     --hard-shadow: #1b1035;
-
-    --brand-logo: url('/brand/logo-light.webp');
 }
 
 :root[data-theme='dark'] {
@@ -108,17 +106,11 @@
     --pop-orange: #ff9550;
 
     --hard-shadow: #ff5ca8;
-
-    --brand-logo: url('/brand/logo-dark.webp');
 }
 
 @utility bg-party-dots {
     background-image: radial-gradient(var(--dot) 1.5px, transparent 1.5px);
     background-size: 22px 22px;
-}
-
-@utility bg-brand-logo {
-    background: var(--brand-logo) left center / contain no-repeat;
 }
 
 @utility scrollbar-none {
