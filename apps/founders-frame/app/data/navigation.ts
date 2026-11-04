@@ -3,7 +3,6 @@ export const PATHS = {
     events: '/events',
     about: '/about',
     tickets: '/tickets',
-    applications: '/applications',
 } as const
 
 export const PUBLIC_PAGES = [PATHS.home, PATHS.events, PATHS.about] as const
@@ -17,13 +16,12 @@ const withSeat = (path: string, ticketTypeId?: string) =>
 
 export const eventPath = (slug: string) => `${PATHS.events}/${slug}`
 
-export const rsvpPath = (slug: string, ticketTypeId?: string) => withSeat(`${eventPath(slug)}/rsvp`, ticketTypeId)
+export const BOOK_SEGMENT = 'book'
 
-export const applyPath = (slug: string, ticketTypeId?: string) => withSeat(`${eventPath(slug)}/apply`, ticketTypeId)
+export const bookPath = (slug: string, ticketTypeId?: string) =>
+    withSeat(`${eventPath(slug)}/${BOOK_SEGMENT}`, ticketTypeId)
 
 export const ticketPath = (accessToken: string) => `${PATHS.tickets}/${accessToken}`
-
-export const applicationPath = (accessToken: string) => `${PATHS.applications}/${accessToken}`
 
 export const SECTION_IDS = {
     events: 'events',
