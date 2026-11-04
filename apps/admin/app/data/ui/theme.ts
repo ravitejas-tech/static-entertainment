@@ -1,6 +1,6 @@
 import { Monitor, Moon, Sun } from 'lucide-react'
 
-export const THEME_STORAGE_KEY = 'echoverse-admin-theme'
+export const THEME_STORAGE_KEY = 'admin-theme'
 
 export const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)'
 
