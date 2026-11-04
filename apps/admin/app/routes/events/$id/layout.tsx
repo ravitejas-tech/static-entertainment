@@ -8,7 +8,6 @@ import { TabsNav } from '~/components/ui/tabs-nav'
 import { EVENT_HEADER_COPY } from '~/data/events/copy'
 import { EVENT_PATHS, eventTabs } from '~/data/events/links'
 import { ERROR_COPY, LOADING_LABEL } from '~/data/ui/feedback'
-import { useShowsApplications } from '~/hooks/applications/use-shows-applications'
 import { useEvent } from '~/hooks/events/queries'
 import { requirePermission } from '~/lib/guards'
 import type { EventOutletContext } from '~/types/events'
@@ -21,7 +20,6 @@ export async function clientLoader() {
 
 export default function EventLayout({ params }: Route.ComponentProps) {
     const { data: event, isPending, isError } = useEvent({ variables: params.id })
-    const showsApplications = useShowsApplications(event?.community ?? '')
 
     if (isPending) return <Spinner label={LOADING_LABEL} />
     if (isError) return <Notice tone='pink'>{ERROR_COPY.failed.details}</Notice>
@@ -41,7 +39,7 @@ export default function EventLayout({ params }: Route.ComponentProps) {
         <>
             <EventHeader event={event} />
             <TabsNav
-                items={eventTabs(event.id, showsApplications)}
+                items={eventTabs(event.id)}
                 label={EVENT_HEADER_COPY.tabsLabel}
             />
             <Outlet context={{ event } satisfies EventOutletContext} />
