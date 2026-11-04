@@ -9,6 +9,7 @@ import { Spinner } from '~/components/ui/spinner'
 import { PROMO_CODES_COPY } from '~/data/promo-codes/copy'
 import { SEARCH_FROM_COUNT } from '~/data/promo-codes/limits'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { usePromoCodes } from '~/hooks/promo-codes/queries'
 import { matchesPromoSearch } from '~/lib/promo-codes'
 import type { PromoCodeOverview } from '~/types/promo-codes'
@@ -22,7 +23,8 @@ export interface PromoCodesSectionProps {
 }
 
 export function PromoCodesSection({ canEdit, onCreate, onEdit }: PromoCodesSectionProps) {
-    const { data: codes, isPending, isError, refetch } = usePromoCodes()
+    const { slug: community } = useCommunity()
+    const { data: codes, isPending, isError, refetch } = usePromoCodes({ variables: community })
     const [searchText, setSearchText] = useState('')
 
     if (isPending) return <Spinner label={LOADING_LABEL} />
