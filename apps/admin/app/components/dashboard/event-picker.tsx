@@ -1,5 +1,6 @@
 import { Select } from '~/components/ui/select'
 import { DASHBOARD_COPY } from '~/data/dashboard/copy'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useEvents } from '~/hooks/events/queries'
 import { eventOptions } from '~/lib/event-list'
 
@@ -9,7 +10,8 @@ export interface EventPickerProps {
 }
 
 export function EventPicker({ value, onChange }: EventPickerProps) {
-    const { data: events = [] } = useEvents()
+    const { slug: community } = useCommunity()
+    const { data: events = [] } = useEvents({ variables: community })
 
     return (
         <Select
