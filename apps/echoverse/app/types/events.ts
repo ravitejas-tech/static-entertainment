@@ -1,10 +1,11 @@
 import type { z } from 'zod'
+import type { EVENT_CATEGORIES } from '~/data/events/categories'
 import type { PopTone } from '~/data/ui/pop-tones'
 import type { eventFaqSchema, eventHostSchema, eventScheduleItemSchema } from '~/schemas/event-content'
-import type { Enums, Tables } from '~/types/database'
+import type { Tables } from '~/types/database'
 import type { Photo } from '~/types/media'
 
-export type EventCategory = Enums<'event_category'>
+export type EventCategory = keyof typeof EVENT_CATEGORIES
 
 export type TicketTypeRow = Tables<'ticket_types'>
 
