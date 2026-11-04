@@ -1,15 +1,17 @@
-import {
-    confirmApplicationResultSchema,
-    createOrderResultSchema,
-    submitApplicationResultSchema,
-} from '~/schemas/functions'
+import { createOrderResultSchema, verifyPaymentResultSchema } from '~/schemas/functions'
 import { invokeFunction } from '~/services/functions'
-import type { ApplicationRequest, RsvpRequest } from '~/types/registration'
+import { supabase } from '~/services/supabase'
+import type { OrderRequest, PromoQuoteInput, VerifyPaymentInput } from '~/types/registration'
 
-export const createRsvp = (request: RsvpRequest) => invokeFunction('create-order', request, createOrderResultSchema)
+export const createOrder = (request: OrderRequest) => invokeFunction('create-order', request, createOrderResultSchema)
 
-export const submitApplication = (request: ApplicationRequest) =>
-    invokeFunction('submit-application', request, submitApplicationResultSchema)
+export const verifyPayment = (input: VerifyPaymentInput) =>
+    invokeFunction('verify-payment', input, verifyPaymentResultSchema)
 
-export const confirmApplication = (accessToken: string) =>
-    invokeFunction('confirm-application', { accessToken }, confirmApplicationResultSchema)
+export async function quotePromo({ eventId, code, subtotal }: PromoQuoteInput) {
+    const { data, error } = await supabase
+        .rpc('quote_promo', { p_event_id: eventId, p_code: code, p_subtotal: subtotal })
+        .single()
+    if (error) throw new Error(error.message)
+    return data
+}
