@@ -29,6 +29,8 @@ export const PERMISSIONS = {
     refundOrders: ['super_admin', 'finance'],
     resendTickets: ['super_admin', 'event_manager', 'finance'],
     issueComplimentary: ['super_admin', 'event_manager'],
+    viewApplications: ['super_admin', 'event_manager', 'finance', 'marketing', 'viewer'],
+    reviewApplications: ['super_admin', 'event_manager'],
     viewPromoCodes: ['super_admin', 'event_manager', 'finance', 'marketing', 'viewer'],
     editPromoCodes: ['super_admin', 'event_manager', 'marketing'],
     checkIn: ['super_admin', 'event_manager', 'gate_staff'],
