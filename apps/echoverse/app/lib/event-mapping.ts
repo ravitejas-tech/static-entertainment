@@ -1,7 +1,7 @@
-import { EVENT_CATEGORIES } from '~/data/events/categories'
+import { EVENT_CATEGORIES, FALLBACK_CATEGORY } from '~/data/events/categories'
 import { FALLBACK_EVENT_PHOTO } from '~/data/events/media'
 import { EVENT_STATUS_PRIORITY } from '~/data/events/status'
-import { directionsUrl, hasEnded, isBookable, ticketStatus } from '~/lib/events'
+import { directionsUrl, hasEnded, isBookable, isEventCategory, ticketStatus } from '~/lib/events'
 import { eventFaqsSchema, eventHostsSchema, eventScheduleSchema } from '~/schemas/event-content'
 import type {
     EventDetail,
@@ -44,13 +44,14 @@ function summarize(row: EventWithTickets, tickets: TicketView[], now: number): E
         .map(({ opensAt }) => opensAt ?? '')
         .sort((a, b) => Date.parse(a) - Date.parse(b))
     const ticketStatuses = tickets.map(({ status }) => status)
+    const category = isEventCategory(row.category) ? row.category : FALLBACK_CATEGORY
 
     return {
         id: row.id,
         slug: row.slug,
         title: row.title,
-        category: row.category,
-        categoryLabel: EVENT_CATEGORIES[row.category].label,
+        category,
+        categoryLabel: EVENT_CATEGORIES[category].label,
         tag: row.tag,
         tone: row.tone,
         summary: row.summary,
