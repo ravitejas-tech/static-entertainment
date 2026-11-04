@@ -12,7 +12,6 @@ export default [
             route('tickets', 'routes/events/$id/tickets.tsx'),
             route('questions', 'routes/events/$id/questions.tsx'),
             route('attendees', 'routes/events/$id/attendees.tsx'),
-            route('applications', 'routes/events/$id/applications.tsx'),
         ]),
         route('promo-codes', 'routes/promo-codes.tsx'),
         route('orders', 'routes/orders/index.tsx'),
