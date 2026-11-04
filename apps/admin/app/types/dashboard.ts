@@ -21,3 +21,8 @@ export interface OrderBreakdownItem extends Required<Pick<BadgeProps, 'tone'>> {
     key: Exclude<keyof DashboardOrderCounts, 'needs_refund'>
     label: string
 }
+
+export interface DashboardScope {
+    community: string
+    eventId: string | null
+}
