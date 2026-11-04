@@ -5,3 +5,6 @@
 # React Router
 /.react-router/
 /build/
+
+# original image sources (large PNGs); the site serves the WebP versions in public/images
+/image-sources/
