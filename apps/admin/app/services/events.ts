@@ -3,14 +3,21 @@ import { supabase } from '~/services/supabase'
 import { uploadEventImage } from '~/services/storage'
 import type { EventInsert, EventOverview, EventUpdate } from '~/types/events'
 
-export async function listEvents() {
-    const { data, error } = await supabase.from('events').select('*').order('starts_at', { ascending: false })
+export async function listEvents(community: string) {
+    const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('community', community)
+        .order('starts_at', { ascending: false })
     if (error) throw error
     return data
 }
 
-export async function listEventOverviews(): Promise<EventOverview[]> {
-    const [events, { data: summaries, error }] = await Promise.all([listEvents(), supabase.rpc('event_summaries')])
+export async function listEventOverviews(community: string): Promise<EventOverview[]> {
+    const [events, { data: summaries, error }] = await Promise.all([
+        listEvents(community),
+        supabase.rpc('event_summaries', { p_community: community }),
+    ])
     if (error) throw error
     return events.map((event) => ({ ...event, stats: summaries.find(({ event_id }) => event_id === event.id) }))
 }
