@@ -1,5 +1,4 @@
 import { BRAND_NAME, BRAND_TAGLINE } from '~/data/brand'
-import { HOME_FAQS } from '~/data/landing/faq'
 import { BRAND_ICONS, SITE } from '~/data/seo/site'
 import { absoluteUrl } from '~/lib/seo/url'
 
@@ -24,14 +23,6 @@ export function homeSchema() {
                 name: BRAND_NAME,
                 inLanguage: SITE.language,
                 publisher: { '@id': organizationId },
-            },
-            {
-                '@type': 'FAQPage',
-                mainEntity: HOME_FAQS.map(({ question, answer }) => ({
-                    '@type': 'Question',
-                    name: question,
-                    acceptedAnswer: { '@type': 'Answer', text: answer },
-                })),
             },
         ],
     }
