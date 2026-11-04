@@ -24,7 +24,7 @@ export const ORDERS_COPY = {
         source: 'From',
         date: 'Booked',
     },
-    sources: { complimentary: 'Free ticket' },
+    sources: { complimentary: 'Free ticket', application: 'Application' },
     detail: {
         back: 'All orders',
         notFound: { emoji: '🔍', title: 'Order not found', body: 'It may have been removed, or the link is wrong.' },
@@ -64,7 +64,6 @@ export const ORDERS_COPY = {
     summary: {
         tickets: (count: number) => `${count} ${count === 1 ? 'ticket' : 'tickets'}`,
         paid: 'Paid',
-        free: 'Free ticket',
         pending: 'Waiting for payment',
         expired: 'Payment not finished. Nothing was charged',
         failed: 'Payment failed',
