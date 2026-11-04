@@ -3,16 +3,17 @@ import { Skeleton } from '~/components/ui/skeleton'
 
 export function RegistrationSkeleton() {
     return (
-        <Container className='space-y-8 py-10 md:py-14'>
-            <Skeleton className='h-5 w-28' />
-            <div className='grid gap-10 lg:grid-cols-12'>
-                <div className='space-y-6 lg:col-span-7'>
-                    <Skeleton className='h-12 w-3/4' />
-                    <Skeleton className='h-6 w-full' />
-                    <Skeleton className='h-80 w-full' />
+        <div>
+            <Skeleton className='h-96 w-full rounded-none lg:h-110' />
+            <Container className='grid gap-12 pb-16 lg:grid-cols-12'>
+                <div className='space-y-6 pt-10 lg:col-span-7 lg:pt-14'>
+                    <Skeleton className='h-8 w-56' />
+                    <Skeleton className='h-24 w-full' />
+                    <Skeleton className='h-24 w-full' />
+                    <Skeleton className='h-48 w-full' />
                 </div>
-                <Skeleton className='h-48 lg:col-span-5' />
-            </div>
-        </Container>
+                <Skeleton className='hidden h-150 rounded-2xl lg:col-span-5 lg:-mt-52 lg:block' />
+            </Container>
+        </div>
     )
 }
