@@ -13,7 +13,8 @@ import type { Route } from './+types/root'
 import './global.css'
 
 export const links: Route.LinksFunction = () => [
-    { rel: 'icon', type: 'image/png', sizes: '32x32', href: ADMIN_ICONS.favicon },
+    { rel: 'icon', type: 'image/svg+xml', href: ADMIN_ICONS.favicon },
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: ADMIN_ICONS.faviconPng },
     { rel: 'apple-touch-icon', href: ADMIN_ICONS.appleTouch },
 ]
 
