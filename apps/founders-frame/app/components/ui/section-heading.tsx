@@ -1,5 +1,6 @@
 import { Text } from '~/components/ui/text'
 import { sectionTitleId } from '~/data/layout/landmarks'
+import { observeEntrance } from '~/lib/entrance'
 import { cn } from '~/lib/utils'
 
 export interface SectionHeadingProps {
@@ -22,7 +23,9 @@ export function SectionHeading({
     className,
 }: SectionHeadingProps) {
     return (
-        <div className={cn('mb-8 max-w-3xl space-y-3 md:mb-12', reveal && 'motion-safe:animate-reveal', className)}>
+        <div
+            ref={reveal ? observeEntrance : undefined}
+            className={cn('mb-8 max-w-3xl space-y-3 md:mb-12', reveal && 'motion-safe:animate-reveal', className)}>
             <Text variant='meta'>{eyebrow}</Text>
             <Text
                 as={level}
