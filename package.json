@@ -19,7 +19,7 @@
         "db:start": "supabase start",
         "db:stop": "supabase stop",
         "db:reset": "supabase db reset",
-        "db:types": "supabase gen types typescript --local > apps/echoverse/app/types/database.ts && cp apps/echoverse/app/types/database.ts apps/admin/app/types/database.ts && prettier --write apps/echoverse/app/types/database.ts apps/admin/app/types/database.ts",
+        "db:types": "supabase gen types typescript --local > apps/echoverse/app/types/database.ts && cp apps/echoverse/app/types/database.ts apps/admin/app/types/database.ts && cp apps/echoverse/app/types/database.ts apps/founders-frame/app/types/database.ts && prettier --write apps/*/app/types/database.ts",
         "functions:serve": "supabase functions serve --env-file supabase/functions/.env"
     },
     "engines": {
