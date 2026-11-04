@@ -7,7 +7,6 @@ export const ACTIVITY_FILTERS = [
     { value: 'promo_codes', label: 'Promo codes' },
     { value: 'team', label: 'Team' },
     { value: 'orders', label: 'Orders' },
-    { value: 'applications', label: 'Applications' },
     { value: 'check_ins', label: 'Check-ins' },
 ] as const
 
@@ -18,7 +17,6 @@ export const ACTIVITY_FILTER_ENTITIES: Record<ActivityFilter, ActivityEntity | n
     promo_codes: 'promo_codes',
     team: 'staff',
     orders: 'orders',
-    applications: 'applications',
     check_ins: 'tickets',
 }
 
