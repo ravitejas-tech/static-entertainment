@@ -76,7 +76,7 @@ Same setup as the Echoverse website, as a separate site on the static host.
 - Environment variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - **SPA fallback:** any path without a file serves `/__spa-fallback.html` with status 200.
 - **Rebuild when Founders Frame events change**, with its own deploy hook and database webhook, like step 5.
-- Once it has a domain, set it as the community's `site_url` (step 4) and add it to the Auth redirect URLs (step 1). Until then its ticket and application emails cannot link back to the site.
+- Once it has a domain, set it as the community's `site_url` (step 4) and add it to the Auth redirect URLs (step 1). Until then its ticket emails cannot link back to the site.
 
 ## 6. Admin panel (static)
 
