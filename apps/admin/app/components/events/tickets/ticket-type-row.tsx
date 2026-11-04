@@ -25,7 +25,6 @@ export function TicketTypeRow({ ticket, canEdit, index, count, onEdit, onMove, o
     const booked = TICKETS_COPY.booked(formatCount(ticket.booked), formatCount(ticket.quantity))
     const facts = [
         priceLabel(ticket.price),
-        ticket.requires_approval && TICKETS_COPY.needsApproval,
         booked,
         TICKETS_COPY.left(formatCount(ticket.remaining)),
         ticket.admits > 1 && TICKETS_COPY.admits(ticket.admits),
