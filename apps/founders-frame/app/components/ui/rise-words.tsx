@@ -1,6 +1,7 @@
 import { Fragment, type CSSProperties } from 'react'
 import { DrawnUnderline } from '~/components/ui/drawn-underline'
 import { Text } from '~/components/ui/text'
+import { observeEntrance } from '~/lib/entrance'
 import { splitWords } from '~/lib/words'
 
 const TRIGGER_CLASSES = {
@@ -21,9 +22,8 @@ export function RiseWords({ text, trigger = 'scroll', startOrder = 0, underlineL
     return words.map((word, index) => {
         const underlined = underlineLast && index === words.length - 1
         const mask = (
-            <Text
-                as='span'
-                variant='inherit'
+            <span
+                ref={trigger === 'scroll' ? observeEntrance : undefined}
                 className='word-mask'>
                 <Text
                     as='span'
@@ -32,7 +32,7 @@ export function RiseWords({ text, trigger = 'scroll', startOrder = 0, underlineL
                     style={{ '--word-order': startOrder + index } as CSSProperties}>
                     {word}
                 </Text>
-            </Text>
+            </span>
         )
 
         return (
@@ -43,7 +43,7 @@ export function RiseWords({ text, trigger = 'scroll', startOrder = 0, underlineL
                         variant='inherit'
                         className='relative inline-block'>
                         {mask}
-                        <DrawnUnderline />
+                        <DrawnUnderline trigger={trigger} />
                     </Text>
                 ) : (
                     mask
