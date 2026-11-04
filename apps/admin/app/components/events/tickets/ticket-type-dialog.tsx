@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { TicketTypeFields } from '~/components/events/tickets/ticket-type-fields'
@@ -6,7 +7,7 @@ import { Dialog } from '~/components/ui/dialog'
 import { TICKET_FORM_ID, TICKETS_COPY } from '~/data/events/tickets'
 import { useSaveTicketType } from '~/hooks/events/tickets/mutations'
 import { formToTicket, ticketToForm } from '~/lib/events/tickets'
-import { ticketTypeSchema, type TicketTypeValues } from '~/schemas/ticket-type'
+import { createTicketTypeSchema, type TicketTypeValues } from '~/schemas/ticket-type'
 import type { TicketDraft } from '~/types/ticket-types'
 
 const { dialog } = TICKETS_COPY
@@ -15,7 +16,7 @@ export interface TicketTypeDialogProps {
     eventId: string
     draft: TicketDraft
     nextSortOrder: number
-    approvals: boolean
+    freeTickets: boolean
     onClose: () => void
 }
 
@@ -23,12 +24,13 @@ export function TicketTypeDialog({
     eventId,
     draft: { ticket, preset },
     nextSortOrder,
-    approvals,
+    freeTickets,
     onClose,
 }: TicketTypeDialogProps) {
+    const schema = useMemo(() => createTicketTypeSchema(freeTickets), [freeTickets])
     const { mutate, isPending } = useSaveTicketType()
     const form = useForm<TicketTypeValues>({
-        resolver: zodResolver(ticketTypeSchema),
+        resolver: zodResolver(schema),
         defaultValues: ticketToForm(ticket ?? preset),
     })
 
@@ -65,7 +67,7 @@ export function TicketTypeDialog({
                             { onSuccess: onClose },
                         ),
                     )}>
-                    <TicketTypeFields approvals={approvals} />
+                    <TicketTypeFields freeTickets={freeTickets} />
                 </form>
             </FormProvider>
         </Dialog>
