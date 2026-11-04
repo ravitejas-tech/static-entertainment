@@ -1,14 +1,13 @@
 import { CalendarDays } from 'lucide-react'
 import { Link } from 'react-router'
 import { EventCover } from '~/components/events/event-cover'
-import { FormatBadge } from '~/components/events/format-badge'
+import { PriceBadge } from '~/components/events/price-badge'
 import { PanelFrame } from '~/components/landing/panel-frame'
 import { PanelTab } from '~/components/landing/panel-tab'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
 import { EVENT_CARD_COPY } from '~/data/events/card'
-import { EVENT_FORMATS } from '~/data/events/formats'
 import { HOME_EVENTS_PANELS } from '~/data/landing/events'
 import { eventPath } from '~/data/navigation'
 import { PHOTO_SIZES } from '~/data/ui/media'
@@ -25,7 +24,7 @@ export interface EventPanelProps {
 }
 
 export function EventPanel({ event, order, first, priority = false, open, onOpen }: EventPanelProps) {
-    const { slug, title, categoryLabel, format, summary, startsAt, endsAt, venueName, city, photo } = event
+    const { slug, title, categoryLabel, fromPrice, summary, startsAt, endsAt, venueName, city, photo } = event
     const { day, month } = formatDateBadge(startsAt)
 
     return (
@@ -79,7 +78,7 @@ export function EventPanel({ event, order, first, priority = false, open, onOpen
                             <time dateTime={startsAt}>{formatEventDay(startsAt)}</time>
                         </Text>
                     </span>
-                    <FormatBadge format={format} />
+                    <PriceBadge price={fromPrice} />
                     {!event.open && <Badge tone='neutral'>{EVENT_CARD_COPY.closed}</Badge>}
                 </div>
                 <div className='max-w-xl space-y-3'>
@@ -116,7 +115,7 @@ export function EventPanel({ event, order, first, priority = false, open, onOpen
                         asChild
                         variant='gold'
                         className='mt-2 w-full sm:w-auto'>
-                        <span>{event.open ? EVENT_FORMATS[format].cta : HOME_EVENTS_PANELS.details}</span>
+                        <span>{event.open ? EVENT_CARD_COPY.book : HOME_EVENTS_PANELS.details}</span>
                     </Button>
                 </div>
             </div>
