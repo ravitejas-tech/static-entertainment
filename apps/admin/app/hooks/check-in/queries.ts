@@ -5,7 +5,7 @@ import { getCheckInEvent, getCheckInStats, listCheckInEvents, listRecentCheckIns
 
 export const useCheckInEvents = createQuery({
     queryKey: ['check-in-events'],
-    fetcher: async () => splitByTime(await listCheckInEvents(), Date.now()),
+    fetcher: async (community: string) => splitByTime(await listCheckInEvents(community), Date.now()),
     refetchInterval: EVENTS_REFRESH_MS,
 })
 
