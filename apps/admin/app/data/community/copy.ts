@@ -2,7 +2,7 @@ export const COMMUNITY_COPY = {
     list: {
         title: 'Community',
         description:
-            'Everyone who has booked with Echoverse. See who is new, who keeps coming back and who to invite again.',
+            'Everyone who has booked with this community. See who is new, who keeps coming back and who to invite again.',
         caption: 'Community members',
         segmentLabel: 'Show',
         sortLabel: 'Sort',
@@ -74,7 +74,7 @@ export const COMMUNITY_COPY = {
         noBookings: { emoji: '🎟️', title: 'No bookings', body: 'Their bookings will show up here.' },
     },
     csv: {
-        filePrefix: 'echoverse-community',
+        filePrefix: 'community',
         headers: {
             name: 'Name',
             email: 'Email',
