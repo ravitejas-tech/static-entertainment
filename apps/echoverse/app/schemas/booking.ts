@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { Constants } from '~/types/database'
 
-const { order_status, order_source, event_category, pop_tone, ticket_status } = Constants.public.Enums
+const { order_status, order_source, pop_tone, ticket_status } = Constants.public.Enums
 
 export const bookingSchema = z.object({
     order: z.object({
@@ -24,7 +24,7 @@ export const bookingSchema = z.object({
         id: z.string(),
         slug: z.string(),
         title: z.string(),
-        category: z.enum(event_category),
+        category: z.string(),
         tone: z.enum(pop_tone),
         starts_at: z.string(),
         ends_at: z.string(),
