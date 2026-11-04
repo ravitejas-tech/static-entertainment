@@ -5,7 +5,7 @@ The websites, ticketing platform and admin panel for Static Entertainment's comm
 | App | Folder | Local address |
 |---|---|---|
 | Echoverse Hub website: events, booking, QR tickets, My Tickets | `apps/echoverse/` | http://localhost:7300 |
-| Founders Frame website (scaffold) | `apps/founders-frame/` | http://localhost:7302 |
+| Founders Frame website: events, RSVPs, applications, QR tickets | `apps/founders-frame/` | http://localhost:7302 |
 | Admin panel: dashboard, events, orders, refunds, gate scanner | `apps/admin/` | http://localhost:7301 |
 | Backend: Supabase in Docker | `supabase/` | Studio http://127.0.0.1:54323 |
 
@@ -16,6 +16,7 @@ You need Node 22.22+, Yarn (bundled in the repo) and Docker Desktop (running).
 ```bash
 yarn install
 cp apps/echoverse/.env.example apps/echoverse/.env
+cp apps/founders-frame/.env.example apps/founders-frame/.env
 cp apps/admin/.env.example apps/admin/.env
 cp supabase/functions/.env.example supabase/functions/.env
 
