@@ -158,12 +158,23 @@ The palette is defined once in `app/global.css`: raw values on `:root` (light) a
 - **Confetti celebrates once.** The hero shower (`animate-confetti-fall`, one iteration) and the canvas burst play when the page opens, then stop. Nothing falls continuously behind content; later confetti only comes from a click (`CelebrateButton`).
 - **Every looping animation is `motion-safe:` or paired with `motion-reduce:`** — the marquee stops, confetti rain hides. Canvas confetti passes `disableForReducedMotion`.
 - **Content is visible without JavaScript.** `Reveal` is a CSS scroll-driven animation (`animate-reveal`, `animation-timeline: view()`); browsers without support just play it once on load. Nothing is prerendered at `opacity: 0`, and the hero has no entrance animation at all — it is the LCP element.
+- **Founders Frame's motion is calm and editorial**, all CSS except the typewriter, and all of it off under reduced motion:
+  - `Reveal` (`trigger='scroll'` by default, `'load'` in the hero) for blocks, `SectionHeading` reveals itself.
+  - `RiseWords` lifts a headline in word by word (`underlineLast` draws the hand-drawn `DrawnUnderline`).
+  - `animate-clip-reveal` on a photo frame with `animate-settle` on the photo; `animate-parallax-up` lifts the hero's next-gathering card on scroll. The hero's ink panel does not animate.
+  - The home events section is a row of expanding panels (`EventPanels`, each wrapped in `PanelFrame`): one panel is open, the rest are slim tabs with a vertical title (`writing-vertical`), and a navy "More gatherings coming" panel closes the row. Hovering or tabbing to a panel opens it; on phones the panels stack as bars, and the first tap opens a bar while the second follows its link. Only keyboard focus (`:focus-visible`) opens a panel, so a tap's focus never skips the first step. The row has no `Reveal`: a half-faded block at the fold fails Lighthouse's contrast check.
+  - The Founders Frame events page (`EventBrowser`) is a month agenda (`EventAgenda`: sticky month labels, one row per event, past months greyed) from `md` up, and the same expanding panels below `md`. Both are in the HTML and CSS shows one, so nothing waits on a JS media query; only the panels' first photo loads eagerly. The format chips (`FilterChip`) and the event-type select filter upcoming events only; past events always show.
+  - Event listings move without fading: `Reveal effect='lift'` (`animate-lift`, a slide up driven by scrolling that finishes once the item is fully on screen, or `animate-lift-load` on load) on agenda rows, phone sections and every expanding panel. Nothing in a list ever starts at `opacity: 0`, and event photos do not animate. The events page heading (`EventsIntro`) moves like the hero: `RiseWords` with the drawn underline, then the eyebrow, lead and filter bar `Reveal` on load; the agenda's month labels rise in with `RiseWords` on scroll.
+  - `Typewriter` types the hero's audience words once, then stops. The prerendered HTML shows the first word, and screen readers get the full list.
+- **The Founders Frame navbar is clear over the home hero** and turns solid within the first 4rem of scrolling (`animate-nav-solid`, a CSS scroll timeline, only on `/`). The hero pulls itself up under the sticky header (`-mt-16 pt-16 sm:-mt-18 sm:pt-18`). Browsers without scroll timelines keep the solid navbar.
+- **Scroll-driven animations need `overflow-clip`, not `overflow-hidden`,** on every ancestor up to the page. `overflow-hidden` makes the element a scroll container, `view()` then tracks that box instead of the page, and the animation silently never runs.
 - **Canvas confetti is loaded on demand** (`celebrate` in `~/lib/confetti` dynamically imports `canvas-confetti`), so it never runs during prerender.
 
 ### Light and dark
 
 - **Both themes come from the same tokens.** `data-theme='light' | 'dark'` on `<html>` swaps the raw values; components never branch on the theme and the `dark:` variant is never used.
 - **The preference** (`system`, `light`, `dark`) lives in `localStorage` under `echoverse-theme` and is read through `useTheme` (`~/hooks/use-theme`). `THEME_INIT_SCRIPT` in `root.tsx` applies it before first paint, so prerendered pages never flash the wrong theme.
+- **Founders Frame has no dark theme.** It keeps one light token set and no toggle; check it in light and at 375px only.
 - **Check every UI change in both themes and at 375px wide** — screenshot light, dark and mobile before handing it over. A page must never scroll horizontally; tilted cards are clipped by `overflow-x-clip` on `Section` and the public layout.
 
 ### Mobile
