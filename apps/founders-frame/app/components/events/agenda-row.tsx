@@ -1,12 +1,11 @@
 import { MapPin } from 'lucide-react'
 import { Link } from 'react-router'
 import { EventCover } from '~/components/events/event-cover'
-import { FormatBadge } from '~/components/events/format-badge'
+import { PriceBadge } from '~/components/events/price-badge'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
 import { EVENT_CARD_COPY } from '~/data/events/card'
-import { EVENT_FORMATS } from '~/data/events/formats'
 import { EVENTS_AGENDA } from '~/data/events/meta'
 import { eventPath } from '~/data/navigation'
 import { PHOTO_SIZES } from '~/data/ui/media'
@@ -20,7 +19,7 @@ export interface AgendaRowProps {
 }
 
 export function AgendaRow({ event, past = false }: AgendaRowProps) {
-    const { slug, title, categoryLabel, format, summary, startsAt, venueName, city, photo, open } = event
+    const { slug, title, categoryLabel, fromPrice, summary, startsAt, venueName, city, photo, open } = event
     const { weekday, day } = formatDateBadge(startsAt)
 
     return (
@@ -61,7 +60,11 @@ export function AgendaRow({ event, past = false }: AgendaRowProps) {
             <div className='flex min-w-0 flex-1 flex-col justify-between gap-4 p-5 lg:p-6'>
                 <div className='space-y-2'>
                     <div className='flex flex-wrap items-center gap-x-3 gap-y-2'>
-                        {past ? <Badge tone='neutral'>{EVENT_CARD_COPY.ended}</Badge> : <FormatBadge format={format} />}
+                        {past ? (
+                            <Badge tone='neutral'>{EVENT_CARD_COPY.ended}</Badge>
+                        ) : (
+                            <PriceBadge price={fromPrice} />
+                        )}
                         {!past && !open && <Badge tone='outline'>{EVENT_CARD_COPY.closed}</Badge>}
                         <Text
                             as='span'
@@ -107,7 +110,7 @@ export function AgendaRow({ event, past = false }: AgendaRowProps) {
                         <Button
                             asChild
                             size='sm'>
-                            <span>{open ? EVENT_FORMATS[format].cta : EVENTS_AGENDA.details}</span>
+                            <span>{open ? EVENT_CARD_COPY.book : EVENTS_AGENDA.details}</span>
                         </Button>
                     )}
                 </div>
