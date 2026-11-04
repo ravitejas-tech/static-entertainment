@@ -9,6 +9,8 @@ export const SEGMENT_STATE_CLASSES = {
     idle: 'hover:bg-surface-muted',
 } as const
 
+export const TOGGLE_CHIP_CLASS = 'cursor-pointer rounded-full border-2 border-border px-3 py-1.5 transition'
+
 export const TABS_TRACK_CLASS =
     'grid grid-cols-2 gap-1 rounded-2xl border-2 border-border bg-surface p-1 sm:flex sm:w-max sm:rounded-full'
 
