@@ -21,25 +21,31 @@ export const CONVERSATION_PHOTO = landingPhoto(
 )
 
 export const AUDIENCE_PHOTOS: Record<MemberType, ResponsivePhoto> = {
-    founder: landingPhoto('aud-founders', 'tall', 'Two co-founders sketching a plan on a glass wall'),
+    founder: landingPhoto('aud-founders-seat', 'seat', 'Two co-founders sketching a plan on a glass wall'),
     business_leader: landingPhoto(
-        'aud-leaders',
-        'tall',
+        'aud-leaders-seat',
+        'seat',
         'A business leader talking with a small circle of professionals',
     ),
-    investor: landingPhoto('aud-investors', 'tall', 'An investor listening to a founder over coffee'),
+    investor: landingPhoto('aud-investors-seat', 'seat', 'An investor listening to a founder over coffee'),
     professional: landingPhoto(
-        'aud-professionals',
-        'tall',
+        'aud-professionals-seat',
+        'seat',
         'Two professionals exchanging contacts at an evening event',
     ),
-    student: landingPhoto('aud-students', 'tall', 'Students discussing an idea around a table'),
-    ecosystem_partner: landingPhoto('aud-partners', 'tall', 'A mentor guiding three founders around a laptop'),
+    student: landingPhoto('aud-students-seat', 'seat', 'Students discussing an idea around a table'),
+    ecosystem_partner: landingPhoto('aud-partners-seat', 'seat', 'A mentor guiding three founders around a laptop'),
 }
 
 export const FORMAT_PHOTOS = {
     mixer: landingPhoto('format-mixer', 'wide', 'A founder mixer on a Pune rooftop at dusk'),
     roundtable: landingPhoto('format-roundtable', 'wide', 'Founders and investors in a moderated roundtable'),
+} as const
+
+export const JOURNEY_PHOTOS = {
+    stage: CONVERSATION_PHOTO,
+    event: FORMAT_PHOTOS.mixer,
+    room: GATHERING_PHOTO,
 } as const
 
 export const CTA_PHOTO = landingPhoto(
