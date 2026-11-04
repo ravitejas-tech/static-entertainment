@@ -12,6 +12,7 @@ export interface EmailMessage {
     html: string
     text: string
     images?: InlineImage[]
+    senderName?: string
 }
 
 function parseSender(from: string) {
@@ -19,8 +20,14 @@ function parseSender(from: string) {
     return match ? { name: match[1]?.trim() ?? '', email: match[2]?.trim() ?? from } : { name: '', email: from }
 }
 
-async function sendWithMailpit({ to, subject, html, text, images = [] }: EmailMessage) {
+function senderFor({ senderName }: EmailMessage) {
     const sender = parseSender(CONFIG.email.from)
+    return senderName ? { ...sender, name: senderName } : sender
+}
+
+async function sendWithMailpit(message: EmailMessage) {
+    const { to, subject, html, text, images = [] } = message
+    const sender = senderFor(message)
     const response = await fetch(`${CONFIG.email.mailpitUrl}/api/v1/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,7 +48,9 @@ async function sendWithMailpit({ to, subject, html, text, images = [] }: EmailMe
     if (!response.ok) throw new Error(`Mailpit rejected the email: ${response.status} ${await response.text()}`)
 }
 
-async function sendWithResend({ to, subject, html, text, images = [] }: EmailMessage) {
+async function sendWithResend(message: EmailMessage) {
+    const { to, subject, html, text, images = [] } = message
+    const sender = senderFor(message)
     const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -49,7 +58,7 @@ async function sendWithResend({ to, subject, html, text, images = [] }: EmailMes
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            from: CONFIG.email.from,
+            from: sender.name ? `${sender.name} <${sender.email}>` : sender.email,
             to: [to.email],
             subject,
             html,
