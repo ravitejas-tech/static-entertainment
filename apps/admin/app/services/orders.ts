@@ -5,14 +5,15 @@ import { invokeFunction } from '~/services/functions'
 import { supabase } from '~/services/supabase'
 import type { CancelRequest, OrderQuery, RefundRequest } from '~/types/orders'
 
-export async function listOrders({ eventId, filter, search }: OrderQuery, page: number) {
+export async function listOrders({ community, eventId, filter, search }: OrderQuery, page: number) {
     const from = page * ORDERS_PAGE_SIZE
     let query = supabase
         .from('orders')
         .select(
-            'id, booking_code, name, email, total, status, source, needs_refund, utm_source, created_at, events(title), order_items(quantity, admits)',
+            'id, booking_code, name, email, total, status, source, needs_refund, utm_source, created_at, events!inner(title), order_items(quantity, admits)',
             { count: 'exact' },
         )
+        .eq('events.community', community)
         .match(ORDER_FILTER_MATCH[filter])
         .order('created_at', { ascending: false })
         .range(from, from + ORDERS_PAGE_SIZE - 1)
@@ -28,7 +29,7 @@ export async function getOrder(id: string) {
     const { data, error } = await supabase
         .from('orders')
         .select(
-            '*, events(title, slug, questions), promo_codes(code), order_items(id, quantity, unit_price, admits, ticket_types(name)), tickets(id, code, status, checked_in_at, ticket_types(name))',
+            '*, events(title, slug, community, questions), promo_codes(code), order_items(id, quantity, unit_price, admits, ticket_types(name)), tickets(id, code, status, checked_in_at, ticket_types(name))',
         )
         .eq('id', id)
         .order('code', { referencedTable: 'tickets' })
