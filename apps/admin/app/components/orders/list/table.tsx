@@ -3,13 +3,13 @@ import { DataTable } from '~/components/ui/data-table'
 import { EmptyState } from '~/components/ui/empty-state'
 import { Text } from '~/components/ui/text'
 import { ORDERS_COPY } from '~/data/orders/copy'
-import { DIRECT_SOURCE, ORDERS_PATH } from '~/data/orders/query'
+import { ORDERS_PATH } from '~/data/orders/query'
 import { formatDateTime, formatRupees } from '~/lib/format'
-import { countPeople } from '~/lib/orders'
+import { countPeople, orderSourceLabel } from '~/lib/orders'
 import type { OrderListItem } from '~/types/orders'
 import type { TableColumn } from '~/types/table'
 
-const { columns, list, sources } = ORDERS_COPY
+const { columns, list } = ORDERS_COPY
 
 const ORDER_COLUMNS: TableColumn<OrderListItem>[] = [
     {
@@ -39,7 +39,7 @@ const ORDER_COLUMNS: TableColumn<OrderListItem>[] = [
     {
         key: 'source',
         header: columns.source,
-        cell: (order) => (order.source === 'complimentary' ? sources.complimentary : order.utm_source || DIRECT_SOURCE),
+        cell: orderSourceLabel,
         hideOnPhone: true,
     },
     { key: 'date', header: columns.date, cell: (order) => formatDateTime(order.created_at) },
