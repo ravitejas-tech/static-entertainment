@@ -8,14 +8,14 @@ import {
 import { searchAcross } from '~/lib/search'
 import { communityMemberSchema, communityStatsSchema } from '~/schemas/community'
 import { supabase } from '~/services/supabase'
-import type { CommunityMember, CommunityQuery } from '~/types/community'
+import type { CommunityMember, CommunityQuery, MemberRef } from '~/types/community'
 
 const membersSchema = communityMemberSchema.array()
 
-function membersQuery({ segment, sort, search }: CommunityQuery, count?: 'exact') {
+function membersQuery({ community, segment, sort, search }: CommunityQuery, count?: 'exact') {
     const { column, ascending } = COMMUNITY_SORT_ORDER[sort]
     let query = supabase
-        .rpc('community_members', {}, { count })
+        .rpc('community_members', { p_community: community }, { count })
         .match(COMMUNITY_SEGMENT_MATCH[segment])
         .order(column, { ascending })
         .order('id')
@@ -41,25 +41,29 @@ export async function listAllCommunityMembers(query: CommunityQuery) {
     }
 }
 
-export async function getCommunityStats() {
-    const { data, error } = await supabase.rpc('community_stats').single()
+export async function getCommunityStats(community: string) {
+    const { data, error } = await supabase.rpc('community_stats', { p_community: community }).single()
     if (error) throw error
     return communityStatsSchema.parse(data)
 }
 
-export async function getCommunityMember(id: string) {
-    const { data, error } = await supabase.rpc('community_members').eq('id', id).maybeSingle()
+export async function getCommunityMember({ community, id }: MemberRef) {
+    const { data, error } = await supabase
+        .rpc('community_members', { p_community: community })
+        .eq('id', id)
+        .maybeSingle()
     if (error) throw error
     return data && communityMemberSchema.parse(data)
 }
 
-export async function listMemberBookings(customerId: string) {
+export async function listMemberBookings({ community, id }: MemberRef) {
     const { data, error } = await supabase
         .from('orders')
         .select(
-            'id, booking_code, total, status, needs_refund, created_at, events(title, starts_at), order_items(quantity, admits)',
+            'id, booking_code, total, status, needs_refund, created_at, events!inner(title, starts_at), order_items(quantity, admits)',
         )
-        .eq('customer_id', customerId)
+        .eq('customer_id', id)
+        .eq('events.community', community)
         .in('status', MEMBER_BOOKING_STATUSES)
         .order('created_at', { ascending: false })
     if (error) throw error
