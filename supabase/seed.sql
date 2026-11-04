@@ -364,9 +364,9 @@ insert into public.events (
     '[{"name":"Sample host","role":"Community lead, Founders Frame","part":"host"},{"name":"Sample speaker","role":"Co-founder, sample SaaS startup","part":"speaker"}]',
     'English',
     array['Bring your LinkedIn QR code', 'Doors close at 7:30 PM'],
-    '[{"question":"Who is this for?","answer":"Founders, business leaders, investors, professionals and students who are serious about building."},{"question":"Is it free?","answer":"Yes. RSVP to reserve your spot."}]',
-    'Entry for registered guests only. Each QR code admits one person once.',
-    'This is a free event. If you can no longer attend, let us know so someone else can take your spot.',
+    '[{"question":"Who is this for?","answer":"Founders, business leaders, investors, professionals and students who are serious about building."},{"question":"What does a ticket include?","answer":"Entry, hosted introductions, the founder stories and dinner."}]',
+    'Entry for ticket holders only. Each QR code admits one person once.',
+    'Full refund up to 72 hours before the event. No refunds after that, but you can pass your ticket to a colleague by writing to us.',
     '[]',
     array['founder', 'business_leader', 'investor', 'professional', 'student'],
     array['saas', 'fintech', 'd2c'],
@@ -380,7 +380,7 @@ insert into public.events (
     'Investor and Founder Roundtable',
     'roundtable',
     'Twelve founders and eight investors around one table for an honest conversation about raising in 2027.',
-    'A curated roundtable. We review every application to keep the mix balanced between founders and investors, so everyone at the table can contribute and learn.',
+    'A small roundtable with seats for twelve founders and eight investors, so everyone at the table can contribute and learn.',
     '2026-12-05T16:00:00+05:30',
     '2026-12-05T18:30:00+05:30',
     'Pune', 'PUN', 'Maharashtra',
@@ -389,10 +389,10 @@ insert into public.events (
     '[{"time":"4:00 PM","title":"Welcome and introductions"},{"time":"4:20 PM","title":"Moderated roundtable"},{"time":"5:45 PM","title":"Open conversations"}]',
     '[{"name":"Sample moderator","role":"Partner, sample early-stage fund","part":"moderator"}]',
     'English',
-    array['Approved guests receive a link to confirm their place', 'This is not a pitch event'],
-    '[{"question":"How are guests selected?","answer":"We review every application for fit and to keep the room balanced."}]',
-    'Entry for approved and confirmed guests only.',
-    'This is a free event. Please confirm only if you can attend.',
+    array['Seats are limited to keep the table small', 'This is not a pitch event'],
+    '[{"question":"Why are seats limited?","answer":"Founder and investor seats are capped separately so the room stays balanced and everyone can take part."}]',
+    'Entry for ticket holders only. Each QR code admits one person once.',
+    'Full refund up to 5 days before the roundtable. No refunds after that, as seats are limited.',
     '[{"id":"custom-0f1a2b3c","kind":"custom","label":"What would make this roundtable worthwhile for you?","required":true}]',
     array['founder', 'investor'],
     array['saas', 'fintech', 'ai'],
@@ -417,8 +417,8 @@ insert into public.events (
     'English',
     '{}',
     '[]',
-    'Entry for registered guests only.',
-    'This was a free event.',
+    'Entry for ticket holders only.',
+    'Full refund up to 72 hours before the event. No refunds after that.',
     '[]',
     array['founder', 'professional'],
     array['saas'],
@@ -426,19 +426,22 @@ insert into public.events (
     'published', now()
 );
 
-insert into public.ticket_types (event_id, name, description, price, quantity, admits, min_per_order, max_per_order, sort_order, requires_approval) values
-    ('f0000000-0000-4000-8000-000000000001', 'RSVP', 'Free entry', 0, 80, 1, 1, 1, 1, false),
-    ('f0000000-0000-4000-8000-000000000002', 'Founder seat', 'For founders building a company', 0, 12, 1, 1, 1, 1, true),
-    ('f0000000-0000-4000-8000-000000000002', 'Investor seat', 'For angels, funds and family offices', 0, 8, 1, 1, 1, 2, true),
-    ('f0000000-0000-4000-8000-000000000003', 'RSVP', 'Free entry', 0, 60, 1, 1, 1, 1, false);
+insert into public.ticket_types (event_id, name, description, price, quantity, admits, min_per_order, max_per_order, sort_order) values
+    ('f0000000-0000-4000-8000-000000000001', 'Early bird', 'Limited seats at the best price', 499, 30, 1, 1, 4, 1),
+    ('f0000000-0000-4000-8000-000000000001', 'Standard', 'Entry, introductions and dinner', 799, 50, 1, 1, 4, 2),
+    ('f0000000-0000-4000-8000-000000000002', 'Founder seat', 'For founders building a company', 1499, 12, 1, 1, 1, 1),
+    ('f0000000-0000-4000-8000-000000000002', 'Investor seat', 'For angels, funds and family offices', 1499, 8, 1, 1, 1, 2),
+    ('f0000000-0000-4000-8000-000000000003', 'Standard', 'Entry and lightning talks', 299, 60, 1, 1, 4, 1);
 
 select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', 1, true);
 select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Nisha Bhat', 'nisha.bhat@example.com', '9822100002', 1, true);
 select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Rohan Mehta', 'rohan.mehta@example.com', '9881123456', 1, false);
 
-select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"RSVP","quantity":1}]', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', '{}', null, 'linkedin', 6);
-select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"RSVP","quantity":1}]', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', '{}', null, 'linkedin', 4);
-select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"RSVP","quantity":1}]', 'Kabir Sethi', 'kabir.sethi@example.com', '9822100004', '{}', null, 'direct', 2);
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Early bird","quantity":2}]', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', '{}', null, 'linkedin', 6);
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Standard","quantity":1}]', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', '{}', null, 'linkedin', 4);
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Early bird","quantity":1}]', 'Kabir Sethi', 'kabir.sethi@example.com', '9822100004', '{}', null, 'direct', 2);
+select pg_temp.seed_booking('investor-founder-roundtable-pune', '[{"name":"Founder seat","quantity":1}]', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', '{"custom-0f1a2b3c":"Honest feedback on our seed round plan."}', null, 'linkedin', 3);
+select pg_temp.seed_booking('investor-founder-roundtable-pune', '[{"name":"Investor seat","quantity":1}]', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', '{"custom-0f1a2b3c":"Meeting early fintech and SaaS founders in Pune."}', null, 'linkedin', 1);
 
 select public.save_member_profile(c.id, p.profile)
 from (values
@@ -448,36 +451,6 @@ from (values
     ('kabir.sethi@example.com', '{"member_type":"student","job_title":"Final-year student, COEP","looking_for":["mentors","co_founder"]}'::jsonb)
 ) as p (email, profile)
 join public.customers c on c.email = p.email;
-
-select public.submit_application(
-    'f0000000-0000-4000-8000-000000000002',
-    (select id from public.ticket_types where event_id = 'f0000000-0000-4000-8000-000000000002' and name = a.seat),
-    a.name, a.email, a.phone,
-    jsonb_build_object('custom-0f1a2b3c', a.answer),
-    a.profile,
-    true
-)
-from (values
-    ('Founder seat', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', 'Honest feedback on our seed round plan.', '{"member_type":"founder","job_title":"Co-founder","company":{"name":"Sample Ledger Labs","industry":"fintech","stage":"early_revenue"}}'::jsonb),
-    ('Founder seat', 'Ira Kulkarni', 'ira.k@example.com', '9822100005', 'Meeting investors who understand B2B SaaS.', '{"member_type":"founder","job_title":"Founder and CEO","company":{"name":"Sample Workflow AI","industry":"ai","stage":"mvp"}}'::jsonb),
-    ('Founder seat', 'Dev Malhotra', 'dev.m@example.com', '9822100006', 'Learning how others approached their first raise.', '{"member_type":"founder","job_title":"Founder","company":{"name":"Sample Kitchens","industry":"d2c","stage":"idea"}}'::jsonb),
-    ('Investor seat', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', 'Meeting early fintech and SaaS founders in Pune.', '{"member_type":"investor","job_title":"Angel investor"}'::jsonb),
-    ('Investor seat', 'Sanjay Iyer', 'sanjay.iyer@example.com', '9822100007', 'Sourcing pre-seed companies.', '{"member_type":"investor","job_title":"Principal","company":{"name":"Sample Seed Fund","industry":"services"}}'::jsonb),
-    ('Founder seat', 'Pooja Nair', 'pooja.nair@example.com', '9822100008', 'Peer advice on hiring a first sales lead.', '{"member_type":"founder","job_title":"Co-founder","company":{"name":"Sample Health","industry":"healthtech","stage":"mvp"}}'::jsonb)
-) as a (seat, name, email, phone, answer, profile);
-
-select set_config('request.jwt.claims', '{"sub":"a0000000-0000-4000-8000-000000000001","email":"admin@echoversehub.com","role":"authenticated"}', false);
-select public.review_application(a.id, r.status::public.application_status, r.note)
-from (values
-    ('aarav.d@example.com', 'approved', 'Strong fit for the founder side.'),
-    ('meghana.rao@example.com', 'approved', ''),
-    ('dev.m@example.com', 'waitlisted', 'Very early; invite if a seat opens.'),
-    ('pooja.nair@example.com', 'rejected', 'Topic is not a match this time.')
-) as r (email, status, note)
-join public.applications a on a.email = r.email and a.event_id = 'f0000000-0000-4000-8000-000000000002';
-select set_config('request.jwt.claims', '', false);
-
-select public.confirm_application(access_token) from public.applications where email = 'meghana.rao@example.com';
 
 insert into public.page_visits (community, event_id, path, visitor_id, utm_source, created_at)
 select
