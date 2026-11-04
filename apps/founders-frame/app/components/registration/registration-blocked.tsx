@@ -14,7 +14,7 @@ export function RegistrationBlocked({ reason, slug }: RegistrationBlockedProps) 
     return (
         <StateScreen
             {...REGISTRATION_PAGE.blocked[reason]}
-            actionLabel={missing ? REGISTRATION_PAGE.submitted.more : REGISTRATION_PAGE.back}
+            actionLabel={missing ? REGISTRATION_PAGE.more : REGISTRATION_PAGE.back}
             actionTo={missing ? PATHS.events : eventPath(slug)}
         />
     )
