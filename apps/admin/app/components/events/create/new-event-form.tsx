@@ -11,16 +11,25 @@ import { SelectField } from '~/components/ui/select-field'
 import { TextField } from '~/components/ui/text-field'
 import { NEW_EVENT_COPY } from '~/data/events/copy'
 import { EVENT_FIELDS } from '~/data/events/form'
-import { CATEGORY_OPTIONS } from '~/data/events/labels'
 import { CREATED_PARAM, EVENT_PATHS } from '~/data/events/links'
 import { useCreateEvent } from '~/hooks/events/mutations'
+import { categoryOptions } from '~/lib/events/categories'
 import { newEventDefaults } from '~/lib/events/create'
 import { newEventSchema, type NewEventValues } from '~/schemas/event-create'
+import type { EventCategory } from '~/types/events'
 
-export function NewEventForm() {
+export interface NewEventFormProps {
+    community: string
+    categories: readonly EventCategory[]
+}
+
+export function NewEventForm({ community, categories }: NewEventFormProps) {
     const navigate = useNavigate()
     const { mutate, isPending } = useCreateEvent()
-    const form = useForm<NewEventValues>({ resolver: zodResolver(newEventSchema), defaultValues: newEventDefaults() })
+    const form = useForm<NewEventValues>({
+        resolver: zodResolver(newEventSchema),
+        defaultValues: newEventDefaults(categories[0]?.slug ?? ''),
+    })
 
     return (
         <FormProvider {...form}>
@@ -28,9 +37,12 @@ export function NewEventForm() {
                 noValidate
                 className='space-y-6'
                 onSubmit={form.handleSubmit((values) =>
-                    mutate(values, {
-                        onSuccess: ({ id }) => navigate(`${EVENT_PATHS.tickets(id)}?${CREATED_PARAM}=1`),
-                    }),
+                    mutate(
+                        { community, values },
+                        {
+                            onSuccess: ({ id }) => navigate(`${EVENT_PATHS.tickets(id)}?${CREATED_PARAM}=1`),
+                        },
+                    ),
                 )}>
                 <FormColumns
                     start={
@@ -45,7 +57,7 @@ export function NewEventForm() {
                                 <SelectField<NewEventValues>
                                     name='category'
                                     label={EVENT_FIELDS.category.label}
-                                    options={CATEGORY_OPTIONS}
+                                    options={categoryOptions(categories)}
                                 />
                                 <TextField<NewEventValues>
                                     name='summary'
