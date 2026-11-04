@@ -44,7 +44,6 @@ export const EVENT_HEADER_COPY = {
         tickets: 'Tickets',
         questions: 'Questions',
         attendees: 'Attendees',
-        applications: 'Applications',
     },
     publish: 'Publish',
     unpublish: 'Unpublish',
