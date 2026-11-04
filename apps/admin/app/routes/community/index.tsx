@@ -10,6 +10,7 @@ import { Text } from '~/components/ui/text'
 import { COMMUNITY_COPY } from '~/data/community/copy'
 import { COMMUNITY_STAT_CARDS } from '~/data/community/stat-cards'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useDownloadCommunity } from '~/hooks/community/mutations'
 import { useCommunityMembers, useCommunityStats } from '~/hooks/community/queries'
 import { useCommunityFilters } from '~/hooks/community/use-community-filters'
@@ -24,7 +25,8 @@ export async function clientLoader() {
 
 export default function Community() {
     const { query, searchText, setSearchText, setSegment, setSort } = useCommunityFilters()
-    const { data: stats } = useCommunityStats()
+    const { slug: community } = useCommunity()
+    const { data: stats } = useCommunityStats({ variables: community })
     const { data, isPending, hasNextPage, isFetchingNextPage, fetchNextPage } = useCommunityMembers({
         variables: query,
     })
