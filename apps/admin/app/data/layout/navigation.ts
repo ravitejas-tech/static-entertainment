@@ -25,9 +25,9 @@ export const NAV_ITEMS: readonly NavItem[] = [
 
 export const SHELL_COPY = {
     navLabel: 'Admin',
-    productBadge: 'Admin',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
     signOut: 'Sign out',
     openWebsite: 'Open website',
+    switchCommunity: 'Switch community',
 } as const
