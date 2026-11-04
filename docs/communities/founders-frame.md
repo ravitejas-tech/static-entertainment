@@ -2,12 +2,12 @@
 
 > A curated networking and business community where the right people meet, exchange ideas, build meaningful relationships and create business opportunities.
 
-**Status (2026-10-31):** built, pending a run against the live backend.
-- **Website** (`apps/founders-frame/`): home, events, event pages, free RSVPs, application forms, application status and QR tickets, in the Founders Frame brand: white, navy and gold, the gold emblem logo (`docs/brand/founders-frame-logo-source.png`), Manrope and Inter, light theme only.
-- **Admin:** an Applications tab with review, Founders Frame event fields (audience, industries, founder stages, speakers), approval seats and member profiles.
-- **Backend:** its own event types, applications, member profiles and companies, and Founders Frame-styled emails.
+**Status (2026-11-04):** built, pending a run against the live backend. Every event is paid; free RSVPs and application-based events were dropped on 2026-11-04.
+- **Website** (`apps/founders-frame/`): home, events, event pages, a paid checkout (tickets, member profile, promo codes, Razorpay) and QR tickets, in the Founders Frame brand: white, navy and gold, the gold emblem logo (`docs/brand/founders-frame-logo-source.png`), Manrope and Inter, light theme only.
+- **Admin:** Founders Frame event fields (audience, industries, founder stages, speakers), paid ticket presets (₹0 tickets are rejected) and member profiles.
+- **Backend:** its own event types, member profiles and companies, and Founders Frame-styled emails. Bookings use the same paid order flow as Echoverse.
 - **Landing imagery:** AI-generated placeholder photography in the brand's editorial style (warm evening light; the hero uses daylight shots). Replace it with real photos from Founders Frame events as they happen.
-- **Not built yet:** paid checkout on the Founders Frame site, memberships and cohorts, and a vector (SVG) version of the logo. The site uses raster cut-outs of the PNG.
+- **Not built yet:** memberships and cohorts, and a vector (SVG) version of the logo. The site uses raster cut-outs of the PNG.
 
 ## What it is
 
@@ -18,8 +18,8 @@ It is not just an event management platform. Events are one of the core ways it 
 ## What it believes
 
 - **Community first.** The relationships that form between events matter more than any single event.
-- **Curated, not crowded.** The right people in the room beat a big room. That is why many events are application-based.
-- **Value before price.** Start free, and introduce paid tickets and memberships only once the community has built enough value and demand.
+- **Curated, not crowded.** The right people in the room beat a big room, so gatherings stay small and seats are capped per ticket type.
+- **Worth the ticket.** Every event is paid, and the ticket pays for a well-run room: the venue, the hosting and the right mix of people.
 - **Built to grow.** The underlying system supports every event format from the start, so new formats never need a rebuild.
 
 ## Who it's for
@@ -37,16 +37,14 @@ Members come to find collaborators, mentors, potential clients, investors, co-fo
 
 ## How its events work
 
-Not every event has the same purpose, so Founders Frame supports several registration models. One event can mix them. For example, open RSVPs for the main room and application-only seats at a roundtable.
+Every Founders Frame event is paid, and they all book the same way.
 
 | Model | Flow | Suited to |
 |---|---|---|
-| Free community events | RSVP → registration → QR check-in → post-event follow-up | Networking meetups, founder mixers, community launches, open networking |
-| Application-based events | Apply → review → approve or reject → confirm attendance → QR check-in | Founder roundtables, investor networking, CXO gatherings, curated discussions |
-| Paid events | Register → pay → ticket and QR → check-in | Premium workshops, masterclasses, conferences, special events |
-| Cohorts and memberships | Apply → get accepted → join → attend recurring sessions | Founder development programmes, mentorship circles, long-term initiatives |
+| Paid events | Book → pay → QR ticket by email → check-in | Founder mixers, roundtables, networking evenings, workshops, masterclasses, conferences |
+| Cohorts and memberships (later) | Apply → get accepted → join → attend recurring sessions | Founder development programmes, mentorship circles, long-term initiatives |
 
-**Rollout:** free RSVPs and application-based events first. Paid tickets come next, then memberships and cohorts. No event has been assigned a model yet, so the system must support all of them.
+An event can sell several ticket types, for example Early bird and Standard, or separate founder and investor seats. Capping each type's quantity is how a room stays balanced.
 
 ## What an event carries
 
@@ -55,7 +53,7 @@ Every event has the fields Echoverse events have: name, description, date and ti
 Founders Frame events add:
 - **Event details:** event format, target audience, founder stage and industry or sector.
 - **Programme:** speakers and moderators, and an agenda or session schedule.
-- **Registration:** application questions and approval status, company details and networking preferences.
+- **Booking:** the event's own questions, member type, role and company.
 - **Programmes:** cohort or membership details.
 
 **The registration form adapts to the event.** An investor-founder networking event may ask for:
@@ -82,11 +80,9 @@ Keeping them apart is what lets Founders Frame add formats without rebuilding it
 ## Decisions so far
 
 - **One kind of public account.** Everyone who signs up is a user. Being a founder, an investor or a student is profile information, not a permission.
-- **The admin team reviews applications.** Super Admins and Event Managers approve or reject them; there is no separate curator role.
 - **Shared platform.** Founders Frame uses the same admin panel, backend, team and Razorpay account as Echoverse Hub.
 - **How it maps onto the platform:**
-  - A free RSVP is a ₹0 registration type, confirmed instantly with a QR ticket.
-  - An application is a registration type marked as needing approval. An approved applicant confirms through a normal booking.
+  - Every registration type is a priced ticket type, booked and paid through the same order flow as Echoverse.
   - Speakers and the agenda reuse the event's hosts and schedule.
   - Member profiles and companies are their own tables.
 
@@ -94,5 +90,5 @@ Keeping them apart is what lets Founders Frame add formats without rebuilding it
 
 - **Its own identity.** Founders Frame has its own design, separate from Echoverse Hub's. It speaks to founders, investors and business leaders, so it should read as credible and considered.
 - **Show who's in the room.** Speakers, audience, the format and the kinds of people attending sell an event more than the venue does.
-- **Make applying feel worthwhile.** Explain who an event is for and why it is curated, and ask only the questions that event needs.
+- **Make the ticket feel worth it.** Explain who an event is for and what happens in the room, and ask only the questions that event needs.
 - **Keep members coming back.** Follow-ups after events and a profile that grows over time matter more than a single booking.
