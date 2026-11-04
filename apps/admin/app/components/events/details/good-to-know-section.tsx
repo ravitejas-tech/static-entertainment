@@ -1,6 +1,6 @@
 import { TextListField } from '~/components/events/details/text-list-field'
 import { Panel } from '~/components/ui/panel'
-import { Text } from '~/components/ui/text'
+import { Subsection } from '~/components/ui/subsection'
 import { TextField } from '~/components/ui/text-field'
 import { EVENT_FIELDS as fields, EVENT_SECTIONS, GOOD_TO_KNOW_FIELDS, GOOD_TO_KNOW_LISTS } from '~/data/events/form'
 import type { EventFormValues } from '~/schemas/event'
@@ -19,20 +19,16 @@ export function GoodToKnowSection({ readOnly }: { readOnly: boolean }) {
                 ))}
             </div>
             {GOOD_TO_KNOW_LISTS.map(({ name, copy }) => (
-                <section
+                <Subsection
                     key={name}
-                    className='space-y-3 pt-2'>
-                    <Text
-                        as='h3'
-                        variant='label'>
-                        {copy.title}
-                    </Text>
+                    title={copy.title}
+                    className='pt-2'>
                     <TextListField
                         name={name}
                         copy={copy}
                         readOnly={readOnly}
                     />
-                </section>
+                </Subsection>
             ))}
         </Panel>
     )
