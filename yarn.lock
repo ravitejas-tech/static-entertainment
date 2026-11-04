@@ -312,6 +312,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/inter@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/inter@npm:5.3.0"
+  checksum: 10c0/46fbe41e8482a718f99634c8254346c6081d615415059be12e177224c903d688199125967825e75d4b8122668fd83f70880e11d4e02d08c20b503c65fe2a96d1
+  languageName: node
+  linkType: hard
+
+"@fontsource-variable/manrope@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@fontsource-variable/manrope@npm:5.3.0"
+  checksum: 10c0/8b760dff605c6d43c64e39243568c89f7806e59e86ac80e83a0dab42dfadfb1498d8f1816c78c24875e2f743b5340653c8bdd33cd75d051a1af56ed3802bfd0d
+  languageName: node
+  linkType: hard
+
 "@fontsource-variable/plus-jakarta-sans@npm:^5.3.0":
   version: 5.3.0
   resolution: "@fontsource-variable/plus-jakarta-sans@npm:5.3.0"
@@ -2645,25 +2659,41 @@ __metadata:
   resolution: "founders-frame@workspace:apps/founders-frame"
   dependencies:
     "@eslint/js": "npm:^9"
+    "@fontsource-variable/inter": "npm:^5.3.0"
+    "@fontsource-variable/manrope": "npm:^5.3.0"
+    "@hookform/resolvers": "npm:^5.9.1"
+    "@radix-ui/react-slot": "npm:^1.5.0"
     "@react-router/dev": "npm:^8.5.1"
     "@react-router/node": "npm:^8.5.1"
+    "@supabase/supabase-js": "npm:^2.118.0"
     "@tailwindcss/vite": "npm:^4.2.2"
+    "@tanstack/react-query": "npm:^5.104.3"
     "@types/node": "npm:^22"
+    "@types/qrcode": "npm:^1.5.6"
     "@types/react": "npm:^19.2.18"
     "@types/react-dom": "npm:^19.2.7"
+    class-variance-authority: "npm:^0.7.1"
+    clsx: "npm:^2.1.1"
     eslint: "npm:^9"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^7.1.1"
     isbot: "npm:^5.1.36"
+    lucide-react: "npm:^1.57.0"
     prettier: "npm:^3.9.10"
+    qrcode: "npm:^1.5.4"
     react: "npm:^19.2.8"
     react-dom: "npm:^19.2.8"
+    react-hook-form: "npm:^7.90.0"
+    react-hot-toast: "npm:^2.6.1"
+    react-query-kit: "npm:^3.4.0"
     react-router: "npm:^8.5.1"
+    tailwind-merge: "npm:^3.7.0"
     tailwindcss: "npm:^4.2.2"
     typescript: "npm:~6.0.3"
     typescript-eslint: "npm:^8.71.2"
     vite: "npm:^8.0.3"
+    zod: "npm:^4.6.7"
   languageName: unknown
   linkType: soft
 
