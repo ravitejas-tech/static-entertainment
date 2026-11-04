@@ -3,7 +3,7 @@ import type { Tables } from '~/types/database'
 
 export type ActivityFilter = (typeof ACTIVITY_FILTERS)[number]['value']
 
-export type ActivityEntity = 'events' | 'ticket_types' | 'promo_codes' | 'staff' | 'orders' | 'tickets'
+export type ActivityEntity = 'events' | 'ticket_types' | 'promo_codes' | 'staff' | 'orders' | 'tickets' | 'applications'
 
 export type ActivityEntry = Tables<'activity_log'>
 
