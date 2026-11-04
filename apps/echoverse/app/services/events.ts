@@ -1,3 +1,4 @@
+import { COMMUNITY_SLUG } from '~/data/brand'
 import { supabase } from '~/services/supabase'
 
 const EVENT_WITH_TICKETS = '*, ticket_types(*)'
@@ -6,6 +7,7 @@ export async function listPublishedEvents() {
     const { data, error } = await supabase
         .from('events')
         .select(EVENT_WITH_TICKETS)
+        .eq('community', COMMUNITY_SLUG)
         .eq('status', 'published')
         .order('starts_at')
         .order('sort_order', { referencedTable: 'ticket_types' })
@@ -17,6 +19,7 @@ export async function getPublishedEvent(slug: string) {
     const { data, error } = await supabase
         .from('events')
         .select(EVENT_WITH_TICKETS)
+        .eq('community', COMMUNITY_SLUG)
         .eq('status', 'published')
         .eq('slug', slug)
         .order('sort_order', { referencedTable: 'ticket_types' })
@@ -32,7 +35,7 @@ export async function getEventPreview(slug: string, previewToken: string) {
     ])
     if (event.error) throw event.error
     if (ticketTypes.error) throw ticketTypes.error
-    return event.data && { ...event.data, ticket_types: ticketTypes.data }
+    return event.data?.community === COMMUNITY_SLUG ? { ...event.data, ticket_types: ticketTypes.data } : null
 }
 
 export async function getTicketAvailability(eventIds: string[]) {
