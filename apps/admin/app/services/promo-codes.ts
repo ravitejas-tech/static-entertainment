@@ -1,10 +1,14 @@
 import { supabase } from '~/services/supabase'
 import type { PromoCodeSave, PromoCodeToggle } from '~/types/promo-codes'
 
-export async function listPromoCodes() {
+export async function listPromoCodes(community: string) {
     const [codes, summaries] = await Promise.all([
-        supabase.from('promo_codes').select('*, events(title)').order('created_at', { ascending: false }),
-        supabase.rpc('promo_code_summaries'),
+        supabase
+            .from('promo_codes')
+            .select('*, events(title)')
+            .eq('community', community)
+            .order('created_at', { ascending: false }),
+        supabase.rpc('promo_code_summaries', { p_community: community }),
     ])
     if (codes.error) throw codes.error
     if (summaries.error) throw summaries.error
