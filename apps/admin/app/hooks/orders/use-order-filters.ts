@@ -1,13 +1,16 @@
 import { ORDER_PARAMS } from '~/data/orders/query'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useListParams } from '~/hooks/use-list-params'
 import { parseOrderFilter } from '~/lib/orders'
 import type { OrderFilter } from '~/types/orders'
 
 export function useOrderFilters() {
     const { params, search, searchText, setSearchText, setParam } = useListParams(ORDER_PARAMS.search)
+    const { slug: community } = useCommunity()
 
     return {
         query: {
+            community,
             eventId: params.get(ORDER_PARAMS.event) ?? '',
             filter: parseOrderFilter(params.get(ORDER_PARAMS.status)),
             search,
