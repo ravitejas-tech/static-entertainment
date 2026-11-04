@@ -1,6 +1,6 @@
 import { CATEGORY_PHOTOS, DEFAULT_EVENT_PHOTO } from '~/data/events/covers'
 import { MEMBER_TYPES } from '~/data/members/options'
-import { directionsUrl, eventFormat, hasPassed, isOpen, seatStatus } from '~/lib/events'
+import { directionsUrl, hasPassed, isOpen, lowestPrice, seatStatus } from '~/lib/events'
 import { photoSrcSet } from '~/lib/media'
 import { isOneOf } from '~/lib/options'
 import { eventFaqsSchema, eventHostsSchema, eventScheduleSchema } from '~/schemas/event-content'
@@ -22,15 +22,21 @@ function registrationOptions(
 ): RegistrationOption[] {
     return row.ticket_types
         .filter(({ visible }) => visible)
-        .map((type) => ({
-            id: type.id,
-            name: type.name,
-            description: type.description,
-            price: type.price,
-            requiresApproval: type.requires_approval,
-            status: seatStatus(type, availability.get(type.id), row.sales_paused, now),
-            opensAt: type.sales_start,
-        }))
+        .map((type) => {
+            const remaining = availability.get(type.id)
+            const status = seatStatus(type, remaining, row.sales_paused, now)
+            return {
+                id: type.id,
+                name: type.name,
+                description: type.description,
+                price: type.price,
+                admits: type.admits,
+                minPerOrder: type.min_per_order,
+                max: isOpen(status) ? Math.min(type.max_per_order, remaining ?? type.max_per_order) : 0,
+                status,
+                opensAt: type.sales_start,
+            }
+        })
 }
 
 function fallbackPhoto(category: string): EventCover {
@@ -40,12 +46,13 @@ function fallbackPhoto(category: string): EventCover {
 
 function summarize(row: EventWithTickets, options: RegistrationOption[], categories: CategoryLabels, now: number) {
     const ended = hasPassed(row.ends_at, now)
+    const open = options.filter(({ status }) => isOpen(status))
     return {
         id: row.id,
         slug: row.slug,
         title: row.title,
         categoryLabel: categories.get(row.category) ?? row.category,
-        format: eventFormat(row.ticket_types.filter(({ visible }) => visible)),
+        fromPrice: lowestPrice(open.length > 0 ? open : options),
         summary: row.summary,
         startsAt: row.starts_at,
         endsAt: row.ends_at,
@@ -54,7 +61,7 @@ function summarize(row: EventWithTickets, options: RegistrationOption[], categor
         cover: row.cover_url ? { src: row.cover_url, alt: row.cover_alt || row.title } : null,
         photo: row.cover_url ? { src: row.cover_url, alt: row.cover_alt || row.title } : fallbackPhoto(row.category),
         ended,
-        open: !ended && options.some(({ status }) => isOpen(status)),
+        open: !ended && open.length > 0,
         updatedAt: row.updated_at,
     } satisfies EventSummary
 }
