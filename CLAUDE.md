@@ -5,14 +5,14 @@ Static Entertainment runs several communities. Each has its own website with its
 | Community | What it is | Read |
 |---|---|---|
 | Echoverse Hub | Where strangers become friends: meetups, dance nights, mixers, workshops and trips in Pune. Ticketed: book → pay → QR ticket → gate | [echoverse-hub.md](docs/communities/echoverse-hub.md), [PRD](docs/Echoverse_Hub_Website_Ticketing_Platform_PRD.md), [build plan](docs/build-plan.md) |
-| Founders Frame | A curated networking community for Pune's founders, investors, business leaders and aspiring founders. Free RSVPs and application-based events first; paid tickets, memberships and cohorts later | [founders-frame.md](docs/communities/founders-frame.md) |
+| Founders Frame | A curated networking community for Pune's founders, investors, business leaders and aspiring founders. Every event is paid: book → pay → QR ticket → gate. Memberships and cohorts later | [founders-frame.md](docs/communities/founders-frame.md) |
 
 Read a community's doc before designing or writing copy for its website. Their audiences and tone are deliberately different.
 
 | Piece | Where (workspace) | Local URL |
 |---|---|---|
 | Echoverse website (discovery, event pages, checkout, QR tickets, My Tickets) | `apps/echoverse/` (`echoverse`) | http://localhost:7300 |
-| Founders Frame website (events, free RSVPs, applications, QR tickets; no paid checkout yet) | `apps/founders-frame/` (`founders-frame`) | http://localhost:7302 |
+| Founders Frame website (events, event pages, paid checkout, QR tickets) | `apps/founders-frame/` (`founders-frame`) | http://localhost:7302 |
 | Admin panel (dashboard, events, tickets, orders, refunds, community, promo codes, gate scanner, team) | `apps/admin/` (`admin`) | http://localhost:7301 |
 | Backend (Postgres, RLS, SQL functions, Auth, Storage, Edge Functions) | `supabase/` | API :54321 · Studio :54323 · Mailpit :54324 |
 
@@ -20,7 +20,7 @@ The repo root is only the workspace root. It holds the Supabase CLI, the shared 
 
 **Every event belongs to one community.** `public.communities` is keyed by slug (`echoverse`, `founders-frame`), and `events`, `promo_codes`, `page_visits` and `customer_consents` carry a `community` column that references it. Customers are shared across communities; marketing consent is per community. The admin shows one community at a time (the sidebar switcher), and turns community-only screens on through `COMMUNITY_FEATURES` (`apps/admin/app/data/communities/features.ts`).
 
-**Founders Frame adds** event types per community (`event_categories`), audience/industry/founder-stage tags on events, registration types that need approval (always free), `applications` (submit → review → confirm → QR ticket), `member_profiles` and `companies`. Every person who registers is one kind of user; their member type is profile data, not a permission.
+**Founders Frame adds** event types per community (`event_categories`), audience/industry/founder-stage tags on events, `member_profiles` and `companies` (its checkout asks for member type, role and company). Its events are always paid: the admin rejects ₹0 tickets for it (`freeTickets` in `COMMUNITY_FEATURES`). Applications and approval seats existed briefly and were dropped by `20261104071445_founders_frame_paid_only`. Every person who books is one kind of user; their member type is profile data, not a permission.
 
 ## Rulebooks
 
@@ -55,7 +55,7 @@ Read the one that covers what you are touching. Do not read them all.
 - **Every looping animation respects reduced motion** (`motion-safe:` / `motion-reduce:`).
 - **No horizontal scroll at 375px, and no section that becomes a wall of stacked cards on phones.** Use `SwipeGrid`. Check light, dark (Echoverse only) and mobile before handing UI over.
 - **Confetti plays once on page open**, never in a loop.
-- **Nothing is prerendered invisible.** No JS-driven `opacity: 0` entrances; `Reveal` is CSS. Main content (directory results) doesn't fade in at all.
+- **Nothing is prerendered invisible.** Entrances are CSS keyframes. Echoverse ties them to scroll position; Founders Frame starts them when they scroll into view (`observeEntrance`), which only ever holds back what is still below the screen. Main content (directory results) doesn't fade in at all.
 - **Run Lighthouse after website UI changes**, on a production build served with the SPA fallback, mobile and desktop. Targets: SEO, A11y and Best Practices at 100; mobile Performance 90+. Event detail pages currently reach 88–89.
 
 ## Stack
@@ -89,13 +89,12 @@ apps/
                        past-events, about, faqs, contact, terms, privacy, refund-policy, SEO files
     components/        ui/ primitives, layout/, landing/, events/, content/, checkout/, tickets/, account/
     data/ hooks/ lib/ schemas/ services/ types/   (types/database.ts is generated)
-  founders-frame/app/  Founders Frame website: home, events, event page, rsvp/apply forms, applications.$token,
+  founders-frame/app/  Founders Frame website: home, events, event page, events/$slug.book (checkout),
                        tickets.$token, about, SEO files; same folder shape as Echoverse
   admin/app/           admin panel: same folder shape, plus routes for events/$id/*, orders, community, check-in, team, gallery, activity
 supabase/
   migrations/        schema, RLS, booking + operations SQL functions, activity triggers, storage, cron
-  functions/         create-order, verify-payment, razorpay-webhook, send-tickets, refund-order, invite-staff,
-                     submit-application, review-application, confirm-application, _shared/
+  functions/         create-order, verify-payment, razorpay-webhook, send-tickets, refund-order, invite-staff, _shared/
   templates/         auth emails (login code, invite, recovery)
   seed.sql           local sample data (events, staff, orders)
 docs/                communities/ (what each community stands for), PRD, build plan, deployment checklist, rulebooks
@@ -121,7 +120,7 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
 
 ## Gotchas
 
-- **`database.ts` for the `founders_frame` migration was written by hand**, because no database was reachable when it landed. It mirrors the migration exactly. Once the live project is linked, regenerate it (`yarn supabase gen types typescript --linked`, copied to all three apps like `yarn db:types`) and expect no meaningful diff.
+- **`database.ts` for the `founders_frame` and `founders_frame_paid_only` migrations was written by hand**, because no database was reachable when they landed. It mirrors the migrations exactly. Once the live project is linked, regenerate it (`yarn supabase gen types typescript --linked`, copied to all three apps like `yarn db:types`) and expect no meaningful diff.
 - **Founders Frame's site URL for SEO comes from `VITE_SITE_URL`** (canonicals, sitemap, Open Graph), defaulting to localhost until it has a domain. Set it in production.
 - **Event types are per community.** `events.category` references `event_categories (community, slug)`. Echoverse keeps its own typed list (`EVENT_CATEGORIES`) and falls back to `meetup` for an unknown slug; the admin and Founders Frame read labels from the table.
 
@@ -170,7 +169,7 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
   - `Logo` swaps them through the `--brand-logo` tokens.
   - The favicon and app icons in `apps/echoverse/public/icons/` are the orange O-and-leaves mark. The share image (`apps/echoverse/public/og/echoverse-hub.png`, 1200×630) uses the full logo.
   - All of these are rendered once from the source; regenerate them if the logo changes.
-- **Founders Frame's logo comes from `docs/brand/founders-frame-logo-source.png`** (gold emblem, white wordmark, transparent background). Its brand is white, navy (`--ink`, `--accent`) and gold (`--gold`), with gold kept to a few accents: the drawn underline, the hero lead bar, the next-gathering card and the home events panels (category line and button). Photos are plain rounded rectangles with a soft shadow (`FeaturePhoto`); there are no corner marks or frames around them.
+- **Founders Frame's logo comes from `docs/brand/founders-frame-logo-source.png`** (gold emblem, white wordmark, transparent background). Its brand is white, navy (`--ink`, `--accent`) and gold (`--gold`), with gold kept to a few accents: the drawn underline, the hero lead bar, the next-gathering card, the home events panels (category line and button) the "Who's in the room" round table on navy (the chosen seat's ring and name tag, and the table's dashed inner ring), the "How events work" phone stage (its dashed ring and step progress bar) and the event page (the hero's category line and fact icons, the evening's timeline dots, the highlight ticks and the "More gatherings coming" button). Photos are plain rounded rectangles with a soft shadow (`FeaturePhoto`); there are no corner marks or frames around them. The round table's seats are the one exception: round portraits.
   - `apps/founders-frame/public/brand/` holds the cut-out emblem and a navy recolour of the wordmark for the white site (`Logo`, `BrandEmblem`, `BRAND_LOGO` in `data/brand.ts`). The original white wordmark only works on navy.
   - The favicon and app icons are the gold emblem on navy; the share image (`public/og/founders-frame.png`) is the full logo on navy. Rendered once from the source with sharp; regenerate them if the logo changes.
 - **Photos are Unsplash stock** (Unsplash License, free for commercial use, never Unsplash+). They are self-hosted as WebP:
@@ -178,7 +177,7 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
   - `apps/echoverse/public/images/shoutouts/`: 720×720 plus -360/-480 versions
 
   Each photo's photographer and source live next to it (`supabase/seed.sql`, `apps/echoverse/app/data/landing/shoutouts.ts`). Never pull images from Pinterest or Google Images. Photos uploaded in the admin are resized to WebP in the browser and stored in the `event-media` bucket; they get no srcset.
-- **Founders Frame's landing photos are AI-generated** (ChatGPT, from the prompts in this repo's history). The site serves WebP versions in `apps/founders-frame/public/images/landing/` (full size plus two smaller widths, registered in `data/landing/images.ts`). The original PNGs sit in the git-ignored `apps/founders-frame/image-sources/`.
+- **Founders Frame's landing photos are AI-generated** (ChatGPT, from the prompts in this repo's history). The site serves WebP versions in `apps/founders-frame/public/images/landing/` (full size plus two smaller widths, registered in `data/landing/images.ts`). The audience photos are square seat crops instead (`aud-*-seat.webp`, 416px plus a 208px version), cut from the 800×1000 portraits that git history still holds. The original PNGs sit in the git-ignored `apps/founders-frame/image-sources/`.
   - Generated people are shown with role labels only, never names or quotes, and are not presented as real members. Swap them for real event photos once events have run.
   - The hero collage photos (`hero-fireside`, `hero-notes`, `hero-roundtable`) are daylight shots with ivory and green tones, made for the hero's dark panel (now navy). The rest of the landing photography is warm evening light.
   - Events without an uploaded cover show one of these photos, picked by category (`data/events/covers.ts`). Only a real cover is used as the share image.
