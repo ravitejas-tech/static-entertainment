@@ -5,21 +5,19 @@ import { EVENT_PAGE_COPY } from '~/data/events/page'
 
 export function GoodToKnow({ items }: { items: string[] }) {
     return (
-        <DetailBlock title={EVENT_PAGE_COPY.blocks.goodToKnow}>
-            <ul className='space-y-2'>
+        <DetailBlock
+            title={EVENT_PAGE_COPY.blocks.goodToKnow}
+            tone='muted'>
+            <ul className='space-y-3'>
                 {items.map((item) => (
                     <li
                         key={item}
                         className='flex items-start gap-3'>
                         <Info
-                            className='mt-1 size-4 shrink-0 text-text-muted'
+                            className='mt-0.5 size-4.5 shrink-0 text-accent-text'
                             aria-hidden
                         />
-                        <Text
-                            as='span'
-                            tone='secondary'>
-                            {item}
-                        </Text>
+                        <Text as='span'>{item}</Text>
                     </li>
                 ))}
             </ul>
