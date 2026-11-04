@@ -8,7 +8,7 @@ export type EventInsert = TablesInsert<'events'>
 
 export type EventUpdate = TablesUpdate<'events'>
 
-export type EventCategory = Enums<'event_category'>
+export type EventCategory = Tables<'event_categories'>
 
 export type EventTone = Enums<'pop_tone'>
 
@@ -37,4 +37,5 @@ export interface ListItemField {
     label: string
     placeholder: string
     multiline?: boolean
+    options?: readonly { value: string; label: string }[]
 }
