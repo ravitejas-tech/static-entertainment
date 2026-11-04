@@ -1,5 +1,6 @@
 import { useFieldArray } from 'react-hook-form'
 import { ListEditor } from '~/components/ui/list-editor'
+import { SelectField } from '~/components/ui/select-field'
 import { TextField } from '~/components/ui/text-field'
 import { EMPTY_LIST_ITEMS, itemLabel } from '~/data/events/form'
 import type { EventFormValues } from '~/schemas/event'
@@ -29,17 +30,30 @@ export function PairListField({ name, fields: itemFields, copy, stacked = false,
             readOnly={readOnly}
             renderItem={(index) => (
                 <div className={cn('grid gap-3', !stacked && 'sm:grid-cols-3')}>
-                    {itemFields.map(({ key, label, placeholder, multiline }, position) => (
-                        <TextField
-                            key={key}
-                            name={`${name}.${index}.${key}`}
-                            label={label}
-                            placeholder={placeholder}
-                            multiline={multiline}
-                            rows={3}
-                            className={cn(!stacked && position > 0 && 'sm:col-span-2')}
-                        />
-                    ))}
+                    {itemFields.map(({ key, label, placeholder, multiline, options }, position) => {
+                        const fieldName = `${name}.${index}.${key}`
+                        const className = cn(!stacked && position > 0 && 'sm:col-span-2')
+                        return options ? (
+                            <SelectField
+                                key={key}
+                                name={fieldName}
+                                label={label}
+                                placeholder={placeholder}
+                                options={options}
+                                className={className}
+                            />
+                        ) : (
+                            <TextField
+                                key={key}
+                                name={fieldName}
+                                label={label}
+                                placeholder={placeholder}
+                                multiline={multiline}
+                                rows={3}
+                                className={className}
+                            />
+                        )
+                    })}
                 </div>
             )}
         />
