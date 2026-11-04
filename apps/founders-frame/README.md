@@ -9,7 +9,7 @@ yarn workspace founders-frame build         # needs Supabase: event pages are li
 ```
 
 - **Community:** every query filters on `COMMUNITY_SLUG` (`app/data/brand.ts`).
-- **Registration:** free RSVPs go through `create-order`; application-based places go through `submit-application`, then `/applications/:token` lets an approved applicant confirm (`confirm-application`) and get a QR ticket at `/tickets/:token`. Paid checkout is not built here yet.
+- **Booking:** every event is paid. `/events/:slug/book` picks tickets, takes the buyer's details and member profile, applies promo codes and pays through `create-order` and `verify-payment` (Razorpay, or the in-page test checkout when `PAYMENT_PROVIDER=test`). The QR tickets are at `/tickets/:token`.
 - **Brand:** tokens in `app/global.css` (white, navy and gold; light only), Manrope and Inter, the gold emblem and navy wordmark in `components/ui/brand-emblem.tsx` and `components/ui/logo.tsx` (`BRAND_LOGO` in `app/data/brand.ts`). Brief: `docs/communities/founders-frame.md`.
 
 Rules: `docs/rulebooks/frontend.md`.
