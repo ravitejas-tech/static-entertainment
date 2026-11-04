@@ -8,7 +8,7 @@ const { fields } = TICKETS_COPY
 
 const numberInput = { type: 'number', inputMode: 'numeric', min: 0, step: 1, valueAsNumber: true } as const
 
-export function TicketTypeFields() {
+export function TicketTypeFields({ approvals }: { approvals: boolean }) {
     const { register } = useFormContext<TicketTypeValues>()
 
     return (
@@ -82,6 +82,13 @@ export function TicketTypeFields() {
                 {...fields.sold_out}
                 {...register('sold_out')}
             />
+            {approvals && (
+                <Switch
+                    id='ticket-requires-approval'
+                    {...fields.requires_approval}
+                    {...register('requires_approval', { deps: ['price'] })}
+                />
+            )}
         </div>
     )
 }
