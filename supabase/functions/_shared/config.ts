@@ -1,7 +1,6 @@
 const read = (name: string, fallback = '') => Deno.env.get(name)?.trim() || fallback
 
 export const CONFIG = {
-    siteUrl: read('SITE_URL', 'http://localhost:7300'),
     adminUrl: read('ADMIN_URL', 'http://localhost:7301'),
     paymentProvider: read('PAYMENT_PROVIDER', 'razorpay') === 'test' ? 'test' : 'razorpay',
     razorpay: {
