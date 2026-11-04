@@ -3,6 +3,7 @@ import { Button } from '~/components/ui/button'
 import { PopCard } from '~/components/ui/pop-card'
 import { Text } from '~/components/ui/text'
 import { GALLERY_COPY } from '~/data/gallery/copy'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { websiteAssetUrl } from '~/lib/website'
 import type { GalleryPhoto } from '~/types/gallery'
 
@@ -19,6 +20,7 @@ export interface PhotoCardProps {
 }
 
 export function PhotoCard({ photo, first, last, busy, onMove, onEdit, onDelete }: PhotoCardProps) {
+    const { community } = useCommunity()
     const tools = [
         { label: actions.earlier, icon: ArrowUp, onClick: () => onMove(-1), disabled: first || busy },
         { label: actions.later, icon: ArrowDown, onClick: () => onMove(1), disabled: last || busy },
@@ -32,7 +34,7 @@ export function PhotoCard({ photo, first, last, busy, onMove, onEdit, onDelete }
             className='flex flex-col overflow-hidden'>
             <figure>
                 <img
-                    src={websiteAssetUrl(photo.url)}
+                    src={websiteAssetUrl(community?.site_url ?? null, photo.url)}
                     alt={photo.alt}
                     loading='lazy'
                     className='aspect-square w-full border-b-2 border-border object-cover'
