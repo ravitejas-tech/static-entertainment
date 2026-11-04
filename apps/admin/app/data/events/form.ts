@@ -18,6 +18,7 @@ export const EVENT_FORM_ERRORS = {
     url: 'Paste a full link starting with https://',
     coverAlt: 'Describe the photo in a few words',
     tag: 'Keep the sticker under 30 characters',
+    category: 'Pick a type of event',
 } as const
 
 export const EVENT_FIELDS = {
@@ -63,6 +64,8 @@ export const EVENT_SECTIONS = {
     },
     schedule: { title: 'Schedule', item: 'Schedule item', add: 'Add to schedule', empty: 'No schedule yet.' },
     hosts: { title: 'Hosts', item: 'Host', add: 'Add host', empty: 'No hosts yet.' },
+    speakers: { title: 'Speakers and hosts', item: 'Person', add: 'Add a person', empty: 'No speakers yet.' },
+    audience: { title: 'Audience and focus' },
     goodToKnow: { title: 'Good to know' },
     included: {
         title: "What's included",
@@ -125,7 +128,7 @@ export const EVENT_FORM_ID = 'event-details-form'
 
 export const EMPTY_LIST_ITEMS = {
     schedule: { time: '', title: '' },
-    hosts: { name: '', role: '' },
+    hosts: { name: '', role: '', part: '' },
     faqs: { question: '', answer: '' },
 } as const
 
