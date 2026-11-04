@@ -10,7 +10,7 @@ export type TicketAvailability = Database['public']['Functions']['ticket_availab
 export type TicketTypeStock = TicketType & { remaining: number; booked: number }
 
 export type TicketPreset = Pick<TicketType, 'name' | 'price' | 'quantity' | 'admits' | 'description'> &
-    Partial<Pick<TicketType, 'requires_approval' | 'max_per_order'>>
+    Partial<Pick<TicketType, 'max_per_order'>>
 
 export type TicketSaleState = keyof typeof TICKET_STATE_TONES
 
