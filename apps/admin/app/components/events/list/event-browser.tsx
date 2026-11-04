@@ -8,6 +8,7 @@ import { Spinner } from '~/components/ui/spinner'
 import { EVENTS_COPY } from '~/data/events/copy'
 import { EVENT_FILTER_PARAM, EVENT_FILTERS, EVENT_SEARCH_PARAM } from '~/data/events/filters'
 import { ERROR_COPY, LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useEventOverviews } from '~/hooks/events/queries'
 import { eventFilterOf, matchesEventSearch } from '~/lib/events/status'
 import { withParam } from '~/lib/search-params'
@@ -20,7 +21,8 @@ export function EventBrowser() {
     const requested = params.get(EVENT_FILTER_PARAM)
     const filter: EventFilter = isFilter(requested) ? requested : 'upcoming'
     const search = params.get(EVENT_SEARCH_PARAM) ?? ''
-    const { data, isPending, isError } = useEventOverviews()
+    const { slug: community } = useCommunity()
+    const { data, isPending, isError } = useEventOverviews({ variables: community })
 
     const events = (data ?? []).filter((event) =>
         search ? matchesEventSearch(event, search) : eventFilterOf(event) === filter,
