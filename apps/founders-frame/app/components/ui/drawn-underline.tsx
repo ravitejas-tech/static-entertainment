@@ -1,8 +1,19 @@
 import { DRAWN_UNDERLINE } from '~/data/ui/motion'
+import { observeEntrance } from '~/lib/entrance'
 
-export function DrawnUnderline() {
+const TRIGGER_CLASSES = {
+    load: 'motion-safe:animate-draw',
+    scroll: 'motion-safe:animate-draw-scroll',
+} as const
+
+export interface DrawnUnderlineProps {
+    trigger?: keyof typeof TRIGGER_CLASSES
+}
+
+export function DrawnUnderline({ trigger = 'load' }: DrawnUnderlineProps) {
     return (
         <svg
+            ref={trigger === 'scroll' ? observeEntrance : undefined}
             viewBox={DRAWN_UNDERLINE.viewBox}
             preserveAspectRatio='none'
             className='pointer-events-none absolute inset-x-0 -bottom-3 h-4 w-full text-gold'
@@ -14,7 +25,7 @@ export function DrawnUnderline() {
                 stroke='currentColor'
                 strokeWidth={4}
                 strokeLinecap='round'
-                className='motion-safe:animate-draw'
+                className={TRIGGER_CLASSES[trigger]}
             />
         </svg>
     )
