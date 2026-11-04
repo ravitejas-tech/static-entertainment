@@ -1,6 +1,5 @@
-import type { BadgeTone } from '~/components/ui/badge'
 import { Constants } from '~/types/database'
-import type { FounderStage, Industry, LookingFor, MemberType } from '~/types/members'
+import type { FounderStage, Industry, MemberType } from '~/types/members'
 
 export const MEMBER_TYPES = Constants.public.Enums.member_type
 
@@ -13,13 +12,13 @@ export const MEMBER_TYPE_LABELS: Record<MemberType, string> = {
     ecosystem_partner: 'Ecosystem partner',
 }
 
-export const MEMBER_TYPE_TONES: Record<MemberType, BadgeTone> = {
-    founder: 'gold',
-    business_leader: 'navy',
-    investor: 'blue',
-    professional: 'neutral',
-    student: 'sand',
-    ecosystem_partner: 'lavender',
+export const MEMBER_GROUP_LABELS: Record<MemberType, string> = {
+    founder: 'Founders',
+    business_leader: 'Business leaders',
+    investor: 'Investors',
+    professional: 'Professionals',
+    student: 'Students',
+    ecosystem_partner: 'Ecosystem partners',
 }
 
 export const FOUNDER_STAGES = ['idea', 'mvp', 'early_revenue', 'growth', 'scale'] as const
@@ -58,16 +57,4 @@ export const INDUSTRY_LABELS: Record<Industry, string> = {
     manufacturing: 'Manufacturing',
     services: 'Services and agencies',
     other: 'Other',
-}
-
-export const LOOKING_FOR = ['co_founder', 'investors', 'customers', 'mentors', 'talent', 'partners', 'peers'] as const
-
-export const LOOKING_FOR_LABELS: Record<LookingFor, string> = {
-    co_founder: 'A co-founder',
-    investors: 'Investors',
-    customers: 'Customers',
-    mentors: 'Mentors',
-    talent: 'Talent',
-    partners: 'Partners',
-    peers: 'Founder peers',
 }
