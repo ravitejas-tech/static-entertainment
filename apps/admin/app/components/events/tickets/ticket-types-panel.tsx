@@ -14,10 +14,13 @@ import { useDeleteTicketType, useReorderTicketTypes } from '~/hooks/events/ticke
 import { useTicketTypes } from '~/hooks/events/tickets/queries'
 import { useCan } from '~/hooks/staff/use-can'
 import { moveItem } from '~/lib/array'
+import { communityFeatures } from '~/lib/communities'
+import { ticketPresetsFor } from '~/lib/events/tickets'
 import type { TicketDraft, TicketTypeStock } from '~/types/ticket-types'
 
-export function TicketTypesPanel({ eventId }: { eventId: string }) {
+export function TicketTypesPanel({ eventId, community }: { eventId: string; community: string }) {
     const canEdit = useCan('editEvents')
+    const { applications } = communityFeatures(community)
     const { data: tickets = [], isPending } = useTicketTypes({ variables: eventId })
     const [draft, setDraft] = useState<TicketDraft | null>(null)
     const [deleting, setDeleting] = useState<TicketTypeStock | null>(null)
@@ -65,12 +68,18 @@ export function TicketTypesPanel({ eventId }: { eventId: string }) {
                     ))}
                 </ul>
             </Panel>
-            {canEdit && <TicketPresets onPick={(preset) => setDraft({ preset })} />}
+            {canEdit && (
+                <TicketPresets
+                    presets={ticketPresetsFor(community)}
+                    onPick={(preset) => setDraft({ preset })}
+                />
+            )}
             {draft && (
                 <TicketTypeDialog
                     eventId={eventId}
                     draft={draft}
                     nextSortOrder={nextSortOrder}
+                    approvals={applications}
                     onClose={() => setDraft(null)}
                 />
             )}
