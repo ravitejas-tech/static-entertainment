@@ -5,7 +5,7 @@ The websites, ticketing platform and admin panel for Static Entertainment's comm
 | App | Folder | Local address |
 |---|---|---|
 | Echoverse Hub website: events, booking, QR tickets, My Tickets | `apps/echoverse/` | http://localhost:7300 |
-| Founders Frame website: events, RSVPs, applications, QR tickets | `apps/founders-frame/` | http://localhost:7302 |
+| Founders Frame website: events, paid checkout, QR tickets | `apps/founders-frame/` | http://localhost:7302 |
 | Admin panel: dashboard, events, orders, refunds, gate scanner | `apps/admin/` | http://localhost:7301 |
 | Backend: Supabase in Docker | `supabase/` | Studio http://127.0.0.1:54323 |
 
