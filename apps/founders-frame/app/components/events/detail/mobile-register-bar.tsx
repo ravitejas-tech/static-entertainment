@@ -1,30 +1,28 @@
+import { Link } from 'react-router'
 import { Button } from '~/components/ui/button'
 import { Text } from '~/components/ui/text'
-import { EVENT_FORMATS } from '~/data/events/formats'
-import { REGISTER_ANCHOR } from '~/data/events/page'
-import { formatEventDay } from '~/lib/format'
+import { EVENT_CARD_COPY } from '~/data/events/card'
+import { EVENT_PAGE_COPY } from '~/data/events/page'
+import { bookPath } from '~/data/navigation'
+import { formatEventDay, formatEventTime, formatRupees } from '~/lib/format'
 import type { EventDetail } from '~/types/events'
 
 export function MobileRegisterBar({ event }: { event: EventDetail }) {
     return (
-        <div className='fixed inset-x-0 bottom-0 z-30 border-t border-border bg-bg/95 px-5 py-3 backdrop-blur-md lg:hidden'>
+        <div className='fixed inset-x-0 bottom-0 z-30 border-t border-border bg-surface px-4 py-3 shadow-dialog lg:hidden'>
             <div className='flex items-center justify-between gap-4'>
                 <div className='min-w-0'>
+                    {event.fromPrice !== null && (
+                        <Text variant='subtitle'>{EVENT_CARD_COPY.from(formatRupees(event.fromPrice))}</Text>
+                    )}
                     <Text
-                        variant='label'
-                        className='truncate'>
-                        {event.title}
-                    </Text>
-                    <Text
-                        variant='small'
-                        tone='secondary'>
-                        {formatEventDay(event.startsAt)}
+                        variant='badge'
+                        tone='muted'>
+                        {EVENT_PAGE_COPY.when(formatEventDay(event.startsAt), formatEventTime(event.startsAt))}
                     </Text>
                 </div>
-                <Button
-                    asChild
-                    size='sm'>
-                    <a href={`#${REGISTER_ANCHOR}`}>{EVENT_FORMATS[event.format].cta}</a>
+                <Button asChild>
+                    <Link to={bookPath(event.slug)}>{EVENT_CARD_COPY.book}</Link>
                 </Button>
             </div>
         </div>
