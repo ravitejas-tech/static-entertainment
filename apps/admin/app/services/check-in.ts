@@ -40,14 +40,15 @@ export async function getCheckInEvent(eventId: string) {
     return data
 }
 
-export async function listCheckInEvents() {
+export async function listCheckInEvents(community: string) {
     const [events, summaries] = await Promise.all([
         supabase
             .from('events')
             .select('id, title, starts_at, ends_at, venue_name, city')
+            .eq('community', community)
             .eq('status', 'published')
             .order('starts_at'),
-        supabase.rpc('event_summaries'),
+        supabase.rpc('event_summaries', { p_community: community }),
     ])
     if (events.error) throw events.error
     if (summaries.error) throw summaries.error
