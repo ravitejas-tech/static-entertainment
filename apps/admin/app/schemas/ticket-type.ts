@@ -19,10 +19,15 @@ export const ticketTypeSchema = z
         sales_end: z.string(),
         visible: z.boolean(),
         sold_out: z.boolean(),
+        requires_approval: z.boolean(),
     })
     .refine(({ min_per_order, max_per_order }) => max_per_order >= min_per_order, {
         path: ['max_per_order'],
         message: errors.maxBelowMin,
+    })
+    .refine(({ requires_approval, price }) => !requires_approval || price === 0, {
+        path: ['price'],
+        message: errors.approvalFree,
     })
     .refine(({ sales_start, sales_end }) => !sales_start || !sales_end || sales_end > sales_start, {
         path: ['sales_end'],
