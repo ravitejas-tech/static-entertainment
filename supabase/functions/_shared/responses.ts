@@ -19,6 +19,12 @@ const KNOWN_ERRORS = new Set([
     'amount_mismatch',
     'payment_invalid',
     'payment_unavailable',
+    'approval_required',
+    'already_applied',
+    'application_not_found',
+    'application_not_approved',
+    'application_closed',
+    'invalid_profile',
     'not_allowed',
     'bad_request',
 ])
