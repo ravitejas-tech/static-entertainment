@@ -1,57 +1,39 @@
 import { EventAgenda } from '~/components/events/event-agenda'
 import { EventFilters } from '~/components/events/event-filters'
 import { PastEventCard } from '~/components/events/past-event-card'
-import { RegistrationGuide } from '~/components/events/registration-guide'
 import { EventPanels } from '~/components/landing/event-panels'
-import { Button } from '~/components/ui/button'
 import { EmptyState } from '~/components/ui/empty-state'
 import { Reveal } from '~/components/ui/reveal'
 import { Text } from '~/components/ui/text'
-import { EVENTS_FILTERS, EVENTS_SECTIONS } from '~/data/events/meta'
+import { EVENTS_SECTIONS } from '~/data/events/meta'
 import { useEventFilters } from '~/hooks/use-event-filters'
 import type { EventSummary } from '~/types/events'
 
 export function EventBrowser({ events }: { events: EventSummary[] }) {
     const upcoming = events.filter(({ ended }) => !ended)
     const past = events.filter(({ ended }) => ended).reverse()
-    const { format, type, formats, types, visible, setFormat, setType, clear } = useEventFilters(upcoming)
+    const { type, types, visible, setType } = useEventFilters(upcoming)
 
     return (
         <>
-            {upcoming.length > 0 ? (
-                <Reveal
-                    trigger='load'
-                    order={5}>
-                    <EventFilters
-                        total={upcoming.length}
-                        format={format}
-                        formats={formats}
-                        type={type}
-                        types={types}
-                        onFormat={setFormat}
-                        onType={setType}
-                    />
-                </Reveal>
-            ) : (
+            {upcoming.length === 0 && (
                 <EmptyState
                     level='h2'
                     {...EVENTS_SECTIONS.empty}
                     className='mb-10'
                 />
             )}
-            {upcoming.length > 0 && visible.length === 0 && (
-                <EmptyState
-                    level='h2'
-                    {...EVENTS_FILTERS.none}
-                    className='mb-10'
-                    action={
-                        <Button
-                            variant='secondary'
-                            onClick={clear}>
-                            {EVENTS_FILTERS.none.action}
-                        </Button>
-                    }
-                />
+            {types.length > 1 && (
+                <Reveal
+                    trigger='load'
+                    order={5}>
+                    <EventFilters
+                        total={upcoming.length}
+                        type={type}
+                        types={types}
+                        onType={setType}
+                    />
+                </Reveal>
             )}
             <div className='space-y-10 md:hidden'>
                 {visible.length > 0 && (
@@ -62,7 +44,7 @@ export function EventBrowser({ events }: { events: EventSummary[] }) {
                             {EVENTS_SECTIONS.upcoming}
                         </Text>
                         <EventPanels
-                            key={`${format ?? 'all'}-${type}`}
+                            key={type ?? 'all'}
                             events={visible}
                             prioritizeFirst
                         />
@@ -85,9 +67,6 @@ export function EventBrowser({ events }: { events: EventSummary[] }) {
                         ))}
                     </Reveal>
                 )}
-                <Reveal effect='lift'>
-                    <RegistrationGuide />
-                </Reveal>
             </div>
             <div className='hidden md:block'>
                 <EventAgenda
