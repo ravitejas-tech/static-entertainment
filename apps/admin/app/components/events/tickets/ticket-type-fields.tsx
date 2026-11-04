@@ -8,7 +8,7 @@ const { fields } = TICKETS_COPY
 
 const numberInput = { type: 'number', inputMode: 'numeric', min: 0, step: 1, valueAsNumber: true } as const
 
-export function TicketTypeFields({ approvals }: { approvals: boolean }) {
+export function TicketTypeFields({ freeTickets }: { freeTickets: boolean }) {
     const { register } = useFormContext<TicketTypeValues>()
 
     return (
@@ -28,7 +28,7 @@ export function TicketTypeFields({ approvals }: { approvals: boolean }) {
                 <TextField<TicketTypeValues>
                     name='price'
                     label={fields.price.label}
-                    hint={fields.price.hint}
+                    hint={freeTickets ? fields.price.hint : fields.price.paidHint}
                     required
                     {...numberInput}
                 />
@@ -82,13 +82,6 @@ export function TicketTypeFields({ approvals }: { approvals: boolean }) {
                 {...fields.sold_out}
                 {...register('sold_out')}
             />
-            {approvals && (
-                <Switch
-                    id='ticket-requires-approval'
-                    {...fields.requires_approval}
-                    {...register('requires_approval', { deps: ['price'] })}
-                />
-            )}
         </div>
     )
 }
