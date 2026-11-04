@@ -5,10 +5,15 @@ import { BackLink } from '~/components/ui/back-link'
 import { Text } from '~/components/ui/text'
 import { EVENTS_COPY, EVENT_HEADER_COPY } from '~/data/events/copy'
 import { EVENT_PATHS } from '~/data/events/links'
+import { usePendingApplications } from '~/hooks/applications/queries'
+import { useShowsApplications } from '~/hooks/applications/use-shows-applications'
 import { eventWhen } from '~/lib/events/dates'
 import type { EventRow } from '~/types/events'
 
 export function EventHeader({ event }: { event: EventRow }) {
+    const showsApplications = useShowsApplications(event.community)
+    const { data: pending } = usePendingApplications({ variables: event.id, enabled: showsApplications })
+
     return (
         <header className='mb-6 space-y-4'>
             <BackLink
@@ -36,7 +41,10 @@ export function EventHeader({ event }: { event: EventRow }) {
                             tone='secondary'>
                             <time dateTime={event.starts_at}>{eventWhen(event)}</time>
                         </Text>
-                        <StatusBadges event={event} />
+                        <StatusBadges
+                            event={event}
+                            pending={pending}
+                        />
                     </div>
                 </div>
                 <EventActions event={event} />
