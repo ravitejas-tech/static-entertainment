@@ -2,7 +2,7 @@ export const LANDING_PHOTO_DIR = '/images/landing'
 
 export const PHOTO_SHAPES = {
     wide: { width: 1536, height: 1024, widths: [768, 1152] },
-    tall: { width: 800, height: 1000, widths: [400, 600] },
+    seat: { width: 416, height: 416, widths: [208] },
     portrait: { width: 1024, height: 1536, widths: [480, 720] },
 } as const
 
@@ -15,4 +15,7 @@ export const PHOTO_SIZES = {
     cover: '(min-width: 1024px) 56rem, 100vw',
     agenda: '(min-width: 1024px) 18rem, 13rem',
     thumb: '6rem',
+    phone: '16rem',
+    portrait: '5.5rem',
+    seat: '(min-width: 1024px) 6.5rem, (min-width: 768px) 6rem, (min-width: 640px) 5rem, 4rem',
 } as const
