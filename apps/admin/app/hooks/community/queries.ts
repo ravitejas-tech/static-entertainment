@@ -1,7 +1,7 @@
 import { createInfiniteQuery, createQuery } from 'react-query-kit'
 import { COMMUNITY_PAGE_SIZE } from '~/data/community/query'
 import { getCommunityMember, getCommunityStats, listCommunityMembers, listMemberBookings } from '~/services/community'
-import type { CommunityQuery } from '~/types/community'
+import type { CommunityQuery, MemberRef } from '~/types/community'
 
 export const useCommunityMembers = createInfiniteQuery({
     queryKey: ['community-members'],
@@ -13,15 +13,15 @@ export const useCommunityMembers = createInfiniteQuery({
 
 export const useCommunityStats = createQuery({
     queryKey: ['community-stats'],
-    fetcher: () => getCommunityStats(),
+    fetcher: (community: string) => getCommunityStats(community),
 })
 
 export const useCommunityMember = createQuery({
     queryKey: ['community-member'],
-    fetcher: (id: string) => getCommunityMember(id),
+    fetcher: (member: MemberRef) => getCommunityMember(member),
 })
 
 export const useMemberBookings = createQuery({
     queryKey: ['member-bookings'],
-    fetcher: (customerId: string) => listMemberBookings(customerId),
+    fetcher: (member: MemberRef) => listMemberBookings(member),
 })
