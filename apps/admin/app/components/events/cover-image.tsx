@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { ImageOff } from 'lucide-react'
 import { Text } from '~/components/ui/text'
 import { IMAGE_SIZES } from '~/data/ui/media'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { websiteAssetUrl } from '~/lib/website'
 import { cn } from '~/lib/utils'
 
@@ -18,6 +19,7 @@ export interface CoverImageProps extends VariantProps<typeof coverVariants> {
 }
 
 export function CoverImage({ src, alt, emptyLabel, size, className }: CoverImageProps) {
+    const { community } = useCommunity()
     if (!src)
         return (
             <div className={cn(coverVariants({ size }), 'grid place-items-center gap-1 p-2 text-center', className)}>
@@ -36,7 +38,7 @@ export function CoverImage({ src, alt, emptyLabel, size, className }: CoverImage
         )
     return (
         <img
-            src={websiteAssetUrl(src)}
+            src={websiteAssetUrl(community?.site_url ?? null, src)}
             alt={alt}
             loading='lazy'
             width={IMAGE_SIZES.cover.width}
