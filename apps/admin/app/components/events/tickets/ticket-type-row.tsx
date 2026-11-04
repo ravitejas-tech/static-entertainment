@@ -6,8 +6,8 @@ import { MoveButtons } from '~/components/ui/move-buttons'
 import { ProgressBar } from '~/components/ui/progress-bar'
 import { Text } from '~/components/ui/text'
 import { TICKET_STATE_TONES, TICKETS_COPY } from '~/data/events/tickets'
-import { ticketSaleState } from '~/lib/events/tickets'
-import { formatCount, formatDateTime, formatRupees } from '~/lib/format'
+import { priceLabel, ticketSaleState } from '~/lib/events/tickets'
+import { formatCount, formatDateTime } from '~/lib/format'
 import type { TicketTypeStock } from '~/types/ticket-types'
 
 export interface TicketTypeRowProps {
@@ -24,7 +24,8 @@ export function TicketTypeRow({ ticket, canEdit, index, count, onEdit, onMove, o
     const state = ticketSaleState(ticket)
     const booked = TICKETS_COPY.booked(formatCount(ticket.booked), formatCount(ticket.quantity))
     const facts = [
-        ticket.price > 0 ? formatRupees(ticket.price) : TICKETS_COPY.free,
+        priceLabel(ticket.price),
+        ticket.requires_approval && TICKETS_COPY.needsApproval,
         booked,
         TICKETS_COPY.left(formatCount(ticket.remaining)),
         ticket.admits > 1 && TICKETS_COPY.admits(ticket.admits),
