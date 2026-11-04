@@ -6,12 +6,12 @@ import { MEMBER_TYPE_LABELS } from '~/data/members/options'
 import { FORM_COPY } from '~/data/registration/form'
 import { FIELD_IDS } from '~/data/registration/page'
 import { toOptions } from '~/lib/options'
-import type { RegistrationFormInput, RegistrationMode } from '~/types/registration'
+import type { RegistrationFormInput } from '~/types/registration'
 
 const { fields } = FORM_COPY
 const MEMBER_TYPE_OPTIONS = toOptions(MEMBER_TYPE_LABELS)
 
-export function RoleFields({ mode }: { mode: RegistrationMode }) {
+export function RoleFields() {
     const {
         register,
         formState: { errors },
@@ -36,8 +36,7 @@ export function RoleFields({ mode }: { mode: RegistrationMode }) {
             <Field
                 id={FIELD_IDS.jobTitle}
                 label={fields.jobTitle.label}
-                error={errors.jobTitle?.message}
-                required={mode === 'apply'}>
+                error={errors.jobTitle?.message}>
                 {(control) => (
                     <Input
                         {...control}
