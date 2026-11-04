@@ -5,7 +5,7 @@ import { toCsv } from '~/lib/csv'
 import { istToday } from '~/lib/date-input'
 import { downloadFile } from '~/lib/download'
 import { formatDate } from '~/lib/format'
-import type { CommunityMember, CommunitySegment } from '~/types/community'
+import type { CommunityMember, CommunityQuery } from '~/types/community'
 
 const { csv } = COMMUNITY_COPY
 const { headers } = csv
@@ -32,13 +32,13 @@ const CSV_COLUMNS: readonly { header: string; cell: (member: CommunityMember) =>
     { header: headers.news, cell: ({ marketing_consent }) => (marketing_consent ? csv.yes : csv.no) },
 ]
 
-export function downloadCommunity(members: readonly CommunityMember[], segment: CommunitySegment) {
+export function downloadCommunity(members: readonly CommunityMember[], { community, segment }: CommunityQuery) {
     const content = toCsv([
         CSV_COLUMNS.map(({ header }) => header),
         ...members.map((member) => CSV_COLUMNS.map(({ cell }) => cell(member))),
     ])
     downloadFile(
-        `${csv.filePrefix}-${segment}-${istToday()}${CSV_FILE.extension}`,
+        `${community}-${csv.filePrefix}-${segment}-${istToday()}${CSV_FILE.extension}`,
         `${CSV_FILE.bom}${content}`,
         CSV_FILE.type,
     )
