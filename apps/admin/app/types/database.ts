@@ -57,6 +57,96 @@ export type Database = {
                 }
                 Relationships: []
             }
+            applications: {
+                Row: {
+                    access_token: string
+                    answers: NonNullable<Json>
+                    confirmed_at: string | null
+                    created_at: string
+                    customer_id: string
+                    email: string
+                    event_id: string
+                    id: string
+                    name: string
+                    order_id: string | null
+                    phone: string
+                    review_note: string
+                    reviewed_at: string | null
+                    reviewed_by: string | null
+                    status: Database['public']['Enums']['application_status']
+                    ticket_type_id: string
+                    updated_at: string
+                }
+                ComputedFields: never
+                Insert: {
+                    access_token?: string
+                    answers?: NonNullable<Json>
+                    confirmed_at?: string | null
+                    created_at?: string
+                    customer_id: string
+                    email: string
+                    event_id: string
+                    id?: string
+                    name: string
+                    order_id?: string | null
+                    phone: string
+                    review_note?: string
+                    reviewed_at?: string | null
+                    reviewed_by?: string | null
+                    status?: Database['public']['Enums']['application_status']
+                    ticket_type_id: string
+                    updated_at?: string
+                }
+                Update: {
+                    access_token?: string
+                    answers?: NonNullable<Json>
+                    confirmed_at?: string | null
+                    created_at?: string
+                    customer_id?: string
+                    email?: string
+                    event_id?: string
+                    id?: string
+                    name?: string
+                    order_id?: string | null
+                    phone?: string
+                    review_note?: string
+                    reviewed_at?: string | null
+                    reviewed_by?: string | null
+                    status?: Database['public']['Enums']['application_status']
+                    ticket_type_id?: string
+                    updated_at?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: 'applications_customer_id_fkey'
+                        columns: ['customer_id']
+                        isOneToOne: false
+                        referencedRelation: 'customers'
+                        referencedColumns: ['id']
+                    },
+                    {
+                        foreignKeyName: 'applications_event_id_fkey'
+                        columns: ['event_id']
+                        isOneToOne: false
+                        referencedRelation: 'events'
+                        referencedColumns: ['id']
+                    },
+                    {
+                        foreignKeyName: 'applications_order_id_fkey'
+                        columns: ['order_id']
+                        isOneToOne: true
+                        referencedRelation: 'orders'
+                        referencedColumns: ['id']
+                    },
+                    {
+                        foreignKeyName: 'applications_ticket_type_id_fkey'
+                        columns: ['ticket_type_id']
+                        isOneToOne: false
+                        referencedRelation: 'ticket_types'
+                        referencedColumns: ['id']
+                    },
+                ]
+            }
             check_ins: {
                 Row: {
                     created_at: string
@@ -103,14 +193,108 @@ export type Database = {
                     },
                 ]
             }
+            communities: {
+                Row: {
+                    booking_prefix: string
+                    created_at: string
+                    name: string
+                    site_url: string | null
+                    slug: string
+                    updated_at: string
+                }
+                ComputedFields: never
+                Insert: {
+                    booking_prefix: string
+                    created_at?: string
+                    name: string
+                    site_url?: string | null
+                    slug: string
+                    updated_at?: string
+                }
+                Update: {
+                    booking_prefix?: string
+                    created_at?: string
+                    name?: string
+                    site_url?: string | null
+                    slug?: string
+                    updated_at?: string
+                }
+                Relationships: []
+            }
+            companies: {
+                Row: {
+                    created_at: string
+                    id: string
+                    industry: string | null
+                    name: string
+                    stage: string | null
+                    updated_at: string
+                    website: string | null
+                }
+                ComputedFields: never
+                Insert: {
+                    created_at?: string
+                    id?: string
+                    industry?: string | null
+                    name: string
+                    stage?: string | null
+                    updated_at?: string
+                    website?: string | null
+                }
+                Update: {
+                    created_at?: string
+                    id?: string
+                    industry?: string | null
+                    name?: string
+                    stage?: string | null
+                    updated_at?: string
+                    website?: string | null
+                }
+                Relationships: []
+            }
+            customer_consents: {
+                Row: {
+                    community: string
+                    customer_id: string
+                    marketing_consent: boolean
+                    updated_at: string
+                }
+                ComputedFields: never
+                Insert: {
+                    community: string
+                    customer_id: string
+                    marketing_consent: boolean
+                    updated_at?: string
+                }
+                Update: {
+                    community?: string
+                    customer_id?: string
+                    marketing_consent?: boolean
+                    updated_at?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: 'customer_consents_community_fkey'
+                        columns: ['community']
+                        isOneToOne: false
+                        referencedRelation: 'communities'
+                        referencedColumns: ['slug']
+                    },
+                    {
+                        foreignKeyName: 'customer_consents_customer_id_fkey'
+                        columns: ['customer_id']
+                        isOneToOne: false
+                        referencedRelation: 'customers'
+                        referencedColumns: ['id']
+                    },
+                ]
+            }
             customers: {
                 Row: {
                     city: string | null
-                    consent_updated_at: string | null
                     created_at: string
                     email: string
                     id: string
-                    marketing_consent: boolean
                     name: string
                     phone: string
                     updated_at: string
@@ -118,34 +302,62 @@ export type Database = {
                 ComputedFields: never
                 Insert: {
                     city?: string | null
-                    consent_updated_at?: string | null
                     created_at?: string
                     email: string
                     id?: string
-                    marketing_consent?: boolean
                     name: string
                     phone: string
                     updated_at?: string
                 }
                 Update: {
                     city?: string | null
-                    consent_updated_at?: string | null
                     created_at?: string
                     email?: string
                     id?: string
-                    marketing_consent?: boolean
                     name?: string
                     phone?: string
                     updated_at?: string
                 }
                 Relationships: []
             }
+            event_categories: {
+                Row: {
+                    community: string
+                    label: string
+                    slug: string
+                    sort_order: number
+                }
+                ComputedFields: never
+                Insert: {
+                    community: string
+                    label: string
+                    slug: string
+                    sort_order?: number
+                }
+                Update: {
+                    community?: string
+                    label?: string
+                    slug?: string
+                    sort_order?: number
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: 'event_categories_community_fkey'
+                        columns: ['community']
+                        isOneToOne: false
+                        referencedRelation: 'communities'
+                        referencedColumns: ['slug']
+                    },
+                ]
+            }
             events: {
                 Row: {
                     age_limit: string
-                    category: Database['public']['Enums']['event_category']
+                    audience: string[]
+                    category: string
                     city: string
                     city_code: string
+                    community: string
                     cover_alt: string
                     cover_credit: string | null
                     cover_source: string | null
@@ -155,10 +367,12 @@ export type Database = {
                     dress_code: string
                     ends_at: string
                     faqs: NonNullable<Json>
+                    founder_stages: string[]
                     highlights: string[]
                     hosts: NonNullable<Json>
                     id: string
                     included: string[]
+                    industries: string[]
                     language: string
                     map_url: string | null
                     not_included: string[]
@@ -187,9 +401,11 @@ export type Database = {
                 ComputedFields: never
                 Insert: {
                     age_limit?: string
-                    category: Database['public']['Enums']['event_category']
+                    audience?: string[]
+                    category: string
                     city: string
                     city_code: string
+                    community: string
                     cover_alt?: string
                     cover_credit?: string | null
                     cover_source?: string | null
@@ -199,10 +415,12 @@ export type Database = {
                     dress_code?: string
                     ends_at: string
                     faqs?: NonNullable<Json>
+                    founder_stages?: string[]
                     highlights?: string[]
                     hosts?: NonNullable<Json>
                     id?: string
                     included?: string[]
+                    industries?: string[]
                     language?: string
                     map_url?: string | null
                     not_included?: string[]
@@ -230,9 +448,11 @@ export type Database = {
                 }
                 Update: {
                     age_limit?: string
-                    category?: Database['public']['Enums']['event_category']
+                    audience?: string[]
+                    category?: string
                     city?: string
                     city_code?: string
+                    community?: string
                     cover_alt?: string
                     cover_credit?: string | null
                     cover_source?: string | null
@@ -242,10 +462,12 @@ export type Database = {
                     dress_code?: string
                     ends_at?: string
                     faqs?: NonNullable<Json>
+                    founder_stages?: string[]
                     highlights?: string[]
                     hosts?: NonNullable<Json>
                     id?: string
                     included?: string[]
+                    industries?: string[]
                     language?: string
                     map_url?: string | null
                     not_included?: string[]
@@ -271,7 +493,22 @@ export type Database = {
                     venue_lng?: number | null
                     venue_name?: string
                 }
-                Relationships: []
+                Relationships: [
+                    {
+                        foreignKeyName: 'events_community_category_fkey'
+                        columns: ['community', 'category']
+                        isOneToOne: false
+                        referencedRelation: 'event_categories'
+                        referencedColumns: ['community', 'slug']
+                    },
+                    {
+                        foreignKeyName: 'events_community_fkey'
+                        columns: ['community']
+                        isOneToOne: false
+                        referencedRelation: 'communities'
+                        referencedColumns: ['slug']
+                    },
+                ]
             }
             gallery_photos: {
                 Row: {
@@ -305,6 +542,55 @@ export type Database = {
                         columns: ['event_id']
                         isOneToOne: false
                         referencedRelation: 'events'
+                        referencedColumns: ['id']
+                    },
+                ]
+            }
+            member_profiles: {
+                Row: {
+                    company_id: string | null
+                    created_at: string
+                    customer_id: string
+                    job_title: string
+                    linkedin_url: string | null
+                    looking_for: string[]
+                    member_type: Database['public']['Enums']['member_type']
+                    updated_at: string
+                }
+                ComputedFields: never
+                Insert: {
+                    company_id?: string | null
+                    created_at?: string
+                    customer_id: string
+                    job_title?: string
+                    linkedin_url?: string | null
+                    looking_for?: string[]
+                    member_type: Database['public']['Enums']['member_type']
+                    updated_at?: string
+                }
+                Update: {
+                    company_id?: string | null
+                    created_at?: string
+                    customer_id?: string
+                    job_title?: string
+                    linkedin_url?: string | null
+                    looking_for?: string[]
+                    member_type?: Database['public']['Enums']['member_type']
+                    updated_at?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: 'member_profiles_company_id_fkey'
+                        columns: ['company_id']
+                        isOneToOne: false
+                        referencedRelation: 'companies'
+                        referencedColumns: ['id']
+                    },
+                    {
+                        foreignKeyName: 'member_profiles_customer_id_fkey'
+                        columns: ['customer_id']
+                        isOneToOne: true
+                        referencedRelation: 'customers'
                         referencedColumns: ['id']
                     },
                 ]
@@ -485,6 +771,7 @@ export type Database = {
             }
             page_visits: {
                 Row: {
+                    community: string
                     created_at: string
                     event_id: string | null
                     id: number
@@ -497,6 +784,7 @@ export type Database = {
                 }
                 ComputedFields: never
                 Insert: {
+                    community: string
                     created_at?: string
                     event_id?: string | null
                     id?: never
@@ -508,6 +796,7 @@ export type Database = {
                     visitor_id: string
                 }
                 Update: {
+                    community?: string
                     created_at?: string
                     event_id?: string | null
                     id?: never
@@ -519,6 +808,13 @@ export type Database = {
                     visitor_id?: string
                 }
                 Relationships: [
+                    {
+                        foreignKeyName: 'page_visits_community_fkey'
+                        columns: ['community']
+                        isOneToOne: false
+                        referencedRelation: 'communities'
+                        referencedColumns: ['slug']
+                    },
                     {
                         foreignKeyName: 'page_visits_event_id_fkey'
                         columns: ['event_id']
@@ -532,6 +828,7 @@ export type Database = {
                 Row: {
                     active: boolean
                     code: string
+                    community: string
                     created_at: string
                     discount_type: Database['public']['Enums']['discount_type']
                     discount_value: number
@@ -547,6 +844,7 @@ export type Database = {
                 Insert: {
                     active?: boolean
                     code: string
+                    community: string
                     created_at?: string
                     discount_type: Database['public']['Enums']['discount_type']
                     discount_value: number
@@ -561,6 +859,7 @@ export type Database = {
                 Update: {
                     active?: boolean
                     code?: string
+                    community?: string
                     created_at?: string
                     discount_type?: Database['public']['Enums']['discount_type']
                     discount_value?: number
@@ -573,6 +872,13 @@ export type Database = {
                     updated_at?: string
                 }
                 Relationships: [
+                    {
+                        foreignKeyName: 'promo_codes_community_fkey'
+                        columns: ['community']
+                        isOneToOne: false
+                        referencedRelation: 'communities'
+                        referencedColumns: ['slug']
+                    },
                     {
                         foreignKeyName: 'promo_codes_event_id_fkey'
                         columns: ['event_id']
@@ -625,6 +931,7 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
+                    requires_approval: boolean
                     sales_end: string | null
                     sales_start: string | null
                     sold_out: boolean
@@ -644,6 +951,7 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
+                    requires_approval?: boolean
                     sales_end?: string | null
                     sales_start?: string | null
                     sold_out?: boolean
@@ -662,6 +970,7 @@ export type Database = {
                     name?: string
                     price?: number
                     quantity?: number
+                    requires_approval?: boolean
                     sales_end?: string | null
                     sales_start?: string | null
                     sold_out?: boolean
@@ -808,7 +1117,7 @@ export type Database = {
                 }[]
             }
             community_members: {
-                Args: Record<PropertyKey, never>
+                Args: { p_community: string }
                 Returns: {
                     city: string
                     email: string
@@ -832,7 +1141,7 @@ export type Database = {
                 }[]
             }
             community_stats: {
-                Args: Record<PropertyKey, never>
+                Args: { p_community: string }
                 Returns: {
                     new_members: number
                     past: number
@@ -841,6 +1150,50 @@ export type Database = {
                     upcoming: number
                     updates_ok: number
                 }[]
+            }
+            confirm_application: {
+                Args: { p_access_token: string }
+                Returns: {
+                    access_token: string
+                    answers: NonNullable<Json>
+                    booking_code: string
+                    cancelled_at: string | null
+                    created_at: string
+                    customer_id: string
+                    discount: number
+                    email: string
+                    event_id: string
+                    hold_expires_at: string | null
+                    id: string
+                    name: string
+                    needs_refund: boolean
+                    notes: string
+                    paid_at: string | null
+                    payment_provider: string | null
+                    phone: string
+                    promo_code_id: string | null
+                    provider_order_id: string | null
+                    provider_payment_id: string | null
+                    provider_refund_id: string | null
+                    referrer: string | null
+                    refund_amount: number | null
+                    refunded_at: string | null
+                    source: Database['public']['Enums']['order_source']
+                    status: Database['public']['Enums']['order_status']
+                    subtotal: number
+                    terms_accepted_at: string | null
+                    total: number
+                    updated_at: string
+                    utm_campaign: string | null
+                    utm_medium: string | null
+                    utm_source: string | null
+                }
+                SetofOptions: {
+                    from: '*'
+                    to: 'orders'
+                    isOneToOne: true
+                    isSetofReturn: false
+                }
             }
             confirm_order: {
                 Args: { p_amount_paise: number; p_order_id: string; p_payment_id: string; p_provider: string }
@@ -888,11 +1241,12 @@ export type Database = {
             }
             current_email: { Args: Record<PropertyKey, never>; Returns: string }
             current_staff_role: { Args: Record<PropertyKey, never>; Returns: Database['public']['Enums']['staff_role'] }
-            dashboard_stats: { Args: { p_event_id?: string }; Returns: Json }
+            dashboard_stats: { Args: { p_community: string; p_event_id?: string }; Returns: Json }
             duplicate_event: { Args: { p_event_id: string }; Returns: string }
             event_summaries: {
-                Args: Record<PropertyKey, never>
+                Args: { p_community: string }
                 Returns: {
+                    applications_pending: number
                     capacity: number
                     checked_in: number
                     event_id: string
@@ -902,15 +1256,18 @@ export type Database = {
                 }[]
             }
             expire_stale_orders: { Args: Record<PropertyKey, never>; Returns: undefined }
-            generate_booking_code: { Args: { p_city_code: string; p_starts_at: string }; Returns: string }
+            generate_booking_code: { Args: { p_event_id: string }; Returns: string }
+            get_application: { Args: { p_access_token: string }; Returns: Json }
             get_booking: { Args: { p_access_token: string }; Returns: Json }
             get_event_preview: {
                 Args: { p_preview_token: string; p_slug: string }
                 Returns: {
                     age_limit: string
-                    category: Database['public']['Enums']['event_category']
+                    audience: string[]
+                    category: string
                     city: string
                     city_code: string
+                    community: string
                     cover_alt: string
                     cover_credit: string | null
                     cover_source: string | null
@@ -920,10 +1277,12 @@ export type Database = {
                     dress_code: string
                     ends_at: string
                     faqs: NonNullable<Json>
+                    founder_stages: string[]
                     highlights: string[]
                     hosts: NonNullable<Json>
                     id: string
                     included: string[]
+                    industries: string[]
                     language: string
                     map_url: string | null
                     not_included: string[]
@@ -969,6 +1328,7 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
+                    requires_approval: boolean
                     sales_end: string | null
                     sales_start: string | null
                     sold_out: boolean
@@ -1090,7 +1450,7 @@ export type Database = {
                 }
             }
             promo_code_summaries: {
-                Args: Record<PropertyKey, never>
+                Args: { p_community: string }
                 Returns: {
                     discount_total: number
                     promo_code_id: string
@@ -1105,6 +1465,42 @@ export type Database = {
                     code: string
                     discount: number
                 }[]
+            }
+            record_marketing_consent: {
+                Args: { p_community: string; p_consent: boolean; p_customer_id: string }
+                Returns: undefined
+            }
+            review_application: {
+                Args: {
+                    p_application_id: string
+                    p_note?: string
+                    p_status: Database['public']['Enums']['application_status']
+                }
+                Returns: {
+                    access_token: string
+                    answers: NonNullable<Json>
+                    confirmed_at: string | null
+                    created_at: string
+                    customer_id: string
+                    email: string
+                    event_id: string
+                    id: string
+                    name: string
+                    order_id: string | null
+                    phone: string
+                    review_note: string
+                    reviewed_at: string | null
+                    reviewed_by: string | null
+                    status: Database['public']['Enums']['application_status']
+                    ticket_type_id: string
+                    updated_at: string
+                }
+                SetofOptions: {
+                    from: '*'
+                    to: 'applications'
+                    isOneToOne: true
+                    isSetofReturn: false
+                }
             }
             reserve_order: {
                 Args: {
@@ -1161,6 +1557,44 @@ export type Database = {
                     isSetofReturn: false
                 }
             }
+            save_member_profile: { Args: { p_customer_id: string; p_profile: Json }; Returns: undefined }
+            submit_application: {
+                Args: {
+                    p_answers?: Json
+                    p_email: string
+                    p_event_id: string
+                    p_marketing_consent?: boolean
+                    p_name: string
+                    p_phone: string
+                    p_profile?: Json
+                    p_ticket_type_id: string
+                }
+                Returns: {
+                    access_token: string
+                    answers: NonNullable<Json>
+                    confirmed_at: string | null
+                    created_at: string
+                    customer_id: string
+                    email: string
+                    event_id: string
+                    id: string
+                    name: string
+                    order_id: string | null
+                    phone: string
+                    review_note: string
+                    reviewed_at: string | null
+                    reviewed_by: string | null
+                    status: Database['public']['Enums']['application_status']
+                    ticket_type_id: string
+                    updated_at: string
+                }
+                SetofOptions: {
+                    from: '*'
+                    to: 'applications'
+                    isOneToOne: true
+                    isSetofReturn: false
+                }
+            }
             ticket_availability: {
                 Args: { p_event_ids: string[] }
                 Returns: {
@@ -1171,21 +1605,29 @@ export type Database = {
             }
             ticket_type_remaining: { Args: { p_ticket_type_id: string }; Returns: number }
             track_visit: {
-                Args: { p_event_id?: string; p_path: string; p_referrer?: string; p_utm?: Json; p_visitor_id: string }
+                Args: {
+                    p_community: string
+                    p_event_id?: string
+                    p_path: string
+                    p_referrer?: string
+                    p_utm?: Json
+                    p_visitor_id: string
+                }
                 Returns: undefined
             }
             upsert_customer: {
-                Args: { p_city: string; p_email: string; p_marketing_consent: boolean; p_name: string; p_phone: string }
+                Args: { p_city: string; p_email: string; p_name: string; p_phone: string }
                 Returns: string
             }
             validate_buyer: { Args: { p_email: string; p_name: string; p_phone: string }; Returns: undefined }
         }
         Enums: {
+            application_status: 'pending' | 'approved' | 'waitlisted' | 'rejected' | 'confirmed' | 'withdrawn'
             check_in_result: 'valid' | 'already_checked_in' | 'invalid' | 'cancelled' | 'wrong_event' | 'override'
             discount_type: 'percent' | 'fixed'
-            event_category: 'dance_night' | 'social_mixer' | 'workshop' | 'weekend_trip' | 'nightlife' | 'meetup'
             event_status: 'draft' | 'published'
-            order_source: 'online' | 'complimentary'
+            member_type: 'founder' | 'business_leader' | 'investor' | 'professional' | 'student' | 'ecosystem_partner'
+            order_source: 'online' | 'complimentary' | 'application'
             order_status: 'pending' | 'paid' | 'expired' | 'failed' | 'cancelled' | 'refunded'
             pop_tone: 'pink' | 'yellow' | 'cyan' | 'lime' | 'violet' | 'orange'
             staff_role: 'super_admin' | 'event_manager' | 'finance' | 'marketing' | 'gate_staff' | 'viewer'
@@ -1300,11 +1742,12 @@ export const Constants = {
     },
     public: {
         Enums: {
+            application_status: ['pending', 'approved', 'waitlisted', 'rejected', 'confirmed', 'withdrawn'],
             check_in_result: ['valid', 'already_checked_in', 'invalid', 'cancelled', 'wrong_event', 'override'],
             discount_type: ['percent', 'fixed'],
-            event_category: ['dance_night', 'social_mixer', 'workshop', 'weekend_trip', 'nightlife', 'meetup'],
             event_status: ['draft', 'published'],
-            order_source: ['online', 'complimentary'],
+            member_type: ['founder', 'business_leader', 'investor', 'professional', 'student', 'ecosystem_partner'],
+            order_source: ['online', 'complimentary', 'application'],
             order_status: ['pending', 'paid', 'expired', 'failed', 'cancelled', 'refunded'],
             pop_tone: ['pink', 'yellow', 'cyan', 'lime', 'violet', 'orange'],
             staff_role: ['super_admin', 'event_manager', 'finance', 'marketing', 'gate_staff', 'viewer'],
