@@ -2,7 +2,12 @@
 
 > A curated networking and business community where the right people meet, exchange ideas, build meaningful relationships and create business opportunities.
 
-**Status (2026-10-31):** the website is scaffolded in `apps/founders-frame/` and the data model below is agreed. Its pages, design and backend features are not built yet.
+**Status (2026-10-31):** built, pending a run against the live backend.
+- **Website** (`apps/founders-frame/`): home, events, event pages, free RSVPs, application forms, application status and QR tickets, in the Founders Frame brand: white, navy and gold, the gold emblem logo (`docs/brand/founders-frame-logo-source.png`), Manrope and Inter, light theme only.
+- **Admin:** an Applications tab with review, Founders Frame event fields (audience, industries, founder stages, speakers), approval seats and member profiles.
+- **Backend:** its own event types, applications, member profiles and companies, and Founders Frame-styled emails.
+- **Landing imagery:** AI-generated placeholder photography in the brand's editorial style (warm evening light; the hero uses daylight shots). Replace it with real photos from Founders Frame events as they happen.
+- **Not built yet:** paid checkout on the Founders Frame site, memberships and cohorts, and a vector (SVG) version of the logo. The site uses raster cut-outs of the PNG.
 
 ## What it is
 
