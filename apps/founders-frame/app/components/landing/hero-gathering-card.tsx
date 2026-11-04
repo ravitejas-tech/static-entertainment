@@ -1,6 +1,6 @@
 import { ArrowUpRight, CalendarDays } from 'lucide-react'
 import { Link } from 'react-router'
-import { FormatBadge } from '~/components/events/format-badge'
+import { PriceBadge } from '~/components/events/price-badge'
 import { Reveal } from '~/components/ui/reveal'
 import { Text } from '~/components/ui/text'
 import { HERO } from '~/data/landing/hero'
@@ -31,7 +31,7 @@ export function HeroGatheringCard({ event, className }: HeroGatheringCardProps) 
                                 aria-hidden
                             />
                         </span>
-                        {event && <FormatBadge format={event.format} />}
+                        {event && <PriceBadge price={event.fromPrice} />}
                     </span>
                     <ArrowUpRight
                         className='size-6 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none'
