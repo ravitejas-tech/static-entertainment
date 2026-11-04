@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 const SHARED_APP_MODULES =
     /[\\/]app[\\/](components[\\/](ui|layout)|data[\\/](ui|layout|seo|events|members|navigation|brand)|lib|hooks[\\/]use-[\w-]+\.ts)/
 const LAZY_ONLY_MODULES =
-    /[\\/]app[\\/](lib[\\/](registration|tickets|qr|event-mapping|query-client)|components[\\/]ui[\\/](qr-code|query-provider|toaster|choice-chips|textarea|checkbox)|data[\\/]ui[\\/]toast)/
+    /[\\/]app[\\/](lib[\\/](registration|tickets|qr|css|event-mapping|query-client)|components[\\/]ui[\\/](qr-code|query-provider|toaster|textarea|checkbox|dialog)|data[\\/]ui[\\/]toast)/
 const REACT_MODULES = /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/
 const ROUTER_MODULES = /[\\/]node_modules[\\/](react-router|cookie|set-cookie-parser)[\\/]/
 
