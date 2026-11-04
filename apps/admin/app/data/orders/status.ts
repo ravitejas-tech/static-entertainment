@@ -55,6 +55,7 @@ export const PAYMENT_PROVIDER_LABELS: Partial<Record<string, string>> = {
     razorpay: 'Razorpay',
     test: 'Test payment',
     complimentary: 'Free ticket',
+    free: 'No payment needed',
 }
 
 export const NOTES_MAX_LENGTH = 2000
