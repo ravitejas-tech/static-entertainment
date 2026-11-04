@@ -44,7 +44,6 @@ Verify `echoversehub.com` in Resend. Then send from `Echoverse Hub <tickets@echo
 
 ```bash
 yarn supabase secrets set \
-  SITE_URL=https://echoversehub.com \
   ADMIN_URL=https://admin.echoversehub.com \
   PAYMENT_PROVIDER=test \
   EMAIL_PROVIDER=resend RESEND_API_KEY=... \
@@ -52,6 +51,12 @@ yarn supabase secrets set \
 ```
 
 `PAYMENT_PROVIDER=test` is the simulated payment from step 2. Leaving it unset means Razorpay, and checkout then fails until the keys are in.
+
+There is no `SITE_URL` secret. Ticket emails link to each community's `communities.site_url`, and use the community's name as the sender name (the address comes from `EMAIL_FROM`). The migration sets Echoverse's URL. When Founders Frame has a domain, set it and add it to the Auth redirect URLs (step 1):
+
+```sql
+update public.communities set site_url = 'https://<founders-frame-domain>' where slug = 'founders-frame';
+```
 
 ## 5. Website (static)
 
@@ -63,13 +68,22 @@ yarn supabase secrets set \
 - **SPA fallback:** any path without a file serves `/__spa-fallback.html` with status 200 (for example a `/* /__spa-fallback.html 200` rewrite).
 - **Rebuild when events change.** Event pages are pre-built so Google and WhatsApp previews work. Create a deploy hook on the host. Then add a Supabase **Database Webhook** on `public.events` (insert, update) that calls that hook. Newly published events then get their own pre-built page within a few minutes. Until the rebuild finishes, they still open in the browser.
 
+## 5b. Founders Frame website (static)
+
+Same setup as the Echoverse website, as a separate site on the static host.
+
+- Build command: `yarn build:founders-frame`. Output directory: `apps/founders-frame/build/client`.
+- Environment variables: `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
+- **SPA fallback:** any path without a file serves `/__spa-fallback.html` with status 200.
+- **Rebuild when Founders Frame events change**, with its own deploy hook and database webhook, like step 5.
+- Once it has a domain, set it as the community's `site_url` (step 4) and add it to the Auth redirect URLs (step 1). Until then its ticket and application emails cannot link back to the site.
+
 ## 6. Admin panel (static)
 
 - Build command: `yarn build:admin`. Output directory: `apps/admin/build/client`.
 - Environment variables:
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_PUBLISHABLE_KEY`
-  - `VITE_WEBSITE_URL=https://echoversehub.com`
 - **SPA fallback:** every path serves `index.html`.
 - The admin pages are already marked `noindex`. Optionally put the admin behind your host's access controls too.
 
