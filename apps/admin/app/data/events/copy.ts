@@ -39,7 +39,13 @@ export const EVENT_BADGES = {
 export const EVENT_HEADER_COPY = {
     back: 'All events',
     tabsLabel: 'Event sections',
-    tabs: { details: 'Details', tickets: 'Tickets', questions: 'Questions', attendees: 'Attendees' },
+    tabs: {
+        details: 'Details',
+        tickets: 'Tickets',
+        questions: 'Questions',
+        attendees: 'Attendees',
+        applications: 'Applications',
+    },
     publish: 'Publish',
     unpublish: 'Unpublish',
     pause: 'Pause sales',
