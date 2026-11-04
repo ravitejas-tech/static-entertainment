@@ -1,6 +1,7 @@
 import type { Config } from '@react-router/dev/config'
 import { loadEnv } from 'vite'
 import { eventPath, PUBLIC_PAGES } from './app/data/navigation'
+import { COMMUNITY_SLUG } from './app/data/brand'
 import { SEO_FILES } from './app/data/seo/routes'
 
 async function publishedEventPaths() {
@@ -11,9 +12,12 @@ async function publishedEventPaths() {
     )
     if (!url || !key) throw new Error('Prerender: set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.')
 
-    const response = await fetch(`${url}/rest/v1/events?select=slug&status=eq.published`, {
-        headers: { apikey: key },
-    }).catch((cause: unknown) => {
+    const response = await fetch(
+        `${url}/rest/v1/events?select=slug&status=eq.published&community=eq.${COMMUNITY_SLUG}`,
+        {
+            headers: { apikey: key },
+        },
+    ).catch((cause: unknown) => {
         throw new Error(
             `Prerender: Supabase at ${url} is unreachable, so the event pages cannot be built. Start it with \`yarn db:start\` and build again.`,
             { cause },
