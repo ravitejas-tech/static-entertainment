@@ -1,12 +1,39 @@
 import type { TicketPreset } from '~/types/ticket-types'
 
-export const TICKET_PRESETS: readonly TicketPreset[] = [
+const ECHOVERSE_PRESETS: readonly TicketPreset[] = [
     { name: 'Early Bird', price: 399, quantity: 50, admits: 1, description: 'Limited seats at the best price.' },
     { name: 'Regular', price: 499, quantity: 100, admits: 1, description: '' },
     { name: 'Couple Pass', price: 899, quantity: 25, admits: 2, description: 'Entry for two people.' },
     { name: 'Group of 4', price: 1599, quantity: 10, admits: 4, description: 'Entry for four people.' },
     { name: 'VIP', price: 999, quantity: 20, admits: 1, description: 'Front-row spot and a welcome drink.' },
 ]
+
+const FOUNDERS_FRAME_PRESETS: readonly TicketPreset[] = [
+    { name: 'RSVP', price: 0, quantity: 80, admits: 1, max_per_order: 1, description: 'Free entry.' },
+    {
+        name: 'Founder seat',
+        price: 0,
+        quantity: 12,
+        admits: 1,
+        max_per_order: 1,
+        requires_approval: true,
+        description: 'For founders building a company.',
+    },
+    {
+        name: 'Investor seat',
+        price: 0,
+        quantity: 8,
+        admits: 1,
+        max_per_order: 1,
+        requires_approval: true,
+        description: 'For angels, funds and family offices.',
+    },
+]
+
+export const TICKET_PRESETS: Partial<Record<string, readonly TicketPreset[]>> = {
+    echoverse: ECHOVERSE_PRESETS,
+    'founders-frame': FOUNDERS_FRAME_PRESETS,
+}
 
 export const NEW_TICKET_DEFAULTS = {
     name: '',
@@ -20,6 +47,7 @@ export const NEW_TICKET_DEFAULTS = {
     sales_end: '',
     visible: true,
     sold_out: false,
+    requires_approval: false,
 } as const
 
 export const TICKET_STATE_TONES = {
@@ -40,6 +68,7 @@ export const TICKETS_COPY = {
     createdBody: 'Pick a quick start below or add your own. Nobody sees this event until you publish it.',
     price: 'Price',
     free: 'Free',
+    needsApproval: 'Needs approval',
     booked: (booked: string, total: string) => `${booked} of ${total} booked`,
     left: (left: string) => `${left} left`,
     admits: (people: number) => `Admits ${people}`,
@@ -77,6 +106,10 @@ export const TICKETS_COPY = {
         sales_end: { label: 'Sales close', hint: 'Optional, India time. Empty means until the event.' },
         visible: { label: 'Show on the website', description: 'Turn off to hide it without deleting it.' },
         sold_out: { label: 'Mark as sold out', description: 'Stops sales for this ticket straight away.' },
+        requires_approval: {
+            label: 'People apply first',
+            description: 'You approve each person before they get a ticket. Seats that need approval are free.',
+        },
     },
     errors: {
         name: 'Give the ticket a name (2–60 characters)',
@@ -87,6 +120,7 @@ export const TICKETS_COPY = {
         maxBelowMin: 'Max has to be at least the min',
         windowOrder: 'Sales have to close after they open',
         description: 'Keep it under 200 characters',
+        approvalFree: 'Seats that need approval are free. Set the price to 0.',
     },
     toasts: {
         saved: 'Ticket saved',
