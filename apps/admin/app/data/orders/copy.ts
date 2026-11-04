@@ -24,7 +24,7 @@ export const ORDERS_COPY = {
         source: 'From',
         date: 'Booked',
     },
-    sources: { complimentary: 'Free ticket', application: 'Application' },
+    sources: { complimentary: 'Free ticket' },
     detail: {
         back: 'All orders',
         notFound: { emoji: '🔍', title: 'Order not found', body: 'It may have been removed, or the link is wrong.' },
