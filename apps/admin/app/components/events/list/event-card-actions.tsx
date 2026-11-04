@@ -5,6 +5,7 @@ import { Button } from '~/components/ui/button'
 import { ExternalLinkButton } from '~/components/ui/external-link-button'
 import { EVENTS_COPY } from '~/data/events/copy'
 import { EVENT_PATHS } from '~/data/events/links'
+import { useSiteUrl } from '~/hooks/communities/use-site-url'
 import { useCan } from '~/hooks/staff/use-can'
 import { useCopyText } from '~/hooks/use-copy-text'
 import { eventPreviewUrl, eventPublicUrl } from '~/lib/website'
@@ -13,6 +14,7 @@ import type { EventRow } from '~/types/events'
 export function EventCardActions({ event }: { event: EventRow }) {
     const canEdit = useCan('editEvents')
     const copyText = useCopyText()
+    const siteUrl = useSiteUrl(event.community)
 
     return (
         <div className='flex flex-wrap gap-2'>
@@ -28,22 +30,23 @@ export function EventCardActions({ event }: { event: EventRow }) {
                     size='sm'
                 />
             )}
-            {event.status === 'published' ? (
-                <ExternalLinkButton
-                    href={eventPublicUrl(event.slug)}
-                    variant='ghost'
-                    size='sm'>
-                    {EVENTS_COPY.viewLive}
-                </ExternalLinkButton>
-            ) : (
-                <Button
-                    variant='ghost'
-                    size='sm'
-                    onClick={() => copyText(eventPreviewUrl(event))}>
-                    <Copy />
-                    {EVENTS_COPY.copyPreview}
-                </Button>
-            )}
+            {siteUrl &&
+                (event.status === 'published' ? (
+                    <ExternalLinkButton
+                        href={eventPublicUrl(siteUrl, event.slug)}
+                        variant='ghost'
+                        size='sm'>
+                        {EVENTS_COPY.viewLive}
+                    </ExternalLinkButton>
+                ) : (
+                    <Button
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => copyText(eventPreviewUrl(siteUrl, event))}>
+                        <Copy />
+                        {EVENTS_COPY.copyPreview}
+                    </Button>
+                ))}
         </div>
     )
 }
