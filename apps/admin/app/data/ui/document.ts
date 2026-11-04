@@ -1,5 +1,6 @@
 export const ADMIN_ICONS = {
-    favicon: '/icons/favicon-32.png',
+    favicon: '/icons/favicon.svg',
+    faviconPng: '/icons/favicon-32.png',
     appleTouch: '/icons/apple-touch-icon.png',
 } as const
 
