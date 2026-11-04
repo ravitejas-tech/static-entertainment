@@ -9,23 +9,36 @@ const ECHOVERSE_PRESETS: readonly TicketPreset[] = [
 ]
 
 const FOUNDERS_FRAME_PRESETS: readonly TicketPreset[] = [
-    { name: 'RSVP', price: 0, quantity: 80, admits: 1, max_per_order: 1, description: 'Free entry.' },
+    {
+        name: 'Early bird',
+        price: 499,
+        quantity: 30,
+        admits: 1,
+        max_per_order: 4,
+        description: 'Limited seats at the best price.',
+    },
+    {
+        name: 'Standard',
+        price: 799,
+        quantity: 80,
+        admits: 1,
+        max_per_order: 4,
+        description: 'Entry, introductions and dinner.',
+    },
     {
         name: 'Founder seat',
-        price: 0,
+        price: 1499,
         quantity: 12,
         admits: 1,
         max_per_order: 1,
-        requires_approval: true,
         description: 'For founders building a company.',
     },
     {
         name: 'Investor seat',
-        price: 0,
+        price: 1499,
         quantity: 8,
         admits: 1,
         max_per_order: 1,
-        requires_approval: true,
         description: 'For angels, funds and family offices.',
     },
 ]
@@ -47,7 +60,6 @@ export const NEW_TICKET_DEFAULTS = {
     sales_end: '',
     visible: true,
     sold_out: false,
-    requires_approval: false,
 } as const
 
 export const TICKET_STATE_TONES = {
@@ -68,7 +80,6 @@ export const TICKETS_COPY = {
     createdBody: 'Pick a quick start below or add your own. Nobody sees this event until you publish it.',
     price: 'Price',
     free: 'Free',
-    needsApproval: 'Needs approval',
     booked: (booked: string, total: string) => `${booked} of ${total} booked`,
     left: (left: string) => `${left} left`,
     admits: (people: number) => `Admits ${people}`,
@@ -97,7 +108,11 @@ export const TICKETS_COPY = {
     fields: {
         name: { label: 'Name', placeholder: 'Early Bird' },
         description: { label: 'Description', hint: 'Optional. One line on what is included.' },
-        price: { label: 'Price (₹)', hint: '0 makes it free.' },
+        price: {
+            label: 'Price (₹)',
+            hint: '0 makes it free.',
+            paidHint: 'Every ticket for this community has a price.',
+        },
         quantity: { label: 'How many to sell' },
         admits: { label: 'People per ticket', hint: '2 for a couple pass, 4 for a group.' },
         min_per_order: { label: 'Min per order' },
@@ -106,10 +121,6 @@ export const TICKETS_COPY = {
         sales_end: { label: 'Sales close', hint: 'Optional, India time. Empty means until the event.' },
         visible: { label: 'Show on the website', description: 'Turn off to hide it without deleting it.' },
         sold_out: { label: 'Mark as sold out', description: 'Stops sales for this ticket straight away.' },
-        requires_approval: {
-            label: 'People apply first',
-            description: 'You approve each person before they get a ticket. Seats that need approval are free.',
-        },
     },
     errors: {
         name: 'Give the ticket a name (2–60 characters)',
@@ -120,7 +131,7 @@ export const TICKETS_COPY = {
         maxBelowMin: 'Max has to be at least the min',
         windowOrder: 'Sales have to close after they open',
         description: 'Keep it under 200 characters',
-        approvalFree: 'Seats that need approval are free. Set the price to 0.',
+        priceNeeded: 'Enter a price above 0',
     },
     toasts: {
         saved: 'Ticket saved',
