@@ -43,9 +43,6 @@ These are what keep ticketing correct. Changes must preserve them.
 | A QR code holds only `ECHOVERSE:<random token>`. The gate looks the token up on the server | `tickets.qr_token`, `check_in` |
 | A promo code applies only to events of its own community, and the same code can exist in two communities | `apply_promo`, `promo_codes_community_code_key` |
 | Marketing consent is recorded per community, never across them. Issuing complimentary tickets does not touch it | `record_marketing_consent`, `customer_consents` |
-| A registration type that needs approval is always free, and it can never be booked directly: `reserve_order` refuses it with `approval_required` | `ticket_types_approval_is_free`, `reserve_order` |
-| An application becomes a ticket only after staff approve it and the applicant confirms. Confirming twice returns the same order, and a full room raises `sold_out` | `review_application`, `confirm_application` |
-| One application per person per event | `applications_one_per_event`, `submit_application` |
 | An event's category must belong to its own community | `events_community_category_fkey` → `event_categories` |
 | A ticket checks in once. Only a super admin or event manager can let someone in again, and that is logged | `check_in` |
 | Stale holds are expired every 5 minutes | `pg_cron` job `expire-stale-orders` |
@@ -62,4 +59,4 @@ SQL raises snake_case codes (`sold_out`, `promo_invalid`, …). Edge functions p
 - `PAYMENT_PROVIDER=test` swaps Razorpay for an in-page test payment that confirms bookings without money. The client demo runs live with it. Real sales need `razorpay` plus the keys ([deployment.md](../deployment.md), step 8). Unset means Razorpay.
 - Email goes to Mailpit locally (`EMAIL_PROVIDER=mailpit`, viewable at http://127.0.0.1:54324) and through Resend in production.
 - **Emails are themed per community** in `_shared/email-themes.ts` (Echoverse pop, Founders Frame editorial) and built from the helpers in `_shared/email-layout.ts`. Copy that differs per community lives in the theme. A new community gets a theme entry, or it falls back to Echoverse's.
-- **Founders Frame registration** runs through `create-order` (free RSVPs, with an optional member `profile`), `submit-application`, `review-application` (staff) and `confirm-application`. Each application status change emails the applicant (received, approved with a confirm link, waitlisted, not selected).
+- **Founders Frame events are all paid** and book through the same `create-order` → payment → `verify-payment` flow as Echoverse. Its checkout also sends a member `profile` (member type, job title, company), which `save_member_profile` stores against the customer. Applications and approval seats were removed in `20261104071445_founders_frame_paid_only`; do not bring back per-community booking rules in SQL without a community setting for them.
