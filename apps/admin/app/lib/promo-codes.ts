@@ -58,7 +58,7 @@ export function formToPromo({
     starts_at,
     expires_at,
     ...values
-}: PromoCodeValues): PromoCodeInsert {
+}: PromoCodeValues): Omit<PromoCodeInsert, 'community'> {
     return {
         ...values,
         event_id: event_id || null,
