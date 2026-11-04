@@ -1,12 +1,11 @@
 import { z } from 'zod'
 import { EVENT_FORM_ERRORS as errors } from '~/data/events/form'
 import { cityCodeSchema, eventSummarySchema, eventTitleSchema, venuePinFields } from '~/schemas/event'
-import { Constants } from '~/types/database'
 
 export const newEventSchema = z
     .object({
         title: eventTitleSchema,
-        category: z.enum(Constants.public.Enums.event_category),
+        category: z.string().min(1, errors.category),
         date: z.string().min(1, errors.date),
         start_time: z.string().min(1, errors.time),
         end_time: z.string().min(1, errors.time),
