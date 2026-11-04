@@ -1,12 +1,12 @@
 export const AUTH_COPY = {
     login: {
         title: 'Sign in',
-        lead: 'Echoverse team only. Use the email you were invited with.',
+        lead: 'Static Entertainment team only. Use the email you were invited with.',
         email: 'Email',
         password: 'Password',
         submit: 'Sign in',
         forgot: 'Forgot your password?',
-        notStaff: "This account isn't on the Echoverse team. Ask a Super Admin to invite you.",
+        notStaff: "This account isn't on the Static Entertainment team. Ask a Super Admin to invite you.",
     },
     reset: {
         title: 'Reset your password',
