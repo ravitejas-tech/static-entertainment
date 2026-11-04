@@ -40,11 +40,11 @@ export const BELIEFS: Belief[] = [
     },
     {
         title: 'Curated, not crowded',
-        body: 'The right people in the room beat a big room. That is why many gatherings are application-based.',
+        body: 'The right people in the room beat a big room, so we keep every gathering small enough for real conversation.',
     },
     {
-        title: 'Value before price',
-        body: 'We start free, and introduce paid events and memberships only once the community has built real value.',
+        title: 'Worth the ticket',
+        body: 'Every ticket pays for a well-run room: the right venue, thoughtful hosting and people worth meeting.',
     },
     {
         title: 'Built to grow',
