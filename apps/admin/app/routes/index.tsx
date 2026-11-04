@@ -8,6 +8,7 @@ import { AUTH_PATHS } from '~/data/auth/session'
 import { DASHBOARD_COPY } from '~/data/dashboard/copy'
 import { DASHBOARD_PARAMS } from '~/data/dashboard/query'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useDashboardStats } from '~/hooks/dashboard/queries'
 import { can } from '~/lib/permissions'
 import { requireStaff } from '~/lib/guards'
@@ -22,7 +23,8 @@ export async function clientLoader() {
 export default function Dashboard() {
     const [params, setParams] = useSearchParams()
     const eventId = params.get(DASHBOARD_PARAMS.event) || null
-    const { data, isError, isPlaceholderData, refetch } = useDashboardStats({ variables: eventId })
+    const { slug: community } = useCommunity()
+    const { data, isError, isPlaceholderData, refetch } = useDashboardStats({ variables: { community, eventId } })
 
     return (
         <>
