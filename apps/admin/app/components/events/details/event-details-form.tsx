@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { AboutSection } from '~/components/events/details/about-section'
+import { AudienceSection } from '~/components/events/details/audience-section'
 import { BasicsSection } from '~/components/events/details/basics-section'
 import { CoverSection } from '~/components/events/details/cover-section'
 import { GoodToKnowSection } from '~/components/events/details/good-to-know-section'
@@ -11,15 +12,23 @@ import { FormColumns } from '~/components/ui/form-columns'
 import { Notice } from '~/components/ui/notice'
 import { SaveBar } from '~/components/ui/save-bar'
 import { UnsavedChangesGuard } from '~/components/ui/unsaved-changes-guard'
+import { SPEAKER_FIELDS } from '~/data/events/audience'
 import { EVENT_FORM_ID, EVENT_ITEM_FIELDS, EVENT_SECTIONS, SAVE_BAR_COPY } from '~/data/events/form'
 import { useUpdateEvent } from '~/hooks/events/mutations'
 import { useCan } from '~/hooks/staff/use-can'
+import { communityFeatures } from '~/lib/communities'
 import { eventToForm, formToEventUpdate } from '~/lib/events/form'
 import { eventFormSchema, type EventFormValues } from '~/schemas/event'
-import type { EventRow } from '~/types/events'
+import type { EventCategory, EventRow } from '~/types/events'
 
-export function EventDetailsForm({ event }: { event: EventRow }) {
+export interface EventDetailsFormProps {
+    event: EventRow
+    categories: readonly EventCategory[]
+}
+
+export function EventDetailsForm({ event, categories }: EventDetailsFormProps) {
     const canEdit = useCan('editEvents')
+    const features = communityFeatures(event.community)
     const readOnly = !canEdit
     const { mutate, isPending } = useUpdateEvent()
     const form = useForm<EventFormValues>({ resolver: zodResolver(eventFormSchema), defaultValues: eventToForm(event) })
@@ -43,7 +52,11 @@ export function EventDetailsForm({ event }: { event: EventRow }) {
                     <FormColumns
                         start={
                             <>
-                                <BasicsSection />
+                                <BasicsSection
+                                    categories={categories}
+                                    stickers={features.stickers}
+                                />
+                                {features.audience && <AudienceSection />}
                                 <WhenWhereSection readOnly={readOnly} />
                                 <CoverSection
                                     eventId={event.id}
@@ -62,8 +75,8 @@ export function EventDetailsForm({ event }: { event: EventRow }) {
                                 />
                                 <PairListSection
                                     name='hosts'
-                                    fields={EVENT_ITEM_FIELDS.hosts}
-                                    copy={EVENT_SECTIONS.hosts}
+                                    fields={features.speakers ? SPEAKER_FIELDS : EVENT_ITEM_FIELDS.hosts}
+                                    copy={features.speakers ? EVENT_SECTIONS.speakers : EVENT_SECTIONS.hosts}
                                     readOnly={readOnly}
                                 />
                                 <GoodToKnowSection readOnly={readOnly} />
