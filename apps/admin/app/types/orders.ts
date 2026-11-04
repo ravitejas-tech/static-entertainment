@@ -7,6 +7,7 @@ export type OrderStatus = Enums<'order_status'>
 export type OrderFilter = (typeof ORDER_FILTERS)[number]['value']
 
 export interface OrderQuery {
+    community: string
     eventId: string
     filter: OrderFilter
     search: string
