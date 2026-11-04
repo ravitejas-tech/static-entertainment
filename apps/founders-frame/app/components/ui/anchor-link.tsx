@@ -12,6 +12,8 @@ const anchorLinkVariants = cva(
                 nav: 'inline-flex min-h-10 items-center px-1 text-text-secondary hover:text-text-primary',
                 inline: 'text-accent-text underline hover:text-accent-hover',
                 list: 'inline-flex min-h-10 items-center gap-2 text-text-secondary hover:text-text-primary hover:underline [&_svg]:size-4 [&_svg]:shrink-0',
+                overlay:
+                    'inline-flex min-h-10 items-center gap-2 text-ivory/85 hover:text-ivory hover:underline focus-visible:outline-gold [&_svg]:size-4 [&_svg]:shrink-0',
                 block: 'block rounded-lg px-4 py-3 hover:bg-surface-muted',
                 arrow: 'inline-flex items-center gap-1.5 text-accent-text hover:underline [&_svg]:size-4 [&_svg]:shrink-0',
             },
