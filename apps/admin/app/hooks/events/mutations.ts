@@ -15,8 +15,11 @@ export const refreshEvents = (client: QueryClient) => client.invalidateQueries({
 const showSaveError = (error: Error) => toast.error(errorMessage(error, EVENT_DB_ERRORS, EVENT_TOASTS.failed))
 
 export const useCreateEvent = createMutation({
-    mutationFn: (values: NewEventValues) =>
-        createEvent(buildEventInsert(values), values.cover && { file: values.cover, alt: values.cover_alt }),
+    mutationFn: ({ community, values }: { community: string; values: NewEventValues }) =>
+        createEvent(
+            { ...buildEventInsert(values), community },
+            values.cover && { file: values.cover, alt: values.cover_alt },
+        ),
     onSuccess: ({ coverFailed }, _variables, _result, { client }) => {
         if (coverFailed) toast.error(EVENT_TOASTS.coverFailed)
         else toast.success(EVENT_TOASTS.created)
