@@ -6,6 +6,7 @@ import { PROMO_CODE_FORM_ID } from '~/data/promo-codes/defaults'
 import { PROMO_FORM_COPY } from '~/data/promo-codes/form'
 import { CONFIRM_DEFAULTS } from '~/data/ui/dialog'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useEvents } from '~/hooks/events/queries'
 import { useSavePromoCode } from '~/hooks/promo-codes/mutations'
 import { formToPromo, promoErrorMessage } from '~/lib/promo-codes'
@@ -19,7 +20,8 @@ export interface PromoCodeDialogProps {
 }
 
 export function PromoCodeDialog({ code, onClose }: PromoCodeDialogProps) {
-    const { data: events = [], isPending: eventsLoading } = useEvents()
+    const { slug: community } = useCommunity()
+    const { data: events = [], isPending: eventsLoading } = useEvents({ variables: community })
     const { mutate, isPending, error } = useSavePromoCode()
     const submitLabel = code ? copy.save : copy.create
 
@@ -51,7 +53,9 @@ export function PromoCodeDialog({ code, onClose }: PromoCodeDialogProps) {
                     code={code}
                     events={events}
                     error={error ? promoErrorMessage(error) : undefined}
-                    onSubmit={(values) => mutate({ id: code?.id, values: formToPromo(values) }, { onSuccess: onClose })}
+                    onSubmit={(values) =>
+                        mutate({ id: code?.id, values: { ...formToPromo(values), community } }, { onSuccess: onClose })
+                    }
                 />
             )}
         </Dialog>
