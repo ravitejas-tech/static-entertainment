@@ -24,7 +24,10 @@ export default function EventTickets() {
                     {TICKETS_COPY.createdBody}
                 </Notice>
             )}
-            <TicketTypesPanel eventId={event.id} />
+            <TicketTypesPanel
+                eventId={event.id}
+                community={event.community}
+            />
         </div>
     )
 }
