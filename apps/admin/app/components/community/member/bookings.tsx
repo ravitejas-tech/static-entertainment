@@ -6,6 +6,7 @@ import { Text } from '~/components/ui/text'
 import { COMMUNITY_COPY } from '~/data/community/copy'
 import { ORDERS_PATH } from '~/data/orders/query'
 import { LOADING_LABEL } from '~/data/ui/feedback'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useMemberBookings } from '~/hooks/community/queries'
 import { formatDate, formatRupees } from '~/lib/format'
 import { countPeople } from '~/lib/orders'
@@ -48,7 +49,8 @@ const BOOKING_COLUMNS: TableColumn<MemberBooking>[] = [
 ]
 
 export function MemberBookings({ customerId }: { customerId: string }) {
-    const { data: bookings = [], isPending } = useMemberBookings({ variables: customerId })
+    const { slug: community } = useCommunity()
+    const { data: bookings = [], isPending } = useMemberBookings({ variables: { community, id: customerId } })
 
     return (
         <section className='space-y-4'>
