@@ -44,10 +44,7 @@ export function EventCard({ event }: { event: EventOverview }) {
                             tone='secondary'>
                             <time dateTime={event.starts_at}>{eventWhen(event)}</time>
                         </Text>
-                        <StatusBadges
-                            event={event}
-                            pending={stats?.applications_pending}
-                        />
+                        <StatusBadges event={event} />
                     </div>
                 </div>
                 <div className='space-y-2 lg:w-64'>
