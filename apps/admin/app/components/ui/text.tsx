@@ -49,7 +49,22 @@ const DEFAULT_TONES: Partial<Record<TextVariant, TextTone>> = {
 }
 
 type TextTag =
-    'p' | 'span' | 'div' | 'li' | 'h1' | 'h2' | 'h3' | 'h4' | 'strong' | 'small' | 'dt' | 'dd' | 'label' | 'th' | 'td'
+    | 'p'
+    | 'span'
+    | 'div'
+    | 'li'
+    | 'legend'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'strong'
+    | 'small'
+    | 'dt'
+    | 'dd'
+    | 'label'
+    | 'th'
+    | 'td'
 
 export interface TextProps extends HTMLAttributes<HTMLElement> {
     as?: TextTag
