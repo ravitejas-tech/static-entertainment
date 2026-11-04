@@ -7,6 +7,7 @@ import { ExternalLinkButton } from '~/components/ui/external-link-button'
 import { Panel } from '~/components/ui/panel'
 import { ORDERS_COPY } from '~/data/orders/copy'
 import { TICKET_PAGE_STATUSES } from '~/data/orders/status'
+import { useSiteUrl } from '~/hooks/communities/use-site-url'
 import { useResendTickets } from '~/hooks/orders/mutations'
 import { useCan } from '~/hooks/staff/use-can'
 import { canCancel, canRefund, ticketPageUrl } from '~/lib/orders'
@@ -20,10 +21,12 @@ export function OrderActions({ order }: { order: OrderDetail }) {
     const showRefund = useCan('refundOrders') && canRefund(order)
     const showCancel = useCan('cancelOrders') && canCancel(order)
     const showResend = useCan('resendTickets') && order.status === 'paid' && order.tickets.length > 0
-    const showTicketPage = TICKET_PAGE_STATUSES.includes(order.status)
+    const siteUrl = useSiteUrl(order.events.community)
+    const ticketPage =
+        siteUrl && TICKET_PAGE_STATUSES.includes(order.status) ? ticketPageUrl(siteUrl, order.access_token) : null
     const closeDialog = () => setDialog(null)
 
-    if (!showRefund && !showCancel && !showResend && !showTicketPage) return null
+    if (!showRefund && !showCancel && !showResend && !ticketPage) return null
 
     return (
         <Panel title={actions.title}>
@@ -45,11 +48,7 @@ export function OrderActions({ order }: { order: OrderDetail }) {
                         {actions.resend}
                     </Button>
                 )}
-                {showTicketPage && (
-                    <ExternalLinkButton href={ticketPageUrl(order.access_token)}>
-                        {actions.ticketPage}
-                    </ExternalLinkButton>
-                )}
+                {ticketPage && <ExternalLinkButton href={ticketPage}>{actions.ticketPage}</ExternalLinkButton>}
                 {showCancel && (
                     <Button
                         variant='danger'
