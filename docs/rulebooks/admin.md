@@ -65,7 +65,7 @@ Primitives in `apps/admin/app/components/ui/`:
   - Seeded images are website-relative paths; show them through `websiteAssetUrl`.
   - Never delete a storage file when a cover is replaced. A duplicated event shares the original's file.
 - **Website links** (preview, live page, ticket page, open website) are built from the community's `site_url` (`useSiteUrl`), and are hidden while a community has none.
-- **Community-only screens are switched on per community** in `COMMUNITY_FEATURES` (`~/data/communities/features`): Echoverse has stickers; Founders Frame has audience tags, speakers and applications. Gate on the event's own community, not the switcher, so a shared link shows the right screens.
+- **Community-only screens are switched on per community** in `COMMUNITY_FEATURES` (`~/data/communities/features`): Echoverse has stickers; Founders Frame has audience tags and speakers, and its tickets always have a price (`freeTickets` is off, so the ticket form rejects ₹0). Gate on the event's own community, not the switcher, so a shared link shows the right screens.
 - **Every list and report is scoped to the selected community.** `useCommunity()` gives the slug from the sidebar switcher. Pass it as the query's variables (`useEvents({ variables: community })`) so each community caches separately, and include it in any new insert (events, promo codes).
 - **The venue map is Leaflet with OpenStreetMap tiles. Search goes through `~/services/place-search` (Photon).** Neither needs a key.
   - `VenuePicker` writes `venue_name`, `venue_address`, `venue_lat` and `venue_lng` into whichever event form it sits in.
