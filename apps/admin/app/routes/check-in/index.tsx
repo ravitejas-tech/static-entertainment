@@ -7,6 +7,7 @@ import { CHECK_IN_COPY } from '~/data/check-in/copy'
 import { LOADING_LABEL } from '~/data/ui/feedback'
 import { useCheckInEvents } from '~/hooks/check-in/queries'
 import { requirePermission } from '~/lib/guards'
+import { useCommunity } from '~/hooks/communities/use-community'
 
 const { events: copy } = CHECK_IN_COPY
 
@@ -16,7 +17,8 @@ export async function clientLoader() {
 }
 
 export default function CheckInEvents() {
-    const { data, isPending } = useCheckInEvents()
+    const { slug: community } = useCommunity()
+    const { data, isPending } = useCheckInEvents({ variables: community })
 
     return (
         <>
