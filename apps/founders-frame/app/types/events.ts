@@ -1,5 +1,4 @@
 import type { z } from 'zod'
-import type { EVENT_FORMATS } from '~/data/events/formats'
 import type { SEAT_STATUS_LABELS } from '~/data/events/status'
 import type { eventFaqSchema, eventHostSchema, eventScheduleItemSchema } from '~/schemas/event-content'
 import type { eventQuestionSchema } from '~/schemas/event-questions'
@@ -15,8 +14,6 @@ export type EventWithTickets = EventRow & { ticket_types: TicketTypeRow[] }
 export type CategoryLabels = Map<string, string>
 
 export type TicketAvailability = Map<string, number>
-
-export type EventFormat = keyof typeof EVENT_FORMATS
 
 export type SeatStatus = keyof typeof SEAT_STATUS_LABELS
 
@@ -44,7 +41,9 @@ export interface RegistrationOption {
     name: string
     description: string
     price: number
-    requiresApproval: boolean
+    admits: number
+    minPerOrder: number
+    max: number
     status: SeatStatus
     opensAt: string | null
 }
@@ -54,7 +53,7 @@ export interface EventSummary {
     slug: string
     title: string
     categoryLabel: string
-    format: EventFormat
+    fromPrice: number | null
     summary: string
     startsAt: string
     endsAt: string
@@ -74,8 +73,8 @@ export interface EventMonth {
     events: EventSummary[]
 }
 
-export interface FormatCount {
-    format: EventFormat
+export interface TypeCount {
+    label: string
     count: number
 }
 
