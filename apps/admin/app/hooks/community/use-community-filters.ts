@@ -1,14 +1,17 @@
 import { COMMUNITY_DEFAULTS } from '~/data/community/filters'
 import { COMMUNITY_PARAMS } from '~/data/community/query'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useListParams } from '~/hooks/use-list-params'
 import { parseCommunitySegment, parseCommunitySort } from '~/lib/community/members'
 import type { CommunitySegment, CommunitySort } from '~/types/community'
 
 export function useCommunityFilters() {
     const { params, search, searchText, setSearchText, setParam } = useListParams(COMMUNITY_PARAMS.search)
+    const { slug: community } = useCommunity()
 
     return {
         query: {
+            community,
             segment: parseCommunitySegment(params.get(COMMUNITY_PARAMS.segment)),
             sort: parseCommunitySort(params.get(COMMUNITY_PARAMS.sort)),
             search,
