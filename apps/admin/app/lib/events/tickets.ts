@@ -1,5 +1,6 @@
-import { NEW_TICKET_DEFAULTS } from '~/data/events/tickets'
+import { NEW_TICKET_DEFAULTS, TICKET_PRESETS, TICKETS_COPY } from '~/data/events/tickets'
 import { fromOptionalIstInput, hasPassed, toIstInput } from '~/lib/date-input'
+import { formatRupees } from '~/lib/format'
 import type { TicketTypeValues } from '~/schemas/ticket-type'
 import type {
     TicketAvailability,
@@ -9,6 +10,10 @@ import type {
     TicketTypeInsert,
     TicketTypeStock,
 } from '~/types/ticket-types'
+
+export const ticketPresetsFor = (community: string) => TICKET_PRESETS[community] ?? []
+
+export const priceLabel = (price: number) => (price > 0 ? formatRupees(price) : TICKETS_COPY.free)
 
 export function withStock(types: readonly TicketType[], stock: readonly TicketAvailability[]): TicketTypeStock[] {
     return types.map((type) => {
@@ -40,6 +45,7 @@ export function ticketToForm(source?: TicketType | TicketPreset): TicketTypeValu
         sales_end: toIstInput(source.sales_end),
         visible: source.visible,
         sold_out: source.sold_out,
+        requires_approval: source.requires_approval,
     }
 }
 
