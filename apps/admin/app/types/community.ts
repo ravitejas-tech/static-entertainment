@@ -8,9 +8,15 @@ export type CommunitySegment = (typeof COMMUNITY_SEGMENTS)[number]['value']
 export type CommunitySort = (typeof COMMUNITY_SORTS)[number]['value']
 
 export interface CommunityQuery {
+    community: string
     segment: CommunitySegment
     sort: CommunitySort
     search: string
+}
+
+export interface MemberRef {
+    community: string
+    id: string
 }
 
 export type CommunityMember = z.infer<typeof communityMemberSchema>
