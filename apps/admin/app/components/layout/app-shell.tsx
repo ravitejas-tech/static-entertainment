@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Brand } from '~/components/layout/brand'
+import { CommunitySwitcher } from '~/components/layout/community-switcher'
 import { NavLinks } from '~/components/layout/nav-links'
 import { UserPanel } from '~/components/layout/user-panel'
 import { Button } from '~/components/ui/button'
@@ -13,6 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className='min-h-screen lg:flex'>
             <aside className='sticky top-0 hidden h-screen w-64 shrink-0 flex-col gap-6 overflow-y-auto border-r-2 border-border bg-surface p-5 lg:flex'>
                 <Brand />
+                <CommunitySwitcher />
                 <div className='flex-1'>
                     <NavLinks />
                 </div>
@@ -32,6 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </div>
                 {menuOpen && (
                     <div className='space-y-4 border-t-2 border-border bg-surface px-4 py-4'>
+                        <CommunitySwitcher />
                         <NavLinks onNavigate={() => setMenuOpen(false)} />
                         <UserPanel />
                     </div>
