@@ -3,20 +3,16 @@ import { Skeleton } from '~/components/ui/skeleton'
 
 export function EventPageSkeleton() {
     return (
-        <Container className='space-y-10 py-10 md:py-14'>
-            <Skeleton className='h-5 w-24' />
-            <div className='grid gap-8 lg:grid-cols-2'>
-                <div className='space-y-4'>
-                    <Skeleton className='h-6 w-32' />
-                    <Skeleton className='h-14 w-full' />
-                    <Skeleton className='h-6 w-4/5' />
+        <div>
+            <Skeleton className='h-130 w-full rounded-none lg:h-150' />
+            <Container className='grid gap-12 pb-16 lg:grid-cols-12'>
+                <div className='space-y-6 lg:col-span-7 lg:pt-18'>
+                    <Skeleton className='h-8 w-56' />
+                    <Skeleton className='h-24 w-full' />
+                    <Skeleton className='h-32 w-full' />
                 </div>
-                <Skeleton className='aspect-video w-full' />
-            </div>
-            <div className='grid gap-10 lg:grid-cols-12'>
-                <Skeleton className='h-64 lg:col-span-7' />
-                <Skeleton className='h-64 lg:col-span-5' />
-            </div>
-        </Container>
+                <Skeleton className='order-first -mt-10 h-96 rounded-2xl lg:order-none lg:col-span-5 lg:-mt-60' />
+            </Container>
+        </div>
     )
 }
