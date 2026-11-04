@@ -44,6 +44,10 @@ export function formatList(items: readonly string[]) {
     return list.format(items)
 }
 
+export function formatSentenceList(items: readonly string[]) {
+    return formatList(items.map((item, index) => (index === 0 ? item : item.toLowerCase())))
+}
+
 export function formatEventDay(instant: string) {
     return eventDay.format(new Date(instant))
 }
@@ -76,4 +80,8 @@ export function formatCalendarMonth(instant: string) {
         month: dateBadge.month.format(date),
         year: calendarMonth.year.format(date),
     }
+}
+
+export function formatStepNumber(step: number) {
+    return String(step).padStart(2, '0')
 }
