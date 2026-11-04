@@ -1,5 +1,6 @@
 export const ADMIN_BRAND = {
-    name: 'Echoverse Hub',
+    name: 'Static Entertainment',
+    monogram: 'SE',
     product: 'Admin',
-    title: 'Echoverse Admin',
+    title: 'Static Entertainment Admin',
 } as const
