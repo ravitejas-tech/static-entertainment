@@ -57,96 +57,6 @@ export type Database = {
                 }
                 Relationships: []
             }
-            applications: {
-                Row: {
-                    access_token: string
-                    answers: NonNullable<Json>
-                    confirmed_at: string | null
-                    created_at: string
-                    customer_id: string
-                    email: string
-                    event_id: string
-                    id: string
-                    name: string
-                    order_id: string | null
-                    phone: string
-                    review_note: string
-                    reviewed_at: string | null
-                    reviewed_by: string | null
-                    status: Database['public']['Enums']['application_status']
-                    ticket_type_id: string
-                    updated_at: string
-                }
-                ComputedFields: never
-                Insert: {
-                    access_token?: string
-                    answers?: NonNullable<Json>
-                    confirmed_at?: string | null
-                    created_at?: string
-                    customer_id: string
-                    email: string
-                    event_id: string
-                    id?: string
-                    name: string
-                    order_id?: string | null
-                    phone: string
-                    review_note?: string
-                    reviewed_at?: string | null
-                    reviewed_by?: string | null
-                    status?: Database['public']['Enums']['application_status']
-                    ticket_type_id: string
-                    updated_at?: string
-                }
-                Update: {
-                    access_token?: string
-                    answers?: NonNullable<Json>
-                    confirmed_at?: string | null
-                    created_at?: string
-                    customer_id?: string
-                    email?: string
-                    event_id?: string
-                    id?: string
-                    name?: string
-                    order_id?: string | null
-                    phone?: string
-                    review_note?: string
-                    reviewed_at?: string | null
-                    reviewed_by?: string | null
-                    status?: Database['public']['Enums']['application_status']
-                    ticket_type_id?: string
-                    updated_at?: string
-                }
-                Relationships: [
-                    {
-                        foreignKeyName: 'applications_customer_id_fkey'
-                        columns: ['customer_id']
-                        isOneToOne: false
-                        referencedRelation: 'customers'
-                        referencedColumns: ['id']
-                    },
-                    {
-                        foreignKeyName: 'applications_event_id_fkey'
-                        columns: ['event_id']
-                        isOneToOne: false
-                        referencedRelation: 'events'
-                        referencedColumns: ['id']
-                    },
-                    {
-                        foreignKeyName: 'applications_order_id_fkey'
-                        columns: ['order_id']
-                        isOneToOne: true
-                        referencedRelation: 'orders'
-                        referencedColumns: ['id']
-                    },
-                    {
-                        foreignKeyName: 'applications_ticket_type_id_fkey'
-                        columns: ['ticket_type_id']
-                        isOneToOne: false
-                        referencedRelation: 'ticket_types'
-                        referencedColumns: ['id']
-                    },
-                ]
-            }
             check_ins: {
                 Row: {
                     created_at: string
@@ -931,7 +841,6 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
-                    requires_approval: boolean
                     sales_end: string | null
                     sales_start: string | null
                     sold_out: boolean
@@ -951,7 +860,6 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
-                    requires_approval?: boolean
                     sales_end?: string | null
                     sales_start?: string | null
                     sold_out?: boolean
@@ -970,7 +878,6 @@ export type Database = {
                     name?: string
                     price?: number
                     quantity?: number
-                    requires_approval?: boolean
                     sales_end?: string | null
                     sales_start?: string | null
                     sold_out?: boolean
@@ -1151,50 +1058,6 @@ export type Database = {
                     updates_ok: number
                 }[]
             }
-            confirm_application: {
-                Args: { p_access_token: string }
-                Returns: {
-                    access_token: string
-                    answers: NonNullable<Json>
-                    booking_code: string
-                    cancelled_at: string | null
-                    created_at: string
-                    customer_id: string
-                    discount: number
-                    email: string
-                    event_id: string
-                    hold_expires_at: string | null
-                    id: string
-                    name: string
-                    needs_refund: boolean
-                    notes: string
-                    paid_at: string | null
-                    payment_provider: string | null
-                    phone: string
-                    promo_code_id: string | null
-                    provider_order_id: string | null
-                    provider_payment_id: string | null
-                    provider_refund_id: string | null
-                    referrer: string | null
-                    refund_amount: number | null
-                    refunded_at: string | null
-                    source: Database['public']['Enums']['order_source']
-                    status: Database['public']['Enums']['order_status']
-                    subtotal: number
-                    terms_accepted_at: string | null
-                    total: number
-                    updated_at: string
-                    utm_campaign: string | null
-                    utm_medium: string | null
-                    utm_source: string | null
-                }
-                SetofOptions: {
-                    from: '*'
-                    to: 'orders'
-                    isOneToOne: true
-                    isSetofReturn: false
-                }
-            }
             confirm_order: {
                 Args: { p_amount_paise: number; p_order_id: string; p_payment_id: string; p_provider: string }
                 Returns: {
@@ -1246,7 +1109,6 @@ export type Database = {
             event_summaries: {
                 Args: { p_community: string }
                 Returns: {
-                    applications_pending: number
                     capacity: number
                     checked_in: number
                     event_id: string
@@ -1257,7 +1119,6 @@ export type Database = {
             }
             expire_stale_orders: { Args: Record<PropertyKey, never>; Returns: undefined }
             generate_booking_code: { Args: { p_event_id: string }; Returns: string }
-            get_application: { Args: { p_access_token: string }; Returns: Json }
             get_booking: { Args: { p_access_token: string }; Returns: Json }
             get_event_preview: {
                 Args: { p_preview_token: string; p_slug: string }
@@ -1328,7 +1189,6 @@ export type Database = {
                     name: string
                     price: number
                     quantity: number
-                    requires_approval: boolean
                     sales_end: string | null
                     sales_start: string | null
                     sold_out: boolean
@@ -1470,38 +1330,6 @@ export type Database = {
                 Args: { p_community: string; p_consent: boolean; p_customer_id: string }
                 Returns: undefined
             }
-            review_application: {
-                Args: {
-                    p_application_id: string
-                    p_note?: string
-                    p_status: Database['public']['Enums']['application_status']
-                }
-                Returns: {
-                    access_token: string
-                    answers: NonNullable<Json>
-                    confirmed_at: string | null
-                    created_at: string
-                    customer_id: string
-                    email: string
-                    event_id: string
-                    id: string
-                    name: string
-                    order_id: string | null
-                    phone: string
-                    review_note: string
-                    reviewed_at: string | null
-                    reviewed_by: string | null
-                    status: Database['public']['Enums']['application_status']
-                    ticket_type_id: string
-                    updated_at: string
-                }
-                SetofOptions: {
-                    from: '*'
-                    to: 'applications'
-                    isOneToOne: true
-                    isSetofReturn: false
-                }
-            }
             reserve_order: {
                 Args: {
                     p_answers?: Json
@@ -1558,43 +1386,6 @@ export type Database = {
                 }
             }
             save_member_profile: { Args: { p_customer_id: string; p_profile: Json }; Returns: undefined }
-            submit_application: {
-                Args: {
-                    p_answers?: Json
-                    p_email: string
-                    p_event_id: string
-                    p_marketing_consent?: boolean
-                    p_name: string
-                    p_phone: string
-                    p_profile?: Json
-                    p_ticket_type_id: string
-                }
-                Returns: {
-                    access_token: string
-                    answers: NonNullable<Json>
-                    confirmed_at: string | null
-                    created_at: string
-                    customer_id: string
-                    email: string
-                    event_id: string
-                    id: string
-                    name: string
-                    order_id: string | null
-                    phone: string
-                    review_note: string
-                    reviewed_at: string | null
-                    reviewed_by: string | null
-                    status: Database['public']['Enums']['application_status']
-                    ticket_type_id: string
-                    updated_at: string
-                }
-                SetofOptions: {
-                    from: '*'
-                    to: 'applications'
-                    isOneToOne: true
-                    isSetofReturn: false
-                }
-            }
             ticket_availability: {
                 Args: { p_event_ids: string[] }
                 Returns: {
@@ -1622,12 +1413,11 @@ export type Database = {
             validate_buyer: { Args: { p_email: string; p_name: string; p_phone: string }; Returns: undefined }
         }
         Enums: {
-            application_status: 'pending' | 'approved' | 'waitlisted' | 'rejected' | 'confirmed' | 'withdrawn'
             check_in_result: 'valid' | 'already_checked_in' | 'invalid' | 'cancelled' | 'wrong_event' | 'override'
             discount_type: 'percent' | 'fixed'
             event_status: 'draft' | 'published'
             member_type: 'founder' | 'business_leader' | 'investor' | 'professional' | 'student' | 'ecosystem_partner'
-            order_source: 'online' | 'complimentary' | 'application'
+            order_source: 'online' | 'complimentary'
             order_status: 'pending' | 'paid' | 'expired' | 'failed' | 'cancelled' | 'refunded'
             pop_tone: 'pink' | 'yellow' | 'cyan' | 'lime' | 'violet' | 'orange'
             staff_role: 'super_admin' | 'event_manager' | 'finance' | 'marketing' | 'gate_staff' | 'viewer'
@@ -1742,12 +1532,11 @@ export const Constants = {
     },
     public: {
         Enums: {
-            application_status: ['pending', 'approved', 'waitlisted', 'rejected', 'confirmed', 'withdrawn'],
             check_in_result: ['valid', 'already_checked_in', 'invalid', 'cancelled', 'wrong_event', 'override'],
             discount_type: ['percent', 'fixed'],
             event_status: ['draft', 'published'],
             member_type: ['founder', 'business_leader', 'investor', 'professional', 'student', 'ecosystem_partner'],
-            order_source: ['online', 'complimentary', 'application'],
+            order_source: ['online', 'complimentary'],
             order_status: ['pending', 'paid', 'expired', 'failed', 'cancelled', 'refunded'],
             pop_tone: ['pink', 'yellow', 'cyan', 'lime', 'violet', 'orange'],
             staff_role: ['super_admin', 'event_manager', 'finance', 'marketing', 'gate_staff', 'viewer'],
