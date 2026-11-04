@@ -6,6 +6,6 @@ import { listAllCommunityMembers } from '~/services/community'
 import type { CommunityQuery } from '~/types/community'
 
 export const useDownloadCommunity = createMutation({
-    mutationFn: async (query: CommunityQuery) => downloadCommunity(await listAllCommunityMembers(query), query.segment),
+    mutationFn: async (query: CommunityQuery) => downloadCommunity(await listAllCommunityMembers(query), query),
     onError: () => toast.error(COMMUNITY_COPY.list.downloadFailed),
 })
