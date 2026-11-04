@@ -18,16 +18,17 @@ const cardVariants = cva('rounded-xl border border-border', {
             true: 'transition duration-200 ease-out hover:border-accent/50 hover:shadow-card motion-safe:hover:-translate-y-0.5',
         },
         elevated: { true: 'shadow-card' },
+        floating: { true: 'rounded-2xl border-transparent shadow-dialog' },
     },
     defaultVariants: { tone: 'surface', padding: 'md' },
 })
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {}
 
-export function Card({ tone, padding, interactive, elevated, className, ...props }: CardProps) {
+export function Card({ tone, padding, interactive, elevated, floating, className, ...props }: CardProps) {
     return (
         <div
-            className={cn(cardVariants({ tone, padding, interactive, elevated }), className)}
+            className={cn(cardVariants({ tone, padding, interactive, elevated, floating }), className)}
             {...props}
         />
     )
