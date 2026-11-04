@@ -9,12 +9,12 @@ export const HOME_FAQS = [
         answer: 'Founders, business leaders, investors, professionals, students and ecosystem partners in Pune who want meaningful business relationships, not just more contacts.',
     },
     {
-        question: 'Is it free to attend?',
-        answer: 'Our community events are free. RSVP to reserve your spot and your entry QR code arrives by email. Some curated events ask you to apply first. Paid workshops and memberships will come later.',
+        question: 'How much does a ticket cost?',
+        answer: 'Prices depend on the event and are listed on each event page. Book online, pay securely and your QR ticket arrives by email straight away.',
     },
     {
-        question: 'How are guests selected for curated events?',
-        answer: 'Every application is read by our team. We look at fit and keep the room balanced, so everyone at the table can contribute. We email you either way.',
+        question: 'Can I book for colleagues?',
+        answer: 'Yes. Choose more than one ticket when you book, up to the limit shown for each ticket type. Every ticket gets its own QR code.',
     },
     {
         question: 'Where do events take place?',
@@ -22,6 +22,6 @@ export const HOME_FAQS = [
     },
     {
         question: 'How will I hear about new events?',
-        answer: 'New gatherings are announced on this site first. RSVP to any event and opt in to updates, and we will let you know when the next one opens.',
+        answer: 'New gatherings are announced on this site first. Opt in to updates when you book, and we will let you know when the next one opens.',
     },
 ] as const
