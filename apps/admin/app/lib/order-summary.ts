@@ -5,13 +5,13 @@ import { answersSchema, questionListSchema } from '~/schemas/orders'
 import type { Json } from '~/types/database'
 import type { OrderDetail } from '~/types/orders'
 
-const { summary } = ORDERS_COPY
+const { summary, sources } = ORDERS_COPY
 
 export function orderSummary(order: OrderDetail) {
     const tickets = summary.tickets(countPeople(order.order_items))
     const total = formatRupees(order.total)
     const lines: Record<OrderDetail['status'], string[]> = {
-        paid: order.source === 'complimentary' ? [summary.free, tickets] : [summary.paid, tickets, total],
+        paid: order.source === 'online' ? [summary.paid, tickets, total] : [sources[order.source], tickets],
         pending: [summary.pending, tickets, total],
         expired: [summary.expired],
         failed: [summary.failed],
