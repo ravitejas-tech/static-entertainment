@@ -1,4 +1,4 @@
-export const AUTH_STORAGE_KEY = 'echoverse-admin-auth'
+export const AUTH_STORAGE_KEY = 'admin-auth'
 
 export const AUTH_PATHS = {
     login: '/login',
