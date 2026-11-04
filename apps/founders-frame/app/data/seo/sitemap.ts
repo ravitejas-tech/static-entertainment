@@ -1,4 +1,4 @@
-import { PATHS, type PublicPage } from '~/data/navigation'
+import { BOOK_SEGMENT, PATHS, type PublicPage } from '~/data/navigation'
 
 export interface SitemapSettings {
     changefreq: 'daily' | 'weekly' | 'monthly' | 'yearly'
@@ -16,9 +16,4 @@ export const EVENT_SITEMAP_SETTINGS: Record<'upcoming' | 'past', SitemapSettings
     past: { changefreq: 'yearly', priority: '0.4' },
 }
 
-export const ROBOTS_DISALLOW = [
-    `${PATHS.tickets}/`,
-    `${PATHS.applications}/`,
-    `${PATHS.events}/*/rsvp`,
-    `${PATHS.events}/*/apply`,
-]
+export const ROBOTS_DISALLOW = [`${PATHS.tickets}/`, `${PATHS.events}/*/${BOOK_SEGMENT}`]
