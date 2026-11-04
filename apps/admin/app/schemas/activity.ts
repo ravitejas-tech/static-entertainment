@@ -11,6 +11,5 @@ export const activityDetailsSchema = z
         quantity: z.number().nullish(),
         email: z.string().nullish(),
         ticket: z.string().nullish(),
-        status: z.string().nullish(),
     })
     .catch({})
