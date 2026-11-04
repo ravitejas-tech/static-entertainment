@@ -3,6 +3,7 @@ import { SegmentedControl } from '~/components/ui/segmented-control'
 import { Select } from '~/components/ui/select'
 import { ORDERS_COPY } from '~/data/orders/copy'
 import { ORDER_FILTERS } from '~/data/orders/status'
+import { useCommunity } from '~/hooks/communities/use-community'
 import { useEvents } from '~/hooks/events/queries'
 import { eventOptions } from '~/lib/event-list'
 import type { OrderFilter } from '~/types/orders'
@@ -19,7 +20,8 @@ export interface OrderFiltersProps {
 }
 
 export function OrderFilters({ searchText, onSearchText, eventId, onEventId, filter, onFilter }: OrderFiltersProps) {
-    const { data: events = [] } = useEvents()
+    const { slug: community } = useCommunity()
+    const { data: events = [] } = useEvents({ variables: community })
 
     return (
         <div className='mb-6 space-y-4'>
