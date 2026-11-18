@@ -1,5 +1,5 @@
 export const SITE = {
-    url: 'https://echoversehub.com',
+    url: import.meta.env.VITE_SITE_URL || 'https://echoversehub.com',
     shortName: 'Echoverse',
     locale: 'en_IN',
     language: 'en-IN',
