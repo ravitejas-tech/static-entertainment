@@ -26,6 +26,11 @@ async function publishedEventPaths() {
     }
 
     const events = (await response.json()) as { slug: string }[]
+    if (events.length === 0) {
+        throw new Error(
+            `Prerender: ${COMMUNITY_SLUG} has no published events, and the event page cannot be built without one. Publish an event in the admin and build again.`,
+        )
+    }
     return events.map(({ slug }) => eventPath(slug))
 }
 
