@@ -1330,6 +1330,7 @@ export type Database = {
                 Args: { p_community: string; p_consent: boolean; p_customer_id: string }
                 Returns: undefined
             }
+            request_site_rebuild: { Args: { p_community: string }; Returns: undefined }
             reserve_order: {
                 Args: {
                     p_answers?: Json
