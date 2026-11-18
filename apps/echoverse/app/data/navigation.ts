@@ -28,6 +28,8 @@ export type PublicPage = (typeof PUBLIC_PAGES)[number]
 
 export const eventPath = (slug: string) => `${PATHS.events}/${slug}`
 
+export const PLACEHOLDER_EVENT_SLUG = 'coming-soon'
+
 export const eventBookingPath = (slug: string) => `${eventPath(slug)}/book`
 
 export const NEW_BOOKING_PARAM = 'new'
