@@ -66,6 +66,7 @@ Read the one that covers what you are touching. Do not read them all.
 | Runtime | Node ≥ 22.22 (React Router 8 minimum) |
 | Web | React 19 + React Router 8 (SPA, `ssr: false`; public pages and every published event prerendered) + Vite 8 (Rolldown) + Tailwind 4. Founders Frame uses the same stack with its own design system (white, navy and gold, Manrope + Inter, light only) |
 | Admin | Same stack, pure SPA (no prerender), same theme tokens in a calmer form |
+| Hosting | Vercel, one project per app (`apps/<app>/vercel.json`), on `vercel.app` addresses until the communities have domains |
 | Backend | Supabase in Docker via the `supabase` dev dependency (`yarn supabase …`): Postgres + RLS + SQL functions, Auth (email OTP for buyers, password for staff), Storage (`event-media`), Edge Functions (Deno, `@supabase/server` `withSupabase`) |
 | Server state | `@tanstack/react-query` via `react-query-kit` (website: booking pages only, through `QueryProvider`) |
 | Forms | `react-hook-form` + `zod` (`@hookform/resolvers/zod`) |
@@ -120,8 +121,8 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
 
 ## Gotchas
 
-- **`database.ts` for the `founders_frame` and `founders_frame_paid_only` migrations was written by hand**, because no database was reachable when they landed. It mirrors the migrations exactly. Once the live project is linked, regenerate it (`yarn supabase gen types typescript --linked`, copied to all three apps like `yarn db:types`) and expect no meaningful diff.
-- **Founders Frame's site URL for SEO comes from `VITE_SITE_URL`** (canonicals, sitemap, Open Graph), defaulting to localhost until it has a domain. Set it in production.
+- **`database.ts` for the `founders_frame`, `founders_frame_paid_only` and `website_rebuild_hooks` migrations was written by hand**, because no database was reachable when they landed. It mirrors the migrations exactly. Once the live project is linked, regenerate it (`yarn supabase gen types typescript --linked`, copied to all three apps like `yarn db:types`) and expect no meaningful diff.
+- **Each website's own URL comes from `VITE_SITE_URL`**, read once into `SITE.url` (`~/data/seo/site`). Canonical, Open Graph, JSON-LD, sitemap, robots and manifest derive from it. Echoverse defaults to `https://echoversehub.com`, Founders Frame to localhost. On Vercel it is the project's `vercel.app` address until the community has a domain.
 - **Event types are per community.** `events.category` references `event_categories (community, slug)`. Echoverse keeps its own typed list (`EVENT_CATEGORIES`) and falls back to `meetup` for an unknown slug; the admin and Founders Frame read labels from the table.
 
 - **React Router 8 needs Node ≥ 22.22 and Vite 7+.** `future.v8_*` flags no longer exist; `splitRouteModules` is on by default.
@@ -133,12 +134,12 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
   - Booking-only modules must stay out of the `shared` group: `LAZY_ONLY_MODULES` (QR, checkout libs, query client, toaster).
   - A new heavy module used by only some pages belongs on that list.
 - **React Query and the toaster are not global.** Booking pages wrap themselves in `QueryProvider`. The root mounts `Toaster` lazily after hydration.
-- **Echoverse builds need Supabase.** `react-router.config.ts` lists published events from Supabase to prerender `/events/<slug>`. If Supabase is down, the build (and `yarn dev:echoverse` start) fails with a clear message.
-  - Events published after a build still open through the SPA fallback (`clientLoader` + `HydrateFallback`). In production a database webhook should trigger a rebuild (see [deployment.md](docs/deployment.md)).
+- **Website builds need Supabase and at least one published event.** Each website's `react-router.config.ts` lists its published events from Supabase to prerender `/events/<slug>`. If Supabase is down, or the community has no published event (React Router cannot build a route with a `loader` that has nothing to prerender), the build and the dev server fail with a clear message.
+  - Events published after a build still open through the SPA fallback (`clientLoader` + `HydrateFallback`).
+  - In production the `website_rebuild_hooks` triggers call the community's Vercel deploy hook, stored in Vault as `deploy_hook_<community>`. They fire on changes to published events, their ticket types and gallery photos, and event types, plus a nightly `pg_cron` run that moves ended events to the past ([deployment.md](docs/deployment.md), step 6). With no hook stored they do nothing.
 - **An app's `app/routes.ts` and `react-router.config.ts` cannot use the `~/` alias.** They load before Vite's resolver, so import with a relative path.
 - **The dev servers are pinned (`strictPort`):** Echoverse 7300, admin 7301, Founders Frame 7302. Not 7000: macOS's AirPlay Receiver listens there.
-- **The Echoverse production domain is `https://echoversehub.com`**, set once in `SITE.url`. Canonical, Open Graph, JSON-LD, sitemap, robots and manifest derive from it.
-- **Each community's site URL lives in `communities.site_url`.** Ticket emails and every admin link to a website (live page, preview, ticket page, open website) are built from it. The migration sets Echoverse's production URL; `seed.sql` points both communities at localhost. Founders Frame's stays empty until it has a domain, and until then its ticket emails fail and the admin hides its website links.
+- **Each community's site URL lives in `communities.site_url`.** Ticket emails and every admin link to a website (live page, preview, ticket page, open website) are built from it. The migration sets Echoverse's to `https://echoversehub.com`; `seed.sql` points both communities at localhost. Founders Frame's starts empty, and until it is set (its `vercel.app` address works) its ticket emails fail and the admin hides its website links.
 - **A website only ever shows its own community.** Each site has a constant slug (`COMMUNITY_SLUG` in `apps/echoverse/app/data/brand.ts`), and every public query filters on it: event lists and pages, previews, My Tickets, visits and the prerender list in `react-router.config.ts`.
 - **Booking runs on the platform now.** Book Now goes from the event page to `/events/:slug/book`, Explore Events goes to `/events`, and WhatsApp (+91 84848 30110, `WHATSAPP` in `apps/echoverse/app/data/contact.ts`) is only "Ask us". Links open in a new tab with `noopener noreferrer`.
 - **Payments are confirmed only on the server.** The `verify-payment` signature check and the `razorpay-webhook` both call the idempotent `confirm_order`.
@@ -157,7 +158,8 @@ Local env: copy `.env.example` → `.env` in `apps/echoverse/`, `apps/founders-f
 - **Admin date and time fields are India time** (`apps/admin/app/lib/date-input.ts`), whatever the browser's zone.
   - Event questions use `id = kind` for preset questions and `custom-xxxxxxxx` for custom ones. The website checkout reads that shape exactly.
 - **Edge function errors are snake_case codes** listed in `supabase/functions/_shared/responses.ts`. Each app maps them to copy (`apps/echoverse/app/data/checkout/errors.ts`, `apps/admin/app/data/ui/function-errors.ts`).
-- **Unknown paths must fall back to `/__spa-fallback.html`** on each website's static host, and to `index.html` for the admin.
+- **Unknown paths must fall back to `/__spa-fallback.html`** on each website, and to `index.html` for the admin. Each app's `vercel.json` does this with a catch-all rewrite. Vercel serves real files first, so prerendered pages and assets are untouched.
+- **Each app is its own Vercel project** with its folder as the Root Directory. The app's `vercel.json` sets install (`yarn install --immutable`, which installs the whole workspace through the committed `.yarn/releases`), build and output, so Corepack stays off.
 - **`@react-router/node` and `isbot` are runtime dependencies** even though nothing runs on a server: React Router needs them to prerender.
 - **ESLint stays on 9** until `eslint-plugin-react` supports 10. One root `eslint.config.js` and `.prettierrc` serve both workspaces.
 - **Light and dark come from one token set** in Echoverse's and the admin's `global.css`, switched by `data-theme` on `<html>` (set before paint by `THEME_INIT_SCRIPT`). Dark mode's hard shadow is pink, not ink. **Founders Frame is light only**: one `:root` token set, no theme toggle, one `theme-color`.
