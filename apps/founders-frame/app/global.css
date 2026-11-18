@@ -1,0 +1,399 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/manrope';
+@import '@fontsource-variable/inter';
+
+@font-face {
+    font-family: 'Manrope Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200 800;
+    src: url('./fonts/manrope-rupee.woff2') format('woff2-variations');
+    unicode-range: U+20B9;
+}
+
+@font-face {
+    font-family: 'Inter Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url('./fonts/inter-rupee.woff2') format('woff2-variations');
+    unicode-range: U+20B9;
+}
+
+@theme {
+    --font-display: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --container-content: 100rem;
+
+    --ease-settle: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    --drop-shadow-photo: 0 18px 32px rgb(15 31 61 / 0.14);
+
+    --animate-caret: caret 1s steps(1) infinite;
+
+    @keyframes nav-solid {
+        from {
+            border-color: transparent;
+            background-color: transparent;
+            backdrop-filter: none;
+        }
+    }
+
+    @keyframes reveal {
+        from {
+            opacity: 0;
+            translate: 0 28px;
+        }
+        to {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    @keyframes word-rise {
+        from {
+            transform: translateY(115%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes draw {
+        from {
+            stroke-dashoffset: 1;
+        }
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes clip-reveal {
+        from {
+            clip-path: inset(9% 9% 9% 9% round var(--radius-xl));
+        }
+        to {
+            clip-path: inset(0 round var(--radius-xl));
+        }
+    }
+
+    @keyframes settle {
+        from {
+            scale: 1.18;
+        }
+        to {
+            scale: 1;
+        }
+    }
+
+    @keyframes parallax-up {
+        to {
+            transform: translateY(-4rem);
+        }
+    }
+
+    @keyframes caret {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes pane-in {
+        from {
+            translate: 0 0.5rem;
+        }
+    }
+
+    @keyframes lift {
+        from {
+            translate: 0 2.5rem;
+        }
+        to {
+            translate: 0 0;
+        }
+    }
+
+    @keyframes orbit {
+        to {
+            rotate: -1turn;
+        }
+    }
+
+    @keyframes orbit-upright {
+        to {
+            rotate: 1turn;
+        }
+    }
+
+    @keyframes step-progress {
+        from {
+            scale: 0 1;
+        }
+    }
+}
+
+@theme inline {
+    --color-bg: var(--bg);
+    --color-surface: var(--surface);
+    --color-surface-muted: var(--surface-muted);
+    --color-border: var(--border);
+
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-muted: var(--text-muted);
+    --color-text-faint: var(--text-faint);
+
+    --color-accent: var(--accent);
+    --color-accent-hover: var(--accent-hover);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent-text: var(--accent-text);
+    --color-gold: var(--gold);
+
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-danger: var(--danger);
+    --color-info: var(--info);
+
+    --color-ink: var(--ink);
+    --color-ivory: var(--ivory);
+
+    --color-tint-green: var(--tint-green);
+    --color-tint-green-text: var(--tint-green-text);
+    --color-tint-navy: var(--tint-navy);
+    --color-tint-navy-text: var(--tint-navy-text);
+    --color-tint-gold: var(--tint-gold);
+    --color-tint-gold-text: var(--tint-gold-text);
+    --color-tint-sand: var(--tint-sand);
+    --color-tint-sand-text: var(--tint-sand-text);
+    --color-tint-lavender: var(--tint-lavender);
+    --color-tint-lavender-text: var(--tint-lavender-text);
+    --color-tint-blue: var(--tint-blue);
+    --color-tint-blue-text: var(--tint-blue-text);
+    --color-tint-neutral: var(--tint-neutral);
+    --color-tint-neutral-text: var(--tint-neutral-text);
+    --color-tint-red: var(--tint-red);
+    --color-tint-red-text: var(--tint-red-text);
+
+    --shadow-card: 0 2px 8px 0 var(--shadow-soft), 0 12px 32px 0 var(--shadow-soft);
+    --shadow-dialog: 0 20px 60px 0 var(--shadow-strong);
+}
+
+:root {
+    color-scheme: light;
+
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface-muted: #f0efea;
+    --border: #dddcd5;
+
+    --text-primary: #0f1f3d;
+    --text-secondary: #46526a;
+    --text-muted: #5d687c;
+    --text-faint: #7f889a;
+
+    --accent: #1b3766;
+    --accent-hover: #142a50;
+    --accent-foreground: #ffffff;
+    --accent-text: #1b3766;
+
+    --gold: #c9a04b;
+
+    --success: #286747;
+    --warning: #8a5a13;
+    --danger: #b33a3a;
+    --info: #315f91;
+
+    --ink: #0f1f3d;
+    --ivory: #f7f6f2;
+
+    --tint-green: #e4f1e9;
+    --tint-green-text: #245a3a;
+    --tint-navy: #e7ecf5;
+    --tint-navy-text: #1b3766;
+    --tint-gold: #f5edda;
+    --tint-gold-text: #6f5116;
+    --tint-sand: #f1e8dc;
+    --tint-sand-text: #76512b;
+    --tint-lavender: #eae8f0;
+    --tint-lavender-text: #554b70;
+    --tint-blue: #e4eaf2;
+    --tint-blue-text: #315f91;
+    --tint-neutral: #efeee8;
+    --tint-neutral-text: #46526a;
+    --tint-red: #f6e3e1;
+    --tint-red-text: #8f2f2f;
+
+    --shadow-soft: rgb(15 31 61 / 0.05);
+    --shadow-strong: rgb(10 20 40 / 0.18);
+}
+
+@utility scrollbar-none {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@utility writing-vertical {
+    writing-mode: vertical-rl;
+}
+
+@utility seat-orbit {
+    --seat-angle: calc(var(--seat-index, 0) * 1turn / var(--seat-count, 1));
+    left: calc(50% + 40% * sin(var(--seat-angle)));
+    top: calc(50% - 40% * cos(var(--seat-angle)));
+}
+
+@utility animate-rise {
+    animation: reveal 0.8s var(--ease-settle) both;
+    animation-delay: calc(var(--reveal-order, 0) * 100ms + 150ms);
+}
+
+@utility animate-reveal {
+    &[data-entered] {
+        animation: reveal 0.8s var(--ease-settle) both paused;
+        animation-delay: calc(var(--reveal-order, 0) * 90ms);
+    }
+
+    &[data-entered='playing'] {
+        animation-play-state: running;
+    }
+}
+
+@utility animate-lift {
+    &[data-entered] {
+        animation: lift 0.8s var(--ease-settle) both paused;
+        animation-delay: calc(var(--reveal-order, 0) * 90ms);
+    }
+
+    &[data-entered='playing'] {
+        animation-play-state: running;
+    }
+}
+
+@utility animate-pane-in {
+    animation: pane-in 0.45s var(--ease-settle) both;
+}
+
+@utility animate-lift-load {
+    animation: lift 0.8s var(--ease-settle) both;
+    animation-delay: calc(var(--reveal-order, 0) * 100ms + 150ms);
+}
+
+@utility word-mask {
+    display: inline-block;
+    overflow: clip;
+    vertical-align: top;
+    padding: 0.08em 0.06em 0.2em;
+    margin: -0.08em -0.06em -0.2em;
+}
+
+@utility animate-word-rise {
+    display: inline-block;
+    animation: word-rise 0.9s var(--ease-settle) both;
+    animation-delay: calc(var(--word-order, 0) * 70ms + 120ms);
+}
+
+@utility animate-word-rise-scroll {
+    display: inline-block;
+
+    [data-entered] > & {
+        animation: word-rise 0.9s var(--ease-settle) both paused;
+        animation-delay: calc(var(--word-order, 0) * 70ms);
+    }
+
+    [data-entered='playing'] > & {
+        animation-play-state: running;
+    }
+}
+
+@utility animate-draw {
+    stroke-dasharray: 1;
+    animation: draw 1s var(--ease-settle) both;
+    animation-delay: 0.9s;
+}
+
+@utility animate-draw-scroll {
+    stroke-dasharray: 1;
+
+    [data-entered] > & {
+        animation: draw 1s var(--ease-settle) both paused;
+        animation-delay: 0.6s;
+    }
+
+    [data-entered='playing'] > & {
+        animation-play-state: running;
+    }
+}
+
+@utility animate-orbit {
+    animation: orbit 30s linear infinite var(--motion-state, running);
+}
+
+@utility animate-orbit-upright {
+    animation: orbit-upright 30s linear infinite var(--motion-state, running);
+}
+
+@utility animate-step-progress {
+    animation: step-progress 5s linear both var(--motion-state, running);
+}
+
+@utility motion-paused {
+    --motion-state: paused;
+}
+
+@utility animate-clip-reveal {
+    &[data-entered] {
+        animation: clip-reveal 1.1s var(--ease-settle) both paused;
+    }
+
+    &[data-entered='playing'] {
+        animation-play-state: running;
+    }
+}
+
+@utility animate-settle {
+    @supports (animation-timeline: view()) {
+        animation: settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
+}
+
+@utility animate-parallax-up {
+    @supports (animation-timeline: scroll()) {
+        animation: parallax-up linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+    }
+}
+
+@utility animate-nav-solid {
+    @supports (animation-timeline: scroll()) {
+        animation: nav-solid linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 4rem;
+    }
+}
+
+@layer base {
+    html {
+        @apply motion-safe:scroll-smooth;
+    }
+
+    html,
+    body {
+        @apply bg-bg font-sans text-text-primary antialiased;
+        min-height: 100vh;
+    }
+
+    svg.lucide {
+        stroke-width: 1.75;
+    }
+
+    ::selection {
+        @apply bg-accent text-accent-foreground;
+    }
+}

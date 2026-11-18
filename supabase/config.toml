@@ -166,6 +166,8 @@ additional_redirect_urls = [
     "http://127.0.0.1:7300/**",
     "http://localhost:7301/**",
     "http://127.0.0.1:7301/**",
+    "http://localhost:7302/**",
+    "http://127.0.0.1:7302/**",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
@@ -250,19 +252,19 @@ otp_expiry = 3600
 # sender_name = "Admin"
 
 [auth.email.template.magic_link]
-subject = "Your Echoverse login code"
+subject = "Your login code"
 content_path = "./supabase/templates/login-code.html"
 
 [auth.email.template.confirmation]
-subject = "Your Echoverse login code"
+subject = "Your login code"
 content_path = "./supabase/templates/login-code.html"
 
 [auth.email.template.invite]
-subject = "You're invited to the Echoverse admin panel"
+subject = "You're invited to the Static Entertainment admin panel"
 content_path = "./supabase/templates/invite.html"
 
 [auth.email.template.recovery]
-subject = "Set a new Echoverse admin password"
+subject = "Set a new Static Entertainment admin password"
 content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize notification email template

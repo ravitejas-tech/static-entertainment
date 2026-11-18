@@ -10,7 +10,7 @@ Every scaffold comes from the CLI. Write only the SQL or TypeScript inside it.
 |---|---|
 | A schema change | `yarn supabase migration new <snake_name> < /dev/null` |
 | A new edge function | `yarn supabase functions new <kebab-name>` |
-| Types for the apps | `yarn db:types` (writes `app/types/database.ts` and `admin/app/types/database.ts`) |
+| Types for the apps | `yarn db:types` (writes `app/types/database.ts` in each app that talks to Supabase) |
 
 `migration new` reads SQL from stdin when stdin isn't a terminal. Without `< /dev/null`, a piped or backgrounded run waits forever and leaves an empty file.
 
@@ -27,7 +27,7 @@ Every scaffold comes from the CLI. Write only the SQL or TypeScript inside it.
 - **Money and tickets change only through SQL functions.** `orders`, `order_items`, `tickets`, `customers` and `check_ins` have no direct write grant. Staff may update `orders.notes` and nothing else.
 - Functions are `security definer` with `set search_path = ''` and schema-qualified names.
 - **An internal function has its `execute` revoked from `public, anon, authenticated`.** Grant it to `service_role` only when an edge function calls it. Supabase grants `execute` to `anon` and `authenticated` by default, so `revoke … from public` alone is not enough.
-- Staff checks go through `has_staff_role(...)`. The role list for each action is mirrored in `PERMISSIONS` (`admin/app/data/staff/roles.ts`), so the admin hides what the database would refuse.
+- Staff checks go through `has_staff_role(...)`. The role list for each action is mirrored in `PERMISSIONS` (`apps/admin/app/data/staff/roles.ts`), so the admin hides what the database would refuse.
 
 ## Booking invariants
 
@@ -41,6 +41,9 @@ These are what keep ticketing correct. Changes must preserve them.
 | Confirming the same order twice is a no-op | `confirm_order` |
 | A late payment for a hold that has since sold out is flagged `needs_refund`. Seats are never oversold to honour it | `confirm_order` |
 | A QR code holds only `ECHOVERSE:<random token>`. The gate looks the token up on the server | `tickets.qr_token`, `check_in` |
+| A promo code applies only to events of its own community, and the same code can exist in two communities | `apply_promo`, `promo_codes_community_code_key` |
+| Marketing consent is recorded per community, never across them. Issuing complimentary tickets does not touch it | `record_marketing_consent`, `customer_consents` |
+| An event's category must belong to its own community | `events_community_category_fkey` → `event_categories` |
 | A ticket checks in once. Only a super admin or event manager can let someone in again, and that is logged | `check_in` |
 | Stale holds are expired every 5 minutes | `pg_cron` job `expire-stale-orders` |
 
@@ -55,3 +58,5 @@ SQL raises snake_case codes (`sold_out`, `promo_invalid`, …). Edge functions p
 - Secrets live in `supabase/functions/.env` (gitignored; copy `.env.example`). Production secrets are set with `supabase secrets set`.
 - `PAYMENT_PROVIDER=test` swaps Razorpay for an in-page test payment that confirms bookings without money. The client demo runs live with it. Real sales need `razorpay` plus the keys ([deployment.md](../deployment.md), step 8). Unset means Razorpay.
 - Email goes to Mailpit locally (`EMAIL_PROVIDER=mailpit`, viewable at http://127.0.0.1:54324) and through Resend in production.
+- **Emails are themed per community** in `_shared/email-themes.ts` (Echoverse pop, Founders Frame editorial) and built from the helpers in `_shared/email-layout.ts`. Copy that differs per community lives in the theme. A new community gets a theme entry, or it falls back to Echoverse's.
+- **Founders Frame events are all paid** and book through the same `create-order` → payment → `verify-payment` flow as Echoverse. Its checkout also sends a member `profile` (member type, job title, company), which `save_member_profile` stores against the customer. Applications and approval seats were removed in `20261104071445_founders_frame_paid_only`; do not bring back per-community booking rules in SQL without a community setting for them.

@@ -7,7 +7,7 @@ Start everything first, one terminal each:
 ```bash
 yarn db:start
 yarn functions:serve
-yarn dev
+yarn dev:echoverse
 yarn dev:admin
 ```
 

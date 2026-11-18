@@ -1,6 +1,6 @@
 # Admin Rules
 
-The admin panel in `admin/` is a separate React Router 8 SPA (`ssr: false`, nothing prerendered) on the same Supabase backend. It follows [global.md](global.md) and [frontend.md](frontend.md):
+The admin panel in `apps/admin/` is a separate React Router 8 SPA (`ssr: false`, nothing prerendered) on the same Supabase backend. It follows [global.md](global.md) and [frontend.md](frontend.md):
 - `Text` for all text
 - copy in `data/`
 - `services/`, `hooks/`, `schemas/` and `types/` placement
@@ -35,13 +35,13 @@ The website's "celebration pop" brand, calmer:
 - No tilts on content.
 - Pages fill the screen up to 1600px (`max-w-8xl` in `AppShell`). Don't narrow a page with its own centred `max-w-*`. Long forms split into `FormColumns` instead.
 
-Primitives in `admin/app/components/ui/`:
+Primitives in `apps/admin/app/components/ui/`:
 
 | Group | Primitives |
 |---|---|
-| Page | `PageHeader`, `BackLink`, `TabsNav` (2×2 grid on phones), `SegmentedControl`, `Panel`, `InsetCard`, `Notice`, `EmptyState`, `Spinner` |
+| Page | `PageHeader`, `BackLink`, `TabsNav` (2×2 grid on phones), `SegmentedControl`, `Panel`, `Subsection`, `InsetCard`, `Notice`, `EmptyState`, `Spinner` |
 | Data | `DataTable` (cards on phones, table above `sm`; column options `align`, `hideOnPhone`, `wideOnPhone`, `nowrap`), `DetailList`, `DividedList`, `StatCard`, `StatCardGrid` (four cards from a `StatCardConfig` list), `StackedCell`, `ProgressBar`, `LoadMoreButton`, `Badge` |
-| Forms | `FormColumns` (two columns from `2xl`), `Field`, `TextField` / `SelectField` (react-hook-form aware), `Input`, `Textarea`, `Select`, `Switch`, `Checkbox`, `SwatchPicker`, `ListEditor`, `MoveButtons`, `FileButton`, `SearchInput`, `SaveBar`, `UnsavedChangesGuard` |
+| Forms | `FormColumns` (two columns from `2xl`), `Field`, `TextField` / `SelectField` (react-hook-form aware), `Input`, `Textarea`, `Select`, `Switch`, `Checkbox`, `ToggleChips` / `ToggleChipsField` (multi-select chips), `SwatchPicker`, `ListEditor`, `MoveButtons`, `FileButton`, `SearchInput`, `SaveBar`, `UnsavedChangesGuard` |
 | Dialogs | `Dialog` (native `<dialog>`, header and footer stay in view), `ConfirmDialog` |
 | Links | `TextLink`, `ExternalLinkButton` |
 
@@ -64,7 +64,9 @@ Primitives in `admin/app/components/ui/`:
 - **Images are resized in the browser** to WebP (`uploadEventImage(eventId, file, 'cover' | 'gallery')`) and stored in the `event-media` bucket.
   - Seeded images are website-relative paths; show them through `websiteAssetUrl`.
   - Never delete a storage file when a cover is replaced. A duplicated event shares the original's file.
-- **Website links** (preview, live page, ticket page) are built from `VITE_WEBSITE_URL`.
+- **Website links** (preview, live page, ticket page, open website) are built from the community's `site_url` (`useSiteUrl`), and are hidden while a community has none.
+- **Community-only screens are switched on per community** in `COMMUNITY_FEATURES` (`~/data/communities/features`): Echoverse has stickers; Founders Frame has audience tags and speakers, and its tickets always have a price (`freeTickets` is off, so the ticket form rejects ₹0). Gate on the event's own community, not the switcher, so a shared link shows the right screens.
+- **Every list and report is scoped to the selected community.** `useCommunity()` gives the slug from the sidebar switcher. Pass it as the query's variables (`useEvents({ variables: community })`) so each community caches separately, and include it in any new insert (events, promo codes).
 - **The venue map is Leaflet with OpenStreetMap tiles. Search goes through `~/services/place-search` (Photon).** Neither needs a key.
   - `VenuePicker` writes `venue_name`, `venue_address`, `venue_lat` and `venue_lng` into whichever event form it sits in.
   - Leaflet is loaded with `loadLeaflet()` (dynamic import) and its CSS is imported by `VenueMapFrame`, so neither reaches other pages.

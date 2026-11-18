@@ -2,6 +2,7 @@ import '@supabase/functions-js/edge-runtime.d.ts'
 import { withSupabase } from '@supabase/server'
 import { CONFIG } from '../_shared/config.ts'
 import { deliverTicketsQuietly } from '../_shared/delivery.ts'
+import { type MemberProfileInput, toProfileJson } from '../_shared/profile.ts'
 import { createRazorpayOrder } from '../_shared/razorpay.ts'
 import { fail, ok, readJson } from '../_shared/responses.ts'
 
@@ -12,6 +13,7 @@ interface CreateOrderRequest {
     answers?: Record<string, string>
     promoCode?: string
     marketingConsent?: boolean
+    profile?: MemberProfileInput
     termsAccepted: boolean
     utm?: { source?: string; medium?: string; campaign?: string; referrer?: string }
 }
@@ -35,6 +37,14 @@ export default {
                 p_hold_minutes: CONFIG.holdMinutes,
             })
             if (error) throw error
+
+            if (body.profile) {
+                const { error: profileError } = await supabaseAdmin.rpc('save_member_profile', {
+                    p_customer_id: order.customer_id,
+                    p_profile: toProfileJson(body.profile),
+                })
+                if (profileError) console.error('Member profile not saved', order.id, profileError)
+            }
 
             const summary = {
                 id: order.id,

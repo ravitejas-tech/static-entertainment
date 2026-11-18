@@ -1,11 +1,12 @@
-# Echoverse Hub
+# Static Entertainment
 
-The official website, ticketing platform and admin panel for Echoverse Hub events.
+The websites, ticketing platform and admin panel for Static Entertainment's communities. Each community has its own website, and all of them share one admin panel and one Supabase backend.
 
 | App | Folder | Local address |
 |---|---|---|
-| Website: events, booking, QR tickets, My Tickets | `app/` | http://localhost:7300 |
-| Admin panel: dashboard, events, orders, refunds, gate scanner | `admin/` | http://localhost:7301 |
+| Echoverse Hub website: events, booking, QR tickets, My Tickets | `apps/echoverse/` | http://localhost:7300 |
+| Founders Frame website: events, paid checkout, QR tickets | `apps/founders-frame/` | http://localhost:7302 |
+| Admin panel: dashboard, events, orders, refunds, gate scanner | `apps/admin/` | http://localhost:7301 |
 | Backend: Supabase in Docker | `supabase/` | Studio http://127.0.0.1:54323 |
 
 ## Run it locally
@@ -14,13 +15,15 @@ You need Node 22.22+, Yarn (bundled in the repo) and Docker Desktop (running).
 
 ```bash
 yarn install
-cp .env.example .env
-cp admin/.env.example admin/.env
+cp apps/echoverse/.env.example apps/echoverse/.env
+cp apps/founders-frame/.env.example apps/founders-frame/.env
+cp apps/admin/.env.example apps/admin/.env
 cp supabase/functions/.env.example supabase/functions/.env
 
-yarn db:start      # first run downloads the Supabase images
-yarn dev           # website
-yarn dev:admin     # admin panel (second terminal)
+yarn db:start              # first run downloads the Supabase images
+yarn dev:echoverse         # Echoverse website
+yarn dev:admin             # admin panel (second terminal)
+yarn dev:founders-frame    # Founders Frame website (third terminal)
 ```
 
 - **Emails:** every email (login codes, tickets, refunds, staff invites) is caught by the local inbox at http://127.0.0.1:54324. Nothing is really sent.
@@ -42,6 +45,7 @@ yarn dev:admin     # admin panel (second terminal)
 
 ## Docs
 
-- [What we built and why](docs/build-plan.md), from [the PRD](docs/Echoverse_Hub_Website_Ticketing_Platform_PRD.md)
+- The communities: [Echoverse Hub](docs/communities/echoverse-hub.md) and [Founders Frame](docs/communities/founders-frame.md)
+- Echoverse: [what we built and why](docs/build-plan.md), from [the PRD](docs/Echoverse_Hub_Website_Ticketing_Platform_PRD.md)
 - [Going live](docs/deployment.md)
 - Rules for changing the code: [docs/rulebooks/](docs/rulebooks/) and [CLAUDE.md](CLAUDE.md)

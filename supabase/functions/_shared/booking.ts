@@ -1,4 +1,9 @@
 export interface Booking {
+    community: {
+        slug: string
+        name: string
+        site_url: string | null
+    }
     order: {
         id: string
         booking_code: string

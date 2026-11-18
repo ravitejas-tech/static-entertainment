@@ -31,8 +31,11 @@ insert into public.staff (user_id, name, email, role) values
     ('a0000000-0000-4000-8000-000000000005', 'Gate Staff', 'gate@echoversehub.com', 'gate_staff'),
     ('a0000000-0000-4000-8000-000000000006', 'Viewer', 'viewer@echoversehub.com', 'viewer');
 
+update public.communities set site_url = 'http://localhost:7300' where slug = 'echoverse';
+update public.communities set site_url = 'http://localhost:7302' where slug = 'founders-frame';
+
 insert into public.events (
-    id, slug, title, category, tag, tone, summary, description,
+    id, community, slug, title, category, tag, tone, summary, description,
     cover_url, cover_alt, cover_credit, cover_source,
     starts_at, ends_at, city, city_code, region, venue_name, venue_address, map_url,
     highlights, schedule, hosts, age_limit, language, dress_code,
@@ -41,6 +44,7 @@ insert into public.events (
 ) values
 (
     'e0000000-0000-4000-8000-000000000001',
+    'echoverse',
     'bollywood-dance-night-pune',
     'Bollywood Dance Night',
     'dance_night',
@@ -74,6 +78,7 @@ Come solo — most people do. Come with your squad — even better. Either way y
 ),
 (
     'e0000000-0000-4000-8000-000000000002',
+    'echoverse',
     'rooftop-social-mixer-mumbai',
     'Rooftop Social Mixer',
     'social_mixer',
@@ -107,6 +112,7 @@ No speed-dating, no forced networking — just good music, good people and a vie
 ),
 (
     'e0000000-0000-4000-8000-000000000003',
+    'echoverse',
     'pottery-and-playlists-pune',
     'Pottery & Playlists',
     'workshop',
@@ -138,6 +144,7 @@ No speed-dating, no forced networking — just good music, good people and a vie
 ),
 (
     'e0000000-0000-4000-8000-000000000004',
+    'echoverse',
     'monsoon-dance-party-pune',
     'Monsoon Dance Party',
     'dance_night',
@@ -161,6 +168,7 @@ No speed-dating, no forced networking — just good music, good people and a vie
 ),
 (
     'e0000000-0000-4000-8000-000000000005',
+    'echoverse',
     'holi-colour-splash-pune',
     'Holi Colour Splash',
     'meetup',
@@ -184,6 +192,7 @@ No speed-dating, no forced networking — just good music, good people and a vie
 ),
 (
     'e0000000-0000-4000-8000-000000000006',
+    'echoverse',
     'clay-and-chai-pune',
     'Clay & Chai Workshop',
     'workshop',
@@ -219,11 +228,11 @@ insert into public.ticket_types (event_id, name, description, price, quantity, a
     ('e0000000-0000-4000-8000-000000000005', 'Entry', '', 349, 150, 1, 1, 6, null, null, 1),
     ('e0000000-0000-4000-8000-000000000006', 'Workshop Seat', '', 549, 30, 1, 1, 4, null, null, 1);
 
-insert into public.promo_codes (code, label, event_id, discount_type, discount_value, max_uses, expires_at) values
-    ('ECHO10', 'Community code', null, 'percent', 10, null, '2026-12-31T23:59:00+05:30'),
-    ('DANCE100', 'Dance night launch', 'e0000000-0000-4000-8000-000000000001', 'fixed', 100, 100, '2026-11-14T18:00:00+05:30'),
-    ('RIYA15', 'Influencer: Riya Sharma', null, 'percent', 15, 50, null),
-    ('TEAMFREE', 'Team and partners (private)', null, 'percent', 100, 10, null);
+insert into public.promo_codes (community, code, label, event_id, discount_type, discount_value, max_uses, expires_at) values
+    ('echoverse', 'ECHO10', 'Community code', null, 'percent', 10, null, '2026-12-31T23:59:00+05:30'),
+    ('echoverse', 'DANCE100', 'Dance night launch', 'e0000000-0000-4000-8000-000000000001', 'fixed', 100, 100, '2026-11-14T18:00:00+05:30'),
+    ('echoverse', 'RIYA15', 'Influencer: Riya Sharma', null, 'percent', 15, 50, null),
+    ('echoverse', 'TEAMFREE', 'Team and partners (private)', null, 'percent', 100, 10, null);
 
 insert into public.gallery_photos (event_id, url, alt, sort_order) values
     ('e0000000-0000-4000-8000-000000000004', '/images/events/monsoon-dance-party.webp', 'A packed dance floor under golden party lights', 1),
@@ -288,15 +297,16 @@ begin
         booking_code, event_id, customer_id, name, email, phone, subtotal, discount, total,
         status, payment_provider, provider_payment_id, paid_at, created_at, terms_accepted_at, utm_source
     ) values (
-        public.generate_booking_code(v_event.city_code, v_event.starts_at),
+        public.generate_booking_code(v_event.id),
         v_event.id,
-        public.upsert_customer(p_name, p_email, p_phone, 'Pune', true),
+        public.upsert_customer(p_name, p_email, p_phone, 'Pune'),
         p_name, p_email, p_phone,
         v_type.price * p_quantity, 0, v_type.price * p_quantity,
         'paid', 'test', 'seed_past_' || gen_random_uuid(),
         v_event.starts_at - interval '6 days', v_event.starts_at - interval '6 days', v_event.starts_at - interval '6 days',
         'instagram'
     ) returning id into v_order_id;
+    perform public.record_marketing_consent((select customer_id from public.orders where id = v_order_id), v_event.community, true);
     insert into public.order_items (order_id, ticket_type_id, quantity, unit_price, admits)
     values (v_order_id, v_type.id, p_quantity, v_type.price, 1);
     perform public.issue_tickets(v_order_id);
@@ -331,8 +341,120 @@ select pg_temp.seed_booking('pottery-and-playlists-pune', '[{"name":"Pair Seat",
 select pg_temp.seed_booking('pottery-and-playlists-pune', '[{"name":"Workshop Seat","quantity":1}]', 'Rohan Mehta', 'rohan.mehta@example.com', '9881123456', '{"experience":"A little","food":"Jain"}', 'ECHO10', 'whatsapp', 2);
 select pg_temp.seed_booking('pottery-and-playlists-pune', '[{"name":"Workshop Seat","quantity":1}]', 'Sameer Kulkarni', 'sameer.k@example.com', '9822033445', '{"experience":"Never"}', null, 'direct', 0);
 
-insert into public.page_visits (event_id, path, visitor_id, utm_source, created_at)
+insert into public.events (
+    id, community, slug, title, category, summary, description,
+    starts_at, ends_at, city, city_code, region, venue_name, venue_address,
+    highlights, schedule, hosts, language, things_to_know, faqs, terms, refund_policy, questions,
+    audience, industries, founder_stages, status, published_at
+) values
+(
+    'f0000000-0000-4000-8000-000000000001',
+    'founders-frame',
+    'founders-frame-launch-mixer-pune',
+    'Founders Frame Launch Mixer',
+    'founder_mixer',
+    'An evening to meet the founders, operators and investors building in Pune.',
+    'Our first gathering. Small-group introductions, three short founder stories and plenty of time to talk with people who understand the journey.',
+    '2026-11-21T18:30:00+05:30',
+    '2026-11-21T21:30:00+05:30',
+    'Pune', 'PUN', 'Maharashtra',
+    'Sample venue, Baner', 'Baner Road, Pune',
+    array['Hosted introductions in small groups', 'Three short founder stories', 'Open networking over dinner'],
+    '[{"time":"6:30 PM","title":"Arrivals and hosted introductions"},{"time":"7:15 PM","title":"Three founder stories"},{"time":"8:00 PM","title":"Open networking and dinner"}]',
+    '[{"name":"Sample host","role":"Community lead, Founders Frame","part":"host"},{"name":"Sample speaker","role":"Co-founder, sample SaaS startup","part":"speaker"}]',
+    'English',
+    array['Bring your LinkedIn QR code', 'Doors close at 7:30 PM'],
+    '[{"question":"Who is this for?","answer":"Founders, business leaders, investors, professionals and students who are serious about building."},{"question":"What does a ticket include?","answer":"Entry, hosted introductions, the founder stories and dinner."}]',
+    'Entry for ticket holders only. Each QR code admits one person once.',
+    'Full refund up to 72 hours before the event. No refunds after that, but you can pass your ticket to a colleague by writing to us.',
+    '[]',
+    array['founder', 'business_leader', 'investor', 'professional', 'student'],
+    array['saas', 'fintech', 'd2c'],
+    array['idea', 'mvp', 'early_revenue'],
+    'published', now()
+),
+(
+    'f0000000-0000-4000-8000-000000000002',
+    'founders-frame',
+    'investor-founder-roundtable-pune',
+    'Investor and Founder Roundtable',
+    'roundtable',
+    'Twelve founders and eight investors around one table for an honest conversation about raising in 2027.',
+    'A small roundtable with seats for twelve founders and eight investors, so everyone at the table can contribute and learn.',
+    '2026-12-05T16:00:00+05:30',
+    '2026-12-05T18:30:00+05:30',
+    'Pune', 'PUN', 'Maharashtra',
+    'Sample venue, Koregaon Park', 'North Main Road, Koregaon Park, Pune',
+    array['Moderated discussion, not pitches', 'A balanced room of founders and investors', 'Follow-up introductions after the event'],
+    '[{"time":"4:00 PM","title":"Welcome and introductions"},{"time":"4:20 PM","title":"Moderated roundtable"},{"time":"5:45 PM","title":"Open conversations"}]',
+    '[{"name":"Sample moderator","role":"Partner, sample early-stage fund","part":"moderator"}]',
+    'English',
+    array['Seats are limited to keep the table small', 'This is not a pitch event'],
+    '[{"question":"Why are seats limited?","answer":"Founder and investor seats are capped separately so the room stays balanced and everyone can take part."}]',
+    'Entry for ticket holders only. Each QR code admits one person once.',
+    'Full refund up to 5 days before the roundtable. No refunds after that, as seats are limited.',
+    '[{"id":"custom-0f1a2b3c","kind":"custom","label":"What would make this roundtable worthwhile for you?","required":true}]',
+    array['founder', 'investor'],
+    array['saas', 'fintech', 'ai'],
+    array['mvp', 'early_revenue', 'growth'],
+    'published', now()
+),
+(
+    'f0000000-0000-4000-8000-000000000003',
+    'founders-frame',
+    'pune-saas-builders-evening',
+    'Pune SaaS Builders Evening',
+    'networking_meetup',
+    'An open evening for people building software products in Pune.',
+    'Founders and product people compared notes on pricing, hiring and selling to their first customers.',
+    '2026-10-10T18:30:00+05:30',
+    '2026-10-10T21:00:00+05:30',
+    'Pune', 'PUN', 'Maharashtra',
+    'Sample venue, Kharadi', 'EON Free Zone Road, Kharadi, Pune',
+    array['Open networking', 'Lightning talks'],
+    '[]',
+    '[]',
+    'English',
+    '{}',
+    '[]',
+    'Entry for ticket holders only.',
+    'Full refund up to 72 hours before the event. No refunds after that.',
+    '[]',
+    array['founder', 'professional'],
+    array['saas'],
+    array['mvp', 'early_revenue'],
+    'published', now()
+);
+
+insert into public.ticket_types (event_id, name, description, price, quantity, admits, min_per_order, max_per_order, sort_order) values
+    ('f0000000-0000-4000-8000-000000000001', 'Early bird', 'Limited seats at the best price', 499, 30, 1, 1, 4, 1),
+    ('f0000000-0000-4000-8000-000000000001', 'Standard', 'Entry, introductions and dinner', 799, 50, 1, 1, 4, 2),
+    ('f0000000-0000-4000-8000-000000000002', 'Founder seat', 'For founders building a company', 1499, 12, 1, 1, 1, 1),
+    ('f0000000-0000-4000-8000-000000000002', 'Investor seat', 'For angels, funds and family offices', 1499, 8, 1, 1, 1, 2),
+    ('f0000000-0000-4000-8000-000000000003', 'Standard', 'Entry and lightning talks', 299, 60, 1, 1, 4, 1);
+
+select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', 1, true);
+select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Nisha Bhat', 'nisha.bhat@example.com', '9822100002', 1, true);
+select pg_temp.seed_past_booking('pune-saas-builders-evening', 'Rohan Mehta', 'rohan.mehta@example.com', '9881123456', 1, false);
+
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Early bird","quantity":2}]', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', '{}', null, 'linkedin', 6);
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Standard","quantity":1}]', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', '{}', null, 'linkedin', 4);
+select pg_temp.seed_booking('founders-frame-launch-mixer-pune', '[{"name":"Early bird","quantity":1}]', 'Kabir Sethi', 'kabir.sethi@example.com', '9822100004', '{}', null, 'direct', 2);
+select pg_temp.seed_booking('investor-founder-roundtable-pune', '[{"name":"Founder seat","quantity":1}]', 'Aarav Deshpande', 'aarav.d@example.com', '9822100001', '{"custom-0f1a2b3c":"Honest feedback on our seed round plan."}', null, 'linkedin', 3);
+select pg_temp.seed_booking('investor-founder-roundtable-pune', '[{"name":"Investor seat","quantity":1}]', 'Meghana Rao', 'meghana.rao@example.com', '9822100003', '{"custom-0f1a2b3c":"Meeting early fintech and SaaS founders in Pune."}', null, 'linkedin', 1);
+
+select public.save_member_profile(c.id, p.profile)
+from (values
+    ('aarav.d@example.com', '{"member_type":"founder","job_title":"Co-founder","linkedin_url":"https://www.linkedin.com/in/example-aarav","looking_for":["investors","customers"],"company":{"name":"Sample Ledger Labs","website":"https://example.com","industry":"fintech","stage":"early_revenue"}}'::jsonb),
+    ('nisha.bhat@example.com', '{"member_type":"professional","job_title":"Product manager","looking_for":["peers"],"company":{"name":"Sample Cloud Co","industry":"saas","stage":"growth"}}'::jsonb),
+    ('meghana.rao@example.com', '{"member_type":"investor","job_title":"Angel investor","looking_for":["peers"]}'::jsonb),
+    ('kabir.sethi@example.com', '{"member_type":"student","job_title":"Final-year student, COEP","looking_for":["mentors","co_founder"]}'::jsonb)
+) as p (email, profile)
+join public.customers c on c.email = p.email;
+
+insert into public.page_visits (community, event_id, path, visitor_id, utm_source, created_at)
 select
+    e.community,
     e.id,
     '/events/' || e.slug,
     'seed-visitor-' || (random() * 400)::integer,
