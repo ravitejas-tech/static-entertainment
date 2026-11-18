@@ -90,7 +90,7 @@ Each app is its own Vercel project, built from this repo. Each app folder has a 
    - **`VITE_SITE_URL`** is the website's production address without a trailing slash, for example `https://founders-frame.vercel.app`. Set it for Production only. Canonical links, the sitemap, robots and share images use it. Echoverse falls back to `https://echoversehub.com` without it.
    - After the first deploy, open **Settings → Build and Deployment → Node.js Version** and pick 22.x or 24.x.
 4. **Vercel may add a suffix** to the address when the project name is taken. Check the address after the first deploy. If it differs, fix `VITE_SITE_URL`, the community's `site_url` (step 4) and the Auth URLs (step 1), then redeploy.
-5. **A website builds only when its community has a published event.** React Router cannot build the event page with nothing to prerender, so the build stops with "Prerender: <community> has no published events". Publish an event in the admin, then deploy that website.
+5. A website deploys fine before its community has a published event: its home and events pages show that nothing is scheduled yet. Once the deploy hook (step 6) is stored, publishing the first event rebuilds it.
 6. Optional: each push builds all three projects. In each project's Root Directory settings, Vercel can skip a deployment when nothing in that app changed.
 
 Preview deployments use the same Supabase project as production. A booking made on a preview address is a real order.

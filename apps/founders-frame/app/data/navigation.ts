@@ -16,6 +16,8 @@ const withSeat = (path: string, ticketTypeId?: string) =>
 
 export const eventPath = (slug: string) => `${PATHS.events}/${slug}`
 
+export const PLACEHOLDER_EVENT_SLUG = 'coming-soon'
+
 export const BOOK_SEGMENT = 'book'
 
 export const bookPath = (slug: string, ticketTypeId?: string) =>

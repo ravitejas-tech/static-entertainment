@@ -1,6 +1,6 @@
 import type { Config } from '@react-router/dev/config'
 import { loadEnv } from 'vite'
-import { eventPath, PUBLIC_PAGES } from './app/data/navigation'
+import { eventPath, PLACEHOLDER_EVENT_SLUG, PUBLIC_PAGES } from './app/data/navigation'
 import { COMMUNITY_SLUG } from './app/data/brand'
 import { SEO_FILES } from './app/data/seo/routes'
 
@@ -28,12 +28,8 @@ async function publishedEventPaths() {
     }
 
     const events = (await response.json()) as { slug: string }[]
-    if (events.length === 0) {
-        throw new Error(
-            `Prerender: ${COMMUNITY_SLUG} has no published events, and the event page cannot be built without one. Publish an event in the admin and build again.`,
-        )
-    }
-    return events.map(({ slug }) => eventPath(slug))
+    const slugs = events.length > 0 ? events.map(({ slug }) => slug) : [PLACEHOLDER_EVENT_SLUG]
+    return slugs.map((slug) => eventPath(slug))
 }
 
 export default {

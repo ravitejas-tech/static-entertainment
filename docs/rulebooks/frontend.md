@@ -86,7 +86,7 @@ The admin panel is a separate app in `admin/`, not a route here.
 
 **Route files hold composition, not implementation.** A route wires params, data and state to components; the markup lives in `components/<feature>/`.
 
-**Prerendered routes** render at build time in Node. They are `PUBLIC_PAGES` in `~/data/navigation` plus `/events/<slug>` for every published event, listed from Supabase in `react-router.config.ts`. Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
+**Prerendered routes** render at build time in Node. They are `PUBLIC_PAGES` in `~/data/navigation` plus `/events/<slug>` for every published event, listed from Supabase in `react-router.config.ts` (or `/events/coming-soon`, a redirect to `/events`, when none is published). Nothing they import may touch `window`, `document` or `localStorage` outside an effect or event handler.
 
 **A public data route has a `loader` and a `clientLoader` that call one local function.** That function does `await import('~/services/event-catalog')`.
 - The `loader` runs at build time, so the HTML carries the data.
